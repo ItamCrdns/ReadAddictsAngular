@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+$inter: 'Inter', sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+:root {
+    font-family: $inter;
+}
+
+body {
+    background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+}
