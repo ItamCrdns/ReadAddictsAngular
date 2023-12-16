@@ -1,20 +1,21 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { environment } from '../../environment/environment';
-import { Post } from './IPost';
+import { HttpClient } from '@angular/common/http'
+import { Inject, Injectable } from '@angular/core'
+import { environment } from '../../environment/environment'
+import { type Post } from './IPost'
+import { type Observable } from 'rxjs'
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class GetPostsService {
-  constructor(private http: HttpClient) {}
+  constructor (@Inject(HttpClient) private readonly http: HttpClient) {}
 
-  getPosts() {
+  getPosts (): Observable<Post[]> {
     return this.http.get<Post[]>(environment.apiUrl + 'Post/allposts', {
       params: {
         page: '1',
-        pageSize: '10',
-      },
-    });
+        pageSize: '10'
+      }
+    })
   }
 }

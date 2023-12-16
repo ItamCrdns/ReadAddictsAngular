@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 
 @Injectable({
   providedIn: 'root'
 })
 export class CharacterCountService {
-  characterCount: number;
+  characterCount: number
 
-  constructor() {
-    this.characterCount = 0;
+  constructor () {
+    this.characterCount = 0
   }
 
-  incrementCharacterCount() {
-    this.characterCount++;
+  incrementCharacterCount (): void {
+    this.characterCount++
   }
 }
