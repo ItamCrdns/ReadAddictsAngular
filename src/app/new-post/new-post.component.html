@@ -1,5 +1,5 @@
 <section class="newpost-wrapper">
-  <div class='newpost'>
+  <div class="newpost">
     <div>
       <img
         ngSrc="https://res.cloudinary.com/dvu9fqdkn/image/upload/v1701618290/185ba21ad06af964b6e9421db7b14741_fvjhqm.jpg"
@@ -9,20 +9,8 @@
         priority="true"
       />
     </div>
-    <div class="input-group">
-      <input
-        required
-        type="text"
-        #textInput
-        (input)="incrementCharacterCount(textInput.value.length)"
-        maxlength="255"
-      />
-      <label class="placeholder-label">Create a new post</label>
-      @if (characterCount > 0) {
-      <label class="char-label">{{ characterCount }}</label>
-      }
-      <ng-icon name="heroPhoto" />
-    </div>
+    <app-input (setTextEvent)="getNewPostText($event)" />
+    <ng-icon name="heroPhoto" />
     <button>Post</button>
   </div>
 </section>

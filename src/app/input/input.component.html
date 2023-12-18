@@ -1,0 +1,13 @@
+<div class="input-group">
+  <input
+    required
+    type="text"
+    #textInput
+    (input)="incrementCharacterCount(textInput.value)"
+    maxlength="255"
+  />
+  <label class="placeholder-label">Create a new post</label>
+  @if (characterCount > 0) {
+  <label class="char-label">{{ characterCount }}</label>
+  }
+</div>

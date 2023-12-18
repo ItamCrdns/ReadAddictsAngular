@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core'
+import { Component } from '@angular/core'
 import { NgOptimizedImage } from '@angular/common'
-import { CharacterCountService } from '../../utility/character-count.service'
+import { InputComponent } from '../input/input.component'
 import { heroPhoto } from '@ng-icons/heroicons/outline'
 import {
   NgIconComponent,
@@ -11,7 +11,7 @@ import {
 @Component({
   selector: 'app-new-post',
   standalone: true,
-  imports: [NgOptimizedImage, NgIconComponent],
+  imports: [NgOptimizedImage, NgIconComponent, InputComponent],
   providers: [
     provideIcons({ heroPhoto }),
     provideNgIconsConfig({ size: '2.25rem', color: 'rgba(175, 175, 175)' })
@@ -20,14 +20,9 @@ import {
   styleUrl: './new-post.component.scss'
 })
 export class NewPostComponent {
-  characterCount: number = 0
-  characterCountService = inject(CharacterCountService)
+  newPostText: string = ''
 
-  constructor () {
-    this.characterCount = this.characterCountService.characterCount
-  }
-
-  incrementCharacterCount (inputLength: number): void {
-    this.characterCount = inputLength
+  getNewPostText (newPostText: string): void {
+    this.newPostText = newPostText
   }
 }

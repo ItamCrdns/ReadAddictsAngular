@@ -22,7 +22,7 @@ import {
 })
 export class NavbarComponent {
   items = navItems
-  toggle: boolean = true
+  toggle: boolean = false
 
   toggleUserMenu (): void {
     this.toggle = !this.toggle
