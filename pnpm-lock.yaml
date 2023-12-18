@@ -29,6 +29,15 @@ dependencies:
   '@angular/router':
     specifier: ^17.0.0
     version: 17.0.0(@angular/common@17.0.0)(@angular/core@17.0.0)(@angular/platform-browser@17.0.0)(rxjs@7.8.0)
+  '@ng-icons/core':
+    specifier: ^26.3.0
+    version: 26.3.0
+  '@ng-icons/heroicons':
+    specifier: ^26.3.0
+    version: 26.3.0
+  '@ng-icons/ionicons':
+    specifier: ^26.3.0
+    version: 26.3.0
   rxjs:
     specifier: ~7.8.0
     version: 7.8.0
@@ -2214,6 +2223,24 @@ packages:
     dependencies:
       call-bind: 1.0.5
     dev: true
+
+  /@ng-icons/core@26.3.0:
+    resolution: {integrity: sha512-4gUGz8yShbMX/4S2B4DzcQHrZ1+t29NqmYS70LScN0XMgiFmbg3uUW/Sc14fPiwmhHVNrKSMmX248U61uBZzGw==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
+  /@ng-icons/heroicons@26.3.0:
+    resolution: {integrity: sha512-rj0Y6lWtQqADtMGx/cipY/ezocSVwSKEFYZEvRMFOrDIvTx80aQKldmnCVl97OQlmBKfefVpT6NQgd3G4ZNGWQ==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
+  /@ng-icons/ionicons@26.3.0:
+    resolution: {integrity: sha512-GVoKgvdBnmRMFz5xwtD9APklU+3+fIZV/+YgIr30DDhvgYgVq9ALb2EGl06A0n3hCYKc34yAKvkA69y+jYIy0Q==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
 
   /@ngtools/webpack@17.0.6(@angular/compiler-cli@17.0.0)(typescript@5.2.2)(webpack@5.89.0):
     resolution: {integrity: sha512-9Us20rqGhi8PmQBwQu6Qtww3WVV/gf2s2DbzcLclsiDtSBobzT64Z6F6E9OpAYD+c5PxlUaOghL6NXdnSNdByA==}
@@ -5860,7 +5887,7 @@ packages:
     dependencies:
       copy-anything: 2.0.6
       parse-node-version: 1.0.1
-      tslib: 2.3.0
+      tslib: 2.6.2
     optionalDependencies:
       errno: 0.1.8
       graceful-fs: 4.2.11
@@ -7227,7 +7254,7 @@ packages:
   /rxjs@7.8.1:
     resolution: {integrity: sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==}
     dependencies:
-      tslib: 2.3.0
+      tslib: 2.6.2
     dev: true
 
   /safe-array-concat@1.0.1:
@@ -7988,7 +8015,6 @@ packages:
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
-    dev: true
 
   /tuf-js@2.1.0:
     resolution: {integrity: sha512-eD7YPPjVlMzdggrOeE8zwoegUaG/rt6Bt3jwoQPunRiNVzgcCE009UDFJKJjG+Gk9wFu6W/Vi+P5d/5QpdD9jA==}

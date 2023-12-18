@@ -1,0 +1,40 @@
+<nav>
+  <div class="nav-links">
+    <h1>Readaddicts</h1>
+    @for(item of items; track item.name) {
+    <a href="{{ item.path }}">{{ item.name }}</a>
+    }
+  </div>
+  <div class="user-wrapper">
+    <img
+      ngSrc="https://res.cloudinary.com/dvu9fqdkn/image/upload/v1701618290/185ba21ad06af964b6e9421db7b14741_fvjhqm.jpg"
+      ngAlt="Coffee"
+      width="50"
+      height="50"
+      priority="true"
+      (click)="toggle = !toggle"
+    />
+    @if (toggle) {
+    <div class="user-menu">
+      <div class="user-menu-wrapper">
+        <img
+          ngSrc="https://res.cloudinary.com/dvu9fqdkn/image/upload/v1701618290/185ba21ad06af964b6e9421db7b14741_fvjhqm.jpg"
+          ngAlt="Coffee"
+          width="50"
+          height="50"
+          priority="true"
+        />
+        <p>Username</p>
+      </div>
+      <div class="item">
+        <ng-icon name="heroChatBubbleLeftRight" />
+        <p>Messages</p>
+      </div>
+      <div class="log-out">
+        <ng-icon class='log-out-btn' name="ionLogOutOutline" />
+        <p>Logout</p>
+      </div>
+    </div>
+    }
+  </div>
+</nav>

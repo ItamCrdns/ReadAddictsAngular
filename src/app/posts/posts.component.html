@@ -1,4 +1,8 @@
-@for (post of posts; track post.post_Id) {
+@if (posts.length <= 0) {
+<section class="no-posts-wrapper">
+  <h1>Seems like you've reached the end</h1>
+</section>
+} @for (post of posts; track post.post_Id) {
 <section class="posts-wrapper">
   <div class="post">
     <div class="title-wrapper">
@@ -28,7 +32,7 @@
       @if (post.comments > 0) {
       <button>{{ post.comments }} comments</button>
       } @else {
-      <button>Comment</button>
+      <button>Leave a comment</button>
       }
     </div>
   </div>

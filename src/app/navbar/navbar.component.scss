@@ -1,0 +1,104 @@
+@import '../../variables.scss';
+
+nav {
+    background-color: white;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .1);
+    padding: 0 1rem;
+
+    h1 {
+        font-size: 32px;
+        font-weight: 600;
+    }
+}
+
+.user-wrapper {
+    position: relative;
+    img {
+        border-radius: 50%;
+        cursor: pointer;
+    }
+}
+
+.user-menu {
+    position: absolute;
+    right: 0;
+    top: 5rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .1);
+    padding: 1rem;
+    max-width: 200px;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    justify-content: center;
+    align-items: center;
+    
+    .user-menu-wrapper {
+        display: flex;
+        gap: .5rem;
+        align-items: center;
+        background-color: whitesmoke;
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .1);
+        padding: .75rem;
+        border-radius: 7px;
+
+        p {
+            font-weight: 700;
+        }
+    }
+
+    .item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0 .75rem;
+    }
+
+    .item p:hover  {
+        cursor: pointer;
+    }
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    a {
+        text-decoration: none;
+        color: black;
+        font-weight: 400;
+        font-size: 16px;
+
+        &:hover {
+            color: #1DA1F2;
+        }
+    }
+}
+
+.log-out {
+    background-color: $pinkred;
+    padding: .25rem 1rem;
+    margin: 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    cursor: pointer;
+
+    .log-out-btn {
+        color: white;
+    }
+
+    p {
+        color: white;
+        font-size: 12px;
+        margin: 0;
+    };
+}

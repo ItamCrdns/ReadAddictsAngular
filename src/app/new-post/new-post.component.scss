@@ -1,10 +1,7 @@
 $primary-color: #9e9e9e;
 $blue-background: #00bfff;
 
-@import url('https://unpkg.com/css.gg@2.0.0/icons/css/image.css');
-
 .newpost-wrapper {
-    margin-top: 2.5rem;
     display: flex;
     justify-content: center;
 }
@@ -17,7 +14,7 @@ $blue-background: #00bfff;
     align-items: center;
     justify-content: center;
     gap: 1.5rem;
-    padding: 1rem;
+    padding: 2rem;
 }
 
 img {
