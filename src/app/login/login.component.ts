@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core'
 import { InputComponent } from '../input/input.component'
-import { GetusernameService } from './get-username.service'
 import { catchError, tap, throwError } from 'rxjs'
 import { type IUser } from './IUser'
 import { NgOptimizedImage } from '@angular/common'
+import { LoginUserService } from './login-user.service'
 
 @Component({
   selector: 'app-login',
@@ -27,12 +27,12 @@ export class LoginComponent {
   }
 
   constructor (
-    @Inject(GetusernameService)
-    private readonly getUsernameService: GetusernameService
+    @Inject(LoginUserService)
+    private readonly loginUsernameService: LoginUserService
   ) {}
 
   getUserData (): void {
-    this.getUsernameService
+    this.loginUsernameService
       .getUsername(this.username)
       .pipe(
         tap((res) => {
@@ -49,6 +49,13 @@ export class LoginComponent {
   }
 
   authenticateUser (): void {
-    // TODO: Authenticate user
+    this.loginUsernameService
+      .authenticateUser(this.username, this.password)
+      .pipe(
+        tap((res) => {
+          console.log(res)
+        })
+      )
+      .subscribe()
   }
 }

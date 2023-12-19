@@ -1,4 +1,4 @@
-@if (posts.length <= 0) {
+@if (posts.length <= 0 && badResponse === 0) {
 <section class="no-posts-wrapper">
   <h1>Seems like you've reached the end</h1>
 </section>
@@ -36,5 +36,10 @@
       }
     </div>
   </div>
+</section>
+} @if (badResponse !== 0) {
+<section class="no-posts-wrapper">
+  <h1>Something went wrong</h1>
+  <p>{{ badResponse }}</p>
 </section>
 }

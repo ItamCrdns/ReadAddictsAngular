@@ -15,7 +15,8 @@ export class GetPostsService {
       params: {
         page: '1',
         pageSize: '10'
-      }
+      },
+      withCredentials: true
     })
   }
 }
