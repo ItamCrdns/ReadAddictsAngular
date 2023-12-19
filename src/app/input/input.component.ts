@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core'
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core'
 import { CharacterCountService } from '../../utility/character-count.service'
 
 @Component({
@@ -9,6 +9,9 @@ import { CharacterCountService } from '../../utility/character-count.service'
   styleUrl: './input.component.scss'
 })
 export class InputComponent {
+  @Input() labelText: string = 'Set a default text...'
+  @Input() labelBackgroundColor: string = 'white'
+  @Input() showCharacterCount: boolean = true
   @Output() setTextEvent = new EventEmitter<string>()
 
   characterCount: number = 0

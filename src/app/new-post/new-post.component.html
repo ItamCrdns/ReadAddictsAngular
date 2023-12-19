@@ -9,7 +9,10 @@
         priority="true"
       />
     </div>
-    <app-input (setTextEvent)="getNewPostText($event)" />
+    <app-input
+      (setTextEvent)="getNewPostText($event)"
+      labelText="Create new post"
+    />
     <ng-icon name="heroPhoto" />
     <button>Post</button>
   </div>

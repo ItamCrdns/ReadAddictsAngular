@@ -6,8 +6,14 @@
     (input)="incrementCharacterCount(textInput.value)"
     maxlength="255"
   />
-  <label class="placeholder-label">Create a new post</label>
-  @if (characterCount > 0) {
-  <label class="char-label">{{ characterCount }}</label>
+  <label
+    [style.background-color]="labelBackgroundColor"
+    class="placeholder-label"
+    >{{ labelText }}</label
+  >
+  @if (characterCount > 0 && showCharacterCount) {
+  <label [style.background-color]="labelBackgroundColor" class="char-label">{{
+    characterCount
+  }}</label>
   }
 </div>
