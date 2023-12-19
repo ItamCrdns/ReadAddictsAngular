@@ -12,8 +12,37 @@
   <button
     [style.color]="username.length > 0 ? 'white' : null"
     [style.background-color]="username.length > 0 ? '#03A9F4' : null"
+    (click)="getUserData()"
   >
-    Login
+    Next
   </button>
+</section>
+} @else if(usernameFound && user !== {}) {
+<section class="login">
+  <div class="user-info">
+    <img
+      ngSrc="{{ user.profile_Picture }}"
+      alt="{{ user.username }}"
+      width="200"
+      height="200"
+    />
+    <p>
+      Welcome back, <span>{{ user.username }}</span
+      >. Please enter your password
+    </p>
+    <app-input
+      (setTextEvent)="getPasswordText($event)"
+      [showCharacterCount]="false"
+      labelText="Password"
+      type="password"
+    />
+    <button
+      [style.color]="password.length > 0 ? 'white' : null"
+      [style.background-color]="password.length > 0 ? '#03A9F4' : null"
+      (click)="authenticateUser()"
+    >
+      Login
+    </button>
+  </div>
 </section>
 }

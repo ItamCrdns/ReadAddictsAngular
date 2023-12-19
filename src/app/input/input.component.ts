@@ -12,6 +12,7 @@ export class InputComponent {
   @Input() labelText: string = 'Set a default text...'
   @Input() labelBackgroundColor: string = 'white'
   @Input() showCharacterCount: boolean = true
+  @Input() type: string = 'text'
   @Output() setTextEvent = new EventEmitter<string>()
 
   characterCount: number = 0

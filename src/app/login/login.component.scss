@@ -27,3 +27,31 @@
         cursor: pointer;
     }
 }
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 25px;
+    margin-top: 2rem;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .1);
+    padding: 1.5rem;
+
+    img {
+        border-radius: 50%;
+    }
+
+    p {
+        font-size: 18px;
+    }
+
+    span {
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+}
+
+

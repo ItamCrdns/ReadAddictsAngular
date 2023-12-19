@@ -1,7 +1,7 @@
 <div class="input-group">
   <input
     required
-    type="text"
+    [type]="type"
     #textInput
     (input)="incrementCharacterCount(textInput.value)"
     maxlength="255"

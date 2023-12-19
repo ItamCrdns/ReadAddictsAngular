@@ -15,11 +15,11 @@ export class PostsComponent implements OnInit {
   posts: Post[] = []
 
   constructor (
-    @Inject(GetPostsService) private readonly postsService: GetPostsService
+    @Inject(GetPostsService) private readonly getPostsService: GetPostsService
   ) {}
 
   ngOnInit (): void {
-    this.postsService.getPosts().subscribe((data) => {
+    this.getPostsService.getPosts().subscribe((data) => {
       this.posts = data
     })
   }
