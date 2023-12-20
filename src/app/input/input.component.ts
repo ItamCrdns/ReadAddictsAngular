@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core'
-import { CharacterCountService } from '../../utility/character-count.service'
+import { CharacterCountService } from '../../services/character-count.service'
 
 @Component({
   selector: 'app-input',
