@@ -10,11 +10,11 @@ import { type Observable } from 'rxjs'
 export class GetPostsService {
   constructor (@Inject(HttpClient) private readonly http: HttpClient) {}
 
-  getPosts (): Observable<Post[]> {
+  getPosts (page: number = 1, pageSize: number = 1): Observable<Post[]> {
     return this.http.get<Post[]>(environment.apiUrl + 'Post/allposts', {
       params: {
-        page: '1',
-        pageSize: '10'
+        page,
+        pageSize
       },
       withCredentials: true
     })

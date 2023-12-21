@@ -1,5 +1,5 @@
 import { Pipe, type PipeTransform } from '@angular/core'
-
+// TODO: Doesnt seem to work well with posts that are JUST created
 @Pipe({
   name: 'dateAgo',
   standalone: true

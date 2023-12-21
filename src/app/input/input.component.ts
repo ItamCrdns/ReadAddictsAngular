@@ -13,6 +13,7 @@ export class InputComponent {
   @Input() labelBackgroundColor: string = 'white'
   @Input() showCharacterCount: boolean = true
   @Input() type: string = 'text'
+  @Input() maxLength: number = 255
   @Output() setTextEvent = new EventEmitter<string>()
 
   characterCount: number = 0

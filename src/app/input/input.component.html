@@ -4,7 +4,7 @@
     [type]="type"
     #textInput
     (input)="incrementCharacterCount(textInput.value)"
-    maxlength="255"
+    [maxLength]="maxLength"
   />
   <label
     [style.background-color]="labelBackgroundColor"

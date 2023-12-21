@@ -43,6 +43,15 @@ export class LoginComponent {
       .pipe(
         tap((res) => {
           this.usernameFound = true
+          this.showAlert = true
+          this.alertMessage = `Welcome back, ${
+            this.username.slice(0, 1)[0].toUpperCase() +
+            this.username.slice(1).toLowerCase()
+          }`
+
+          setTimeout(() => {
+            this.showAlert = false
+          }, 1000)
           this.user = res
         }),
         catchError((err) => {
@@ -51,7 +60,7 @@ export class LoginComponent {
 
           setTimeout(() => {
             this.showAlert = false
-          }, 2000)
+          }, 1000)
 
           return err // Wrong
         })
@@ -74,6 +83,18 @@ export class LoginComponent {
                 console.error('Error while redirecting to home page: ', err)
               })
           }
+        }),
+        catchError((res) => {
+          if (res.status === 401) {
+            this.showAlert = true
+            this.alertMessage = 'Wrong password'
+
+            setTimeout(() => {
+              this.showAlert = false
+            }, 1000)
+          }
+          // handle other errors later
+          return res // Wrong
         })
       )
       .subscribe()

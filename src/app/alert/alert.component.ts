@@ -22,7 +22,7 @@ const fadeInOut = trigger('fadeInOut', [
       opacity: 0
     })
   ),
-  transition('open => close', [animate('.5s 5s ease-out')]), // * Alert stays open for 5 seconds
+  transition('open => close', [animate('.5s 5s ease-out')]), // * Alert stays open for 5 seconds (currently handling this in the parent component with a setTimeout)
   transition('close => open', [animate('.5s 0s  ease-out')])
 ])
 

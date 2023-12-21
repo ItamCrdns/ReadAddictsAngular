@@ -1,6 +1,6 @@
-@if (posts.length <= 0 && badResponse === 0) {
+@if (posts.length <= 0 && statusCode === 204) {
 <section class="no-posts-wrapper">
-  <h1>Seems like you've reached the end</h1>
+  <h1>No posts.</h1>
 </section>
 } @for (post of posts; track post.post_Id) {
 <section class="posts-wrapper">
@@ -37,9 +37,11 @@
     </div>
   </div>
 </section>
-} @if (badResponse !== 0) {
+}
+<div #loadMore></div>
+@if (statusCode !== 0) {
 <section class="no-posts-wrapper">
   <h1>Something went wrong</h1>
-  <p>{{ badResponse }}</p>
+  <p>{{ statusCode }}</p>
 </section>
 }
