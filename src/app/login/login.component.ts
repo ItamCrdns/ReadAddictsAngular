@@ -74,14 +74,9 @@ export class LoginComponent {
       .pipe(
         tap((res) => {
           if (res !== null) {
-            this.router
-              .navigateByUrl('/')
-              .then((_) => {
-                console.log('User authenticated')
-              })
-              .catch((err) => {
-                console.error('Error while redirecting to home page: ', err)
-              })
+            this.router.navigateByUrl('/').catch((err) => {
+              console.error('Error while redirecting to home page: ', err)
+            })
           }
         }),
         catchError((res) => {
