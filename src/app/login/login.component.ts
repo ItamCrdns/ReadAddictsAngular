@@ -5,12 +5,12 @@ import { type IUser } from './IUser'
 import { NgOptimizedImage } from '@angular/common'
 import { LoginUserService } from './login-user.service'
 import { Router } from '@angular/router'
-import { AlertComponent } from '../alert/alert.component'
+import { AlertService } from '../alert/alert.service'
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [InputComponent, AlertComponent, NgOptimizedImage],
+  imports: [InputComponent, NgOptimizedImage],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -20,8 +20,6 @@ export class LoginComponent {
   password: string = ''
   user: Partial<IUser> = {}
   authenticationStatus: boolean = false
-  showAlert: boolean = false
-  alertMessage: string = ''
 
   getUsernameText (username: string): void {
     this.username = username
@@ -34,7 +32,8 @@ export class LoginComponent {
   constructor (
     @Inject(Router) private readonly router: Router,
     @Inject(LoginUserService)
-    private readonly loginUsernameService: LoginUserService
+    private readonly loginUsernameService: LoginUserService,
+    @Inject(AlertService) private readonly alertService: AlertService
   ) {}
 
   getUserData (): void {
@@ -43,25 +42,13 @@ export class LoginComponent {
       .pipe(
         tap((res) => {
           this.usernameFound = true
-          this.showAlert = true
-          this.alertMessage = `Welcome back, ${
-            this.username.slice(0, 1)[0].toUpperCase() +
-            this.username.slice(1).toLowerCase()
-          }`
-
-          setTimeout(() => {
-            this.showAlert = false
-          }, 1000)
           this.user = res
         }),
         catchError((err) => {
-          this.showAlert = true
-          this.alertMessage = `User ${this.username} not found`
-
-          setTimeout(() => {
-            this.showAlert = false
-          }, 1000)
-
+          this.alertService.setAlertValues(
+            true,
+            `User ${this.username} not found`
+          )
           return err // Wrong
         })
       )
@@ -74,6 +61,12 @@ export class LoginComponent {
       .pipe(
         tap((res) => {
           if (res !== null) {
+            this.alertService.setAlertValues(
+              true,
+              `Welcome back, ${this.username
+                .slice(0, 1)
+                .toUpperCase()}${this.username.slice(1).toLowerCase()}`
+            )
             this.router.navigateByUrl('/').catch((err) => {
               console.error('Error while redirecting to home page: ', err)
             })
@@ -81,12 +74,7 @@ export class LoginComponent {
         }),
         catchError((res) => {
           if (res.status === 401) {
-            this.showAlert = true
-            this.alertMessage = 'Wrong password'
-
-            setTimeout(() => {
-              this.showAlert = false
-            }, 1000)
+            this.alertService.setAlertValues(true, 'Incorrect password')
           }
           // handle other errors later
           return res // Wrong
