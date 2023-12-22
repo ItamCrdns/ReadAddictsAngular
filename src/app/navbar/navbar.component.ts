@@ -1,4 +1,4 @@
-import { Component, Inject, type OnInit } from '@angular/core'
+import { Component, Inject } from '@angular/core'
 import { CommonModule, NgOptimizedImage } from '@angular/common'
 import { navItems } from './navItems'
 import { heroChatBubbleLeftRight } from '@ng-icons/heroicons/outline'
@@ -27,7 +27,7 @@ import { take } from 'rxjs'
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   items = navItems
   toggle: boolean = false
   currentUser: Partial<IUser> = {}
@@ -38,28 +38,14 @@ export class NavbarComponent implements OnInit {
     private readonly getCurrentUserService: GetCurrentUserService,
     @Inject(AlertService) private readonly alertService: AlertService,
     @Inject(Router) private readonly router: Router
-  ) {}
+  ) {
+    this.getCurrentUserService.currentUser$.subscribe((res) => {
+      this.currentUser = res
+    })
+  }
 
   toggleUserMenu (): void {
     this.toggle = !this.toggle
-  }
-
-  ngOnInit (): void {
-    this.getCurrentUserService
-      .getCurrentUser()
-      .pipe(take(1)) // * automatically unsubscribes after first emission
-      .subscribe({
-        next: (res) => {
-          this.currentUser = res
-        },
-        error: (err) => {
-          this.alertService.setAlertValues(true, 'Please log in to continue')
-          this.router.navigateByUrl('/login').catch((err) => {
-            console.error('Error while redirecting to login', err)
-          })
-          return err
-        }
-      })
   }
 
   userLogOut (): void {
@@ -69,6 +55,7 @@ export class NavbarComponent implements OnInit {
       .subscribe((res) => {
         if (res === 'Logged out') {
           this.currentUser = {}
+          this.toggle = false
           this.alertService.setAlertValues(true, 'Successfully logged out')
           this.router.navigateByUrl('/login').catch((err) => {
             console.error('Error while redirecting to login', err)

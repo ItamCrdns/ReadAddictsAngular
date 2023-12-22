@@ -9,7 +9,7 @@ import {
 import { GetPostsService } from './get-posts.service'
 import { type Post } from './IPost'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
-import { type Observable, BehaviorSubject, tap } from 'rxjs'
+import { type Observable, BehaviorSubject, tap, take } from 'rxjs'
 import { CommonModule, NgOptimizedImage } from '@angular/common'
 
 @Component({
@@ -35,8 +35,10 @@ export class PostsComponent implements OnDestroy, AfterViewInit {
     this.getPostsService
       .getPosts(page, limit)
       .pipe(
+        take(1),
         tap((newPosts) => {
           const oldPosts = this.postsSubject.getValue()
+          // ? Accumulate the posts in the posts BehaviorSubject
           this.postsSubject.next([...oldPosts, ...newPosts])
         })
       )
