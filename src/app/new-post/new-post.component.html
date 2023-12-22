@@ -1,12 +1,12 @@
 <section class="newpost-wrapper">
   <div class="newpost">
     <div>
+      <!-- Todo: `ngSrc` has an invalid value (``). To fix this, change the value to a non-empty string -->
       <img
-        ngSrc="https://res.cloudinary.com/dvu9fqdkn/image/upload/v1701618290/185ba21ad06af964b6e9421db7b14741_fvjhqm.jpg"
-        ngAlt="Coffee"
+        ngSrc="{{ (currentUser$ | async)?.profile_Picture || null }}"
+        alt="{{ (currentUser$ | async)?.username }}"
         width="75"
         height="75"
-        priority="true"
       />
     </div>
     <app-input

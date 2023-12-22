@@ -1,8 +1,4 @@
-@if (posts.length <= 0 && statusCode === 204) {
-<section class="no-posts-wrapper">
-  <h1>No posts.</h1>
-</section>
-} @for (post of posts; track post.post_Id) {
+@for (post of (posts$ | async); track post.post_Id) {
 <section class="posts-wrapper">
   <div class="post">
     <div class="title-wrapper">
@@ -22,9 +18,10 @@
       image.image_Id) {
       <img
         ngSrc="{{ image.image_Url }}"
-        alt="{{ image.user_Id }}"
+        [alt]="image.user_Id"
         width="100"
         height="100"
+        priority="true"
       />
       } }
     </div>
@@ -39,9 +36,3 @@
 </section>
 }
 <div #loadMore></div>
-@if (statusCode !== 0) {
-<section class="no-posts-wrapper">
-  <h1>Something went wrong</h1>
-  <p>{{ statusCode }}</p>
-</section>
-}

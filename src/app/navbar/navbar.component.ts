@@ -1,5 +1,5 @@
-import { Component, Inject } from '@angular/core'
-import { NgOptimizedImage } from '@angular/common'
+import { Component, Inject, type OnInit } from '@angular/core'
+import { CommonModule, NgOptimizedImage } from '@angular/common'
 import { navItems } from './navItems'
 import { heroChatBubbleLeftRight } from '@ng-icons/heroicons/outline'
 import { ionLogOutOutline } from '@ng-icons/ionicons'
@@ -11,11 +11,14 @@ import {
 import { LogOutService } from '../../services/log-out.service'
 import { Router } from '@angular/router'
 import { AlertService } from '../alert/alert.service'
+import { type IUser } from '../login/IUser'
+import { GetCurrentUserService } from '../../services/get-current-user.service'
+import { take } from 'rxjs'
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [NgOptimizedImage, NgIconComponent],
+  imports: [NgOptimizedImage, NgIconComponent, CommonModule],
   providers: [
     provideIcons({ heroChatBubbleLeftRight, ionLogOutOutline }),
     provideNgIconsConfig({ size: '1.75rem' }),
@@ -24,12 +27,15 @@ import { AlertService } from '../alert/alert.service'
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   items = navItems
   toggle: boolean = false
+  currentUser: Partial<IUser> = {}
 
   constructor (
     private readonly logOutService: LogOutService,
+    @Inject(GetCurrentUserService)
+    private readonly getCurrentUserService: GetCurrentUserService,
     @Inject(AlertService) private readonly alertService: AlertService,
     @Inject(Router) private readonly router: Router
   ) {}
@@ -38,14 +44,36 @@ export class NavbarComponent {
     this.toggle = !this.toggle
   }
 
+  ngOnInit (): void {
+    this.getCurrentUserService
+      .getCurrentUser()
+      .pipe(take(1)) // * automatically unsubscribes after first emission
+      .subscribe({
+        next: (res) => {
+          this.currentUser = res
+        },
+        error: (err) => {
+          this.alertService.setAlertValues(true, 'Please log in to continue')
+          this.router.navigateByUrl('/login').catch((err) => {
+            console.error('Error while redirecting to login', err)
+          })
+          return err
+        }
+      })
+  }
+
   userLogOut (): void {
-    this.logOutService.userLogOut().subscribe((res) => {
-      if (res === 'Logged out') {
-        this.alertService.setAlertValues(true, 'Successfully logged out')
-        this.router.navigateByUrl('/login').catch((err) => {
-          console.error('Error while redirecting to login', err)
-        })
-      }
-    })
+    this.logOutService
+      .userLogOut()
+      .pipe(take(1))
+      .subscribe((res) => {
+        if (res === 'Logged out') {
+          this.currentUser = {}
+          this.alertService.setAlertValues(true, 'Successfully logged out')
+          this.router.navigateByUrl('/login').catch((err) => {
+            console.error('Error while redirecting to login', err)
+          })
+        }
+      })
   }
 }

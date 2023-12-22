@@ -3,64 +3,59 @@ import {
   Component,
   Inject,
   type OnDestroy,
-  type OnInit,
   ViewChild,
   type ElementRef
 } from '@angular/core'
 import { GetPostsService } from './get-posts.service'
 import { type Post } from './IPost'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
-import { NgOptimizedImage } from '@angular/common'
-import { tap, Subscription, catchError, throwError } from 'rxjs'
+import { type Observable, BehaviorSubject, tap } from 'rxjs'
+import { CommonModule, NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'app-posts',
   standalone: true,
-  imports: [DateAgoPipe, NgOptimizedImage],
+  imports: [DateAgoPipe, NgOptimizedImage, CommonModule],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss'
 })
-export class PostsComponent implements OnInit, OnDestroy, AfterViewInit {
-  posts: Post[] = []
-  postsSubscription: Subscription = new Subscription()
+export class PostsComponent implements OnDestroy, AfterViewInit {
+  private readonly postsSubject = new BehaviorSubject<Post[]>([])
+  posts$: Observable<Post[]> = this.postsSubject.asObservable()
   statusCode: number = 0
-  page: number = 1
-  pageSize: number = 1
+  page: number = 5
 
   constructor (
     @Inject(GetPostsService) private readonly getPostsService: GetPostsService
-  ) {}
-
-  ngOnInit (): void {
+  ) {
     this.loadPosts(1, 5)
   }
 
-  ngOnDestroy (): void {
-    this.postsSubscription.unsubscribe()
-    this.observer.unobserve(this.loadMore.nativeElement)
-  }
-
-  private loadPosts (page: number, pageSize: number): void {
-    this.postsSubscription = this.getPostsService
-      .getPosts(page, pageSize)
+  private loadPosts (page: number, limit: number): void {
+    this.getPostsService
+      .getPosts(page, limit)
       .pipe(
-        tap((res) => {
-          this.posts = [...this.posts, ...res]
-        }),
-        catchError((err) => {
-          this.statusCode = err.status
-
-          return throwError(() => new Error('Not logged in ' + err.status))
+        tap((newPosts) => {
+          const oldPosts = this.postsSubject.getValue()
+          this.postsSubject.next([...oldPosts, ...newPosts])
         })
       )
       .subscribe()
   }
 
+  ngOnDestroy (): void {
+    this.observer.unobserve(this.loadMore.nativeElement)
+  }
+
   private readonly observer: IntersectionObserver = new IntersectionObserver(
     (entries) => {
-      if (entries[0].isIntersecting) {
+      // We check if the initial posts are loaded before loading more posts. This fixes an error where sometimes the first post we see its the 6th
+      if (
+        entries[0].isIntersecting &&
+        this.postsSubject.getValue().length !== 0
+      ) {
         this.page++
-        this.loadPosts(this.page, this.pageSize)
+        this.loadPosts(this.page, 1)
       }
     }
   )

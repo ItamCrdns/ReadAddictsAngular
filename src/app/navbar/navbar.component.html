@@ -6,25 +6,27 @@
     }
   </div>
   <div class="user-wrapper">
+    <!-- Todo: when logging in, profile picture wont show automatically we have to reload the page -->
+    @if (currentUser.profile_Picture !== undefined) {
     <img
-      ngSrc="https://res.cloudinary.com/dvu9fqdkn/image/upload/v1701618290/185ba21ad06af964b6e9421db7b14741_fvjhqm.jpg"
-      ngAlt="Coffee"
+      ngSrc="{{ currentUser.profile_Picture }}"
+      alt="{{ currentUser.username }}"
       width="50"
       height="50"
-      priority="true"
       (click)="toggle = !toggle"
     />
-    @if (toggle) {
+    } @if (toggle && currentUser.user_Id !== undefined) {
     <div class="user-menu">
       <div class="user-menu-wrapper">
         <img
-          ngSrc="https://res.cloudinary.com/dvu9fqdkn/image/upload/v1701618290/185ba21ad06af964b6e9421db7b14741_fvjhqm.jpg"
-          ngAlt="Coffee"
+          ngSrc="{{ currentUser.profile_Picture }}"
+          alt="{{ currentUser.username }}"
           width="50"
           height="50"
-          priority="true"
         />
-        <p>Username</p>
+        <p>
+          {{ currentUser.username }}
+        </p>
       </div>
       <div class="item">
         <ng-icon name="heroChatBubbleLeftRight" />
