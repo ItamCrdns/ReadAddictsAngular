@@ -1,4 +1,4 @@
-$blue-background: #00bfff;
+@import '../../mixins';
 
 .newpost-wrapper {
     display: flex;
@@ -11,10 +11,14 @@ $blue-background: #00bfff;
     background-color: rgb(255, 255, 255);
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .1);
     border-radius: 25px;
-    align-items: center;
-    justify-content: center;
     gap: 1.5rem;
     padding: 2rem;
+
+    form {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+    }
 }
 
 img {
@@ -22,10 +26,5 @@ img {
 }
 
 button {
-    all: unset;
-    background-color: $blue-background;
-    padding: .5rem 1.5rem;
-    border-radius: 15px;
-    cursor: pointer;
-    color: white;
+    @include button-styles;
 }

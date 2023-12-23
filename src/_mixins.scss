@@ -1,3 +1,5 @@
+$blue-background: #00bfff;
+
 @mixin post-header {
     background-color: whitesmoke;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .1);
@@ -32,4 +34,13 @@
         object-fit: cover;
         border-radius: 50%;
     }   
+}
+
+@mixin button-styles {
+    all: unset;
+    background-color: $blue-background;
+    padding: .5rem 1.5rem;
+    border-radius: 15px;
+    cursor: pointer;
+    color: white;
 }

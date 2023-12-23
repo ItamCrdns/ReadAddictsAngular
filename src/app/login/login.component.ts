@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core'
 import { InputComponent } from '../input/input.component'
-import { catchError, tap } from 'rxjs'
+import { take } from 'rxjs'
 import { type IUser } from './IUser'
 import { NgOptimizedImage } from '@angular/common'
 import { LoginUserService } from './login-user.service'
@@ -36,30 +36,32 @@ export class LoginComponent {
     @Inject(AlertService) private readonly alertService: AlertService
   ) {}
 
-  getUserData (): void {
+  getUser (): void {
     this.loginUsernameService
       .getUsername(this.username)
-      .pipe(
-        tap((res) => {
+      .pipe(take(1))
+      .subscribe({
+        next: (res) => {
           this.usernameFound = true
           this.user = res
-        }),
-        catchError((err) => {
-          this.alertService.setAlertValues(
-            true,
-            `User ${this.username} not found`
-          )
-          return err // Wrong
-        })
-      )
-      .subscribe()
+        },
+        error: (err) => {
+          if (err.status === 404) {
+            this.alertService.setAlertValues(
+              true,
+              `User ${this.username} not found`
+            )
+          }
+        }
+      })
   }
 
-  authenticateUser (): void {
+  loginUser (): void {
     this.loginUsernameService
       .authenticateUser(this.username, this.password)
-      .pipe(
-        tap((res) => {
+      .pipe(take(1))
+      .subscribe({
+        next: (res) => {
           if (res !== null) {
             this.alertService.setAlertValues(
               true,
@@ -71,15 +73,12 @@ export class LoginComponent {
               console.error('Error while redirecting to home page: ', err)
             })
           }
-        }),
-        catchError((res) => {
-          if (res.status === 401) {
+        },
+        error: (err) => {
+          if (err.status === 401) {
             this.alertService.setAlertValues(true, 'Incorrect password')
           }
-          // handle other errors later
-          return res // Wrong
-        })
-      )
-      .subscribe()
+        }
+      })
   }
 }

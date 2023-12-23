@@ -4,7 +4,7 @@
   <h2>Connect with readers, share books, ignite conversations.</h2>
   <p>Dont have an account? Register.</p>
   <app-input
-    (setTextEvent)="getUsernameText($event)"
+    (modelChange)="getUsernameText($event)"
     labelBackgroundColor="whitesmoke"
     [showCharacterCount]="false"
     labelText="Username"
@@ -13,7 +13,7 @@
   <button
     [style.color]="username.length > 0 ? 'white' : null"
     [style.background-color]="username.length > 0 ? '#03A9F4' : null"
-    (click)="getUserData()"
+    (click)="getUser()"
   >
     Next
   </button>
@@ -32,7 +32,7 @@
       >. Please enter your password
     </p>
     <app-input
-      (setTextEvent)="getPasswordText($event)"
+      (modelChange)="getPasswordText($event)"
       [showCharacterCount]="false"
       labelText="Password"
       type="password"
@@ -40,7 +40,7 @@
     <button
       [style.color]="password.length > 0 ? 'white' : null"
       [style.background-color]="password.length > 0 ? '#03A9F4' : null"
-      (click)="authenticateUser()"
+      (click)="loginUser()"
     >
       Login
     </button>

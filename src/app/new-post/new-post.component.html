@@ -9,11 +9,15 @@
         height="75"
       />
     </div>
-    <app-input
-      (setTextEvent)="getNewPostText($event)"
-      labelText="Create new post"
-    />
-    <ng-icon name="heroPhoto" />
-    <button>Post</button>
+    <form #postForm="ngForm" (ngSubmit)="createNewPost(postForm)">
+      <app-input
+        [(ngModel)]="content"
+        (modelChange)="content = $event"
+        labelText="Create new post"
+        name="content"
+      />
+      <ng-icon name="heroPhoto" />
+      <button type="submit">Post</button>
+    </form>
   </div>
 </section>

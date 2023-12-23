@@ -2,8 +2,8 @@
   <input
     required
     [type]="type"
-    #textInput
-    (input)="incrementCharacterCount(textInput.value)"
+    #postForm
+    (input)="incrementCharacterCount(postForm.value)"
     [maxLength]="maxLength"
   />
   <label
