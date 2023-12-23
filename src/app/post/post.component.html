@@ -1,0 +1,33 @@
+<section class="post-and-comments-wrapper">
+  <article class="post">
+    <header>
+      <img
+        ngSrc="{{ (post$ | async)?.profile_Picture }}"
+        alt="{{ (post$ | async)?.author }}"
+        width="50"
+        height="50"
+      />
+      <h1>
+        <a [routerLink]="['/user', (post$ | async)?.author]">{{
+          (post$ | async)?.author
+        }}</a>
+      </h1>
+      <h2>{{ "@" }}{{ (post$ | async)?.author }}</h2>
+      <p>{{ (post$ | async)?.created | dateAgo }}</p>
+    </header>
+    <p>{{ (post$ | async)?.content }}</p>
+    @if ((post$ | async)?.images?.length ?? 0 > 0) {
+    <div class="image-wrapper">
+      @for (image of (post$ | async)?.images ?? []; track image.image_Id) {
+      <img
+        ngSrc="{{ image.image_Url }}"
+        [alt]="image.user_Id"
+        width="100"
+        height="100"
+        priority="true"
+      />
+      }
+    </div>
+    }
+  </article>
+</section>

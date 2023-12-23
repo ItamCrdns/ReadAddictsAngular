@@ -1,11 +1,11 @@
-interface Image {
+interface IImage {
   image_Id: number
   post_Id: number
   user_Id: number
   image_Url: string
 }
 
-interface Group {
+interface IGroup {
   group_Id: number
   group_Name: string
   group_Description: string
@@ -13,7 +13,7 @@ interface Group {
   group_Picture: string
 }
 
-export interface Post {
+export interface IPost {
   post_Id: number
   user_Id: number
   author: string
@@ -25,7 +25,7 @@ export interface Post {
   last_Name: string
   comments: number
   group_Id: number
-  images: Image[]
-  group: Group
+  images: IImage[]
+  group: IGroup
   allowed: boolean
 }

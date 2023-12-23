@@ -1,18 +1,22 @@
 @for (post of (posts$ | async); track post.post_Id) {
 <section class="posts-wrapper">
-  <div class="post">
-    <div class="title-wrapper">
+  <article class="post">
+    <header class="title-wrapper">
       <img
         ngSrc="{{ post.profile_Picture }}"
         alt="{{ post.author }}"
         width="50"
         height="50"
       />
-      <h1>{{ post.author }}</h1>
+      <h1>
+        <a [routerLink]="['/user', post.author]">
+          {{ post.author }}
+        </a>
+      </h1>
       <h2>{{ "@" }}{{ post.author }}</h2>
       <p>{{ post.created | dateAgo }}</p>
-    </div>
-    <p>{{ post.content }}</p>
+    </header>
+    <a [routerLink]="['/post', post.post_Id]">{{ post.content }}</a>
     <div class="image-wrapper">
       @if (post.images.length > 0) { @for (image of post.images; track
       image.image_Id) {
@@ -32,7 +36,7 @@
       <button>Leave a comment</button>
       }
     </div>
-  </div>
+  </article>
 </section>
 }
 <div #loadMore></div>

@@ -5,8 +5,8 @@ import { Pipe, type PipeTransform } from '@angular/core'
   standalone: true
 })
 export class DateAgoPipe implements PipeTransform {
-  transform (date: string): string {
-    if (date !== '') {
+  transform (date: string | undefined): string | undefined {
+    if (date !== undefined) {
       const dateFromDatabase = new Date(date)
       const userTimezoneOffset = dateFromDatabase.getTimezoneOffset() * 60000
       const dateLocal = new Date(

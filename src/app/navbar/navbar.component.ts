@@ -9,7 +9,7 @@ import {
   provideNgIconsConfig
 } from '@ng-icons/core'
 import { LogOutService } from '../../services/log-out.service'
-import { Router } from '@angular/router'
+import { Router, RouterLink } from '@angular/router'
 import { AlertService } from '../alert/alert.service'
 import { type IUser } from '../login/IUser'
 import { GetCurrentUserService } from '../../services/get-current-user.service'
@@ -18,7 +18,7 @@ import { take } from 'rxjs'
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [NgOptimizedImage, NgIconComponent, CommonModule],
+  imports: [NgOptimizedImage, NgIconComponent, CommonModule, RouterLink],
   providers: [
     provideIcons({ heroChatBubbleLeftRight, ionLogOutOutline }),
     provideNgIconsConfig({ size: '1.75rem' }),

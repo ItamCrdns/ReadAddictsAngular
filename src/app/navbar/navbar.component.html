@@ -25,7 +25,9 @@
           height="50"
         />
         <p>
-          {{ currentUser.username }}
+          <a [routerLink]="['/user', currentUser.username]">{{
+            currentUser.username
+          }}</a>
         </p>
       </div>
       <div class="item">

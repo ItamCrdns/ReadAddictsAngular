@@ -4,32 +4,31 @@ import {
   Inject,
   type OnDestroy,
   ViewChild,
-  type ElementRef
+  type ElementRef,
+  type OnInit
 } from '@angular/core'
 import { GetPostsService } from './get-posts.service'
-import { type Post } from './IPost'
+import { type IPost } from './IPost'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type Observable, BehaviorSubject, tap, take } from 'rxjs'
 import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-posts',
   standalone: true,
-  imports: [DateAgoPipe, NgOptimizedImage, CommonModule],
+  imports: [DateAgoPipe, NgOptimizedImage, CommonModule, RouterLink],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss'
 })
-export class PostsComponent implements OnDestroy, AfterViewInit {
-  private readonly postsSubject = new BehaviorSubject<Post[]>([])
-  posts$: Observable<Post[]> = this.postsSubject.asObservable()
-  statusCode: number = 0
+export class PostsComponent implements OnInit, OnDestroy, AfterViewInit {
+  private readonly postsSubject = new BehaviorSubject<IPost[]>([])
+  posts$: Observable<IPost[]> = this.postsSubject.asObservable()
   page: number = 5
 
   constructor (
     @Inject(GetPostsService) private readonly getPostsService: GetPostsService
-  ) {
-    this.loadPosts(1, 5)
-  }
+  ) {}
 
   private loadPosts (page: number, limit: number): void {
     this.getPostsService
@@ -43,6 +42,10 @@ export class PostsComponent implements OnDestroy, AfterViewInit {
         })
       )
       .subscribe()
+  }
+
+  ngOnInit (): void {
+    this.loadPosts(1, 5)
   }
 
   ngOnDestroy (): void {
