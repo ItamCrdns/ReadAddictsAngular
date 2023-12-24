@@ -13,7 +13,7 @@
         }}</a>
       </h1>
       <h2>{{ "@" }}{{ (post$ | async)?.author }}</h2>
-      <p>{{ (post$ | async)?.created | dateAgo }}</p>
+      <p>{{ (post$ | async)?.created || "" | dateAgo }}</p>
     </header>
     <p>{{ (post$ | async)?.content }}</p>
     @if ((post$ | async)?.images?.length ?? 0 > 0) {
