@@ -7,12 +7,13 @@ import {
   provideIcons,
   provideNgIconsConfig
 } from '@ng-icons/core'
-import { GetCurrentUserService } from '../../services/get-current-user.service'
 import { FormsModule, type NgForm } from '@angular/forms'
 import { NewPostService } from './new-post.service'
 import { take } from 'rxjs'
 import { Router } from '@angular/router'
 import { AlertService } from '../alert/alert.service'
+import { type IUser } from '../login/IUser'
+import { AuthService } from '../../services/auth.service'
 
 @Component({
   selector: 'app-new-post',
@@ -33,17 +34,21 @@ import { AlertService } from '../alert/alert.service'
 })
 export class NewPostComponent {
   newPostText: string = ''
-  currentUser$ = this.getCurrentUserService.getCurrentUser()
+  currentUser: Partial<IUser> = {}
   content: string = ''
 
   constructor (
     @Inject(Router) private readonly router: Router,
-    @Inject(GetCurrentUserService)
-    private readonly getCurrentUserService: GetCurrentUserService,
+    @Inject(AuthService)
+    private readonly authService: AuthService,
     @Inject(NewPostService)
     private readonly newPostService: NewPostService,
     @Inject(AlertService) private readonly alertService: AlertService
-  ) {}
+  ) {
+    this.authService.currentUser$.subscribe((res) => {
+      this.currentUser = res
+    })
+  }
 
   getNewPostText (newPostText: string): void {
     this.newPostText = newPostText

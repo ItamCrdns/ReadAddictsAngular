@@ -3,8 +3,8 @@
     <div>
       <!-- Todo: `ngSrc` has an invalid value (``). To fix this, change the value to a non-empty string -->
       <img
-        ngSrc="{{ (currentUser$ | async)?.profile_Picture || null }}"
-        alt="{{ (currentUser$ | async)?.username }}"
+        ngSrc="{{ currentUser.profile_Picture || null }}"
+        alt="{{ currentUser.username }}"
         width="75"
         height="75"
       />

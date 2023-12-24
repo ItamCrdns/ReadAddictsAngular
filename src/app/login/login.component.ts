@@ -3,9 +3,9 @@ import { InputComponent } from '../input/input.component'
 import { take } from 'rxjs'
 import { type IUser } from './IUser'
 import { NgOptimizedImage } from '@angular/common'
-import { LoginUserService } from './login-user.service'
 import { Router } from '@angular/router'
 import { AlertService } from '../alert/alert.service'
+import { AuthService } from '../../services/auth.service'
 
 @Component({
   selector: 'app-login',
@@ -31,13 +31,13 @@ export class LoginComponent {
 
   constructor (
     @Inject(Router) private readonly router: Router,
-    @Inject(LoginUserService)
-    private readonly loginUsernameService: LoginUserService,
+    @Inject(AuthService)
+    private readonly authService: AuthService,
     @Inject(AlertService) private readonly alertService: AlertService
   ) {}
 
   getUser (): void {
-    this.loginUsernameService
+    this.authService
       .getUsername(this.username)
       .pipe(take(1))
       .subscribe({
@@ -57,12 +57,13 @@ export class LoginComponent {
   }
 
   loginUser (): void {
-    this.loginUsernameService
-      .authenticateUser(this.username, this.password)
+    this.authService
+      .login(this.username, this.password)
       .pipe(take(1))
       .subscribe({
         next: (res) => {
           if (res !== null) {
+            this.authService.setCurrentUser(res)
             this.alertService.setAlertValues(
               true,
               `Welcome back, ${this.username
