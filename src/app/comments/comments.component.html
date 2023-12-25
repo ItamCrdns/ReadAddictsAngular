@@ -1,0 +1,23 @@
+<section class="comments-wrapper">
+  @for (comment of (comments$ | async); track comment.comment_Id) {
+  <article class="comment">
+    <header>
+      <img
+        ngSrc="{{ comment.profile_Picture }}"
+        alt="{{ comment.author }}"
+        width="30"
+        height="30"
+      />
+      <h1>
+        <a [routerLink]="['/user', comment.author]">{{ comment.author }}</a>
+      </h1>
+      <h2>{{ "@" }}{{ comment.author }}</h2>
+      <p>{{ comment.created || "" | dateAgo }}</p>
+    </header>
+    <p>{{ comment.content }}</p>
+  </article>
+  <p>Leave a reply</p>
+  } @empty {
+  <h1>No comments yet.</h1>
+  }
+</section>

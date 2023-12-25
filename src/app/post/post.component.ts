@@ -5,11 +5,18 @@ import { CommonModule, NgOptimizedImage } from '@angular/common'
 import { type IPost } from '../posts/IPost'
 import { Observable } from 'rxjs'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
+import { CommentsComponent } from '../comments/comments.component'
 
 @Component({
   selector: 'app-post',
   standalone: true,
-  imports: [DateAgoPipe, NgOptimizedImage, CommonModule, RouterLink],
+  imports: [
+    DateAgoPipe,
+    NgOptimizedImage,
+    CommonModule,
+    RouterLink,
+    CommentsComponent
+  ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
 })
