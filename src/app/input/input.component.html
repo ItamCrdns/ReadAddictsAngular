@@ -3,16 +3,17 @@
     required
     [type]="type"
     #postForm
-    (input)="incrementCharacterCount(postForm.value)"
+    (keypress)="updateCharacterInfo(postForm.value)"
+    (input)="updateCharacterInfo(postForm.value)"
     [maxLength]="maxLength"
+    [style.background-color]="inputBgColor"
   />
   <label
-    [style.background-color]="labelBackgroundColor"
     class="placeholder-label"
     >{{ labelText }}</label
   >
   @if (characterCount > 0 && showCharacterCount) {
-  <label [style.background-color]="labelBackgroundColor" class="char-label">{{
+  <label class="char-label">{{
     characterCount
   }}</label>
   }

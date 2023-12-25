@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Inject,
   Input,
   Output,
   forwardRef,
@@ -14,6 +15,7 @@ import {
   type Validator,
   type ValidationErrors
 } from '@angular/forms'
+import { AlertService } from '../alert/alert.service'
 
 @Component({
   selector: 'app-input',
@@ -37,7 +39,7 @@ import {
 })
 export class InputComponent implements ControlValueAccessor, Validator {
   @Input() labelText: string = 'Set a default text...'
-  @Input() labelBackgroundColor: string = 'white'
+  @Input() inputBgColor: string = 'whitesmoke'
   @Input() showCharacterCount: boolean = true
   @Input() type: string = 'text'
   @Input() maxLength: number = 255
@@ -48,14 +50,23 @@ export class InputComponent implements ControlValueAccessor, Validator {
   characterCount: number = 0
   characterCountService = inject(CharacterCountService)
 
-  constructor () {
+  constructor (
+    @Inject(AlertService) private readonly alertService: AlertService
+  ) {
     this.characterCount = this.characterCountService.characterCount
   }
 
-  incrementCharacterCount (inputText: string): void {
+  updateCharacterInfo (inputText: string): void {
     this.characterCount = inputText.length
     this.inputValue = inputText
     this.modelChange.emit(this.inputValue)
+
+    if (inputText.length >= this.maxLength) {
+      this.alertService.setAlertValues(
+        true,
+        'Maximum character count of ' + this.maxLength + ' exceeded'
+      )
+    }
   }
 
   writeValue (obj: any): void {

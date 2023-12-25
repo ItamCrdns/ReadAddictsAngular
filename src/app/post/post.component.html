@@ -29,6 +29,9 @@
     </div>
     }
   </article>
-  <app-comments [postId]="post.post_Id" />
+  <section class="comments-section-wrapper">
+    <app-new-comment />
+    <app-comments [postId]="post.post_Id" />
+  </section>
   }
 </section>

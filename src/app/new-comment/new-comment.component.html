@@ -1,0 +1,21 @@
+<section class="newpost-wrapper">
+  <div class="newpost">
+    <div class="newpost-form">
+      <img
+        ngSrc="{{ user.profile_Picture }}"
+        alt="{{ user.username }}"
+        width="55"
+        height="55"
+      />
+      <form #postForm="ngForm" (ngSubmit)="createNewComment(postForm)">
+        <app-input
+          [(ngModel)]="content"
+          (modelChange)="content = $event"
+          labelText="Add a new comment"
+          name="content"
+        />
+        <button type="submit">Post comment</button>
+      </form>
+    </div>
+  </div>
+</section>

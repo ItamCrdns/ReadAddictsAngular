@@ -6,6 +6,7 @@ import { type IPost } from '../posts/IPost'
 import { Observable } from 'rxjs'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { CommentsComponent } from '../comments/comments.component'
+import { NewCommentComponent } from '../new-comment/new-comment.component'
 
 @Component({
   selector: 'app-post',
@@ -15,7 +16,8 @@ import { CommentsComponent } from '../comments/comments.component'
     NgOptimizedImage,
     CommonModule,
     RouterLink,
-    CommentsComponent
+    CommentsComponent,
+    NewCommentComponent
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'

@@ -81,7 +81,13 @@ export class NewPostComponent {
 
   createNewPost (newPostForm: NgForm): void {
     const content: string = newPostForm.value.content
-    if (content === '' || content.length < 8) {
+
+    if (content.length === 0) {
+      this.alertService.setAlertValues(true, 'Your post cannot be empty')
+      return
+    }
+
+    if (content.length > 0 && content.length < 8) {
       this.alertService.setAlertValues(
         true,
         'Your post must be at least 8 characters long'

@@ -7,9 +7,18 @@ import { PostsComponent } from '../posts/posts.component'
   standalone: true,
   imports: [NewPostComponent, PostsComponent],
   template: `
-    <app-new-post />
-    <app-posts />
+    <div class="new-post-posts-wrapper">
+      <app-new-post />
+      <app-posts />
+    </div>
   `,
-  styles: ''
+  styles: `
+  .new-post-posts-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem
+  }
+  `
 })
 export class HomeComponent {}
