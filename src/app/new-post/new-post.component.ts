@@ -1,12 +1,9 @@
-import { Component, Inject } from '@angular/core'
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core'
 import { CommonModule, NgOptimizedImage } from '@angular/common'
 import { InputComponent } from '../input/input.component'
 import { heroPhoto } from '@ng-icons/heroicons/outline'
-import {
-  NgIconComponent,
-  provideIcons,
-  provideNgIconsConfig
-} from '@ng-icons/core'
+import { ionRemoveCircle } from '@ng-icons/ionicons'
+import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { FormsModule, type NgForm } from '@angular/forms'
 import { NewPostService } from './new-post.service'
 import { take } from 'rxjs'
@@ -25,10 +22,7 @@ import { AuthService } from '../../services/auth.service'
     CommonModule,
     FormsModule
   ],
-  providers: [
-    provideIcons({ heroPhoto }),
-    provideNgIconsConfig({ size: '2.25rem', color: 'rgba(175, 175, 175)' })
-  ],
+  providers: [provideIcons({ heroPhoto, ionRemoveCircle })],
   templateUrl: './new-post.component.html',
   styleUrl: './new-post.component.scss'
 })
@@ -36,6 +30,9 @@ export class NewPostComponent {
   newPostText: string = ''
   currentUser: Partial<IUser> = {}
   content: string = ''
+  images: File[] = []
+
+  @ViewChild('imagesInput') imagesInput: ElementRef = new ElementRef('')
 
   constructor (
     @Inject(Router) private readonly router: Router,
@@ -54,13 +51,47 @@ export class NewPostComponent {
     this.newPostText = newPostText
   }
 
+  triggerImagesInput (): void {
+    this.imagesInput.nativeElement.click()
+  }
+
+  setImages (event: Event): void {
+    if (!(event.target instanceof HTMLInputElement)) {
+      return
+    }
+
+    if (event.target.files === null) {
+      return
+    }
+
+    this.images = Array.from(event.target.files)
+  }
+
+  trackByFn (index: number, item: File): string {
+    return item.name + index
+  }
+
+  getImgUrl (img: File): string {
+    return URL.createObjectURL(img)
+  }
+
+  removeImage (image: File): void {
+    this.images = this.images.filter((img) => img !== image)
+  }
+
   createNewPost (newPostForm: NgForm): void {
     // TODO: Add images to post
     if (newPostForm.valid === true) {
       // * Currently: if post content is provided
       const fd = new FormData()
       const postContent: string = newPostForm.value.content
+
       fd.append('content', postContent)
+
+      this.images.forEach((img) => {
+        fd.append('files', img)
+      })
+
       this.newPostService
         .create(fd)
         .pipe(take(1))

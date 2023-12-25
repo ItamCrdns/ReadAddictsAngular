@@ -1,6 +1,6 @@
 <section class="newpost-wrapper">
   <div class="newpost">
-    <div>
+    <div class="newpost-form">
       <!-- Todo: `ngSrc` has an invalid value (``). To fix this, change the value to a non-empty string -->
       <img
         ngSrc="{{ currentUser.profile_Picture || null }}"
@@ -8,16 +8,46 @@
         width="75"
         height="75"
       />
+      <form #postForm="ngForm" (ngSubmit)="createNewPost(postForm)">
+        <app-input
+          [(ngModel)]="content"
+          (modelChange)="content = $event"
+          labelText="Create new post"
+          name="content"
+        />
+        <input
+          #imagesInput
+          type="file"
+          name="files"
+          multiple
+          (change)="setImages($event)"
+        />
+        <ng-icon
+          name="heroPhoto"
+          class="image-picker"
+          (click)="triggerImagesInput()"
+        />
+        <button type="submit">Post</button>
+      </form>
     </div>
-    <form #postForm="ngForm" (ngSubmit)="createNewPost(postForm)">
-      <app-input
-        [(ngModel)]="content"
-        (modelChange)="content = $event"
-        labelText="Create new post"
-        name="content"
-      />
-      <ng-icon name="heroPhoto" />
-      <button type="submit">Post</button>
-    </form>
+    @if (images.length >= 0) {
+    <div class="image-preview">
+      @for (image of images; track trackByFn) {
+      <div>
+        <img
+          src="{{ getImgUrl(image) }}"
+          alt="{{ currentUser.username }}"
+          width="75"
+          height="75"
+        />
+        <ng-icon
+          class="remove-image"
+          name="ionRemoveCircle"
+          (click)="removeImage(image)"
+        />
+      </div>
+      }
+    </div>
+    }
   </div>
 </section>

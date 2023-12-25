@@ -3,21 +3,64 @@
 .newpost-wrapper {
     display: flex;
     justify-content: center;
-    margin-bottom: 2rem;
+    margin: 2rem 0;
 }
 
 .newpost {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: rgb(255, 255, 255);
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .1);
     border-radius: 25px;
-    gap: 1.5rem;
     padding: 2rem;
+}
+
+.newpost-form {
+    display: flex;
+    gap: 1.5rem;
 
     form {
         display: flex;
         align-items: center;
         gap: .75rem;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .image-picker {
+        cursor: pointer;
+        color: gray;
+        font-size: 2.25rem;
+    }
+}
+
+.image-preview {
+    display: flex;
+    flex-direction: row;
+
+    div {
+        margin-top: 2rem;
+        position: relative;
+        width: 100px;
+        overflow: hidden;
+    }
+
+    img {
+        object-fit: cover;
+    }
+
+    .remove-image {
+        color: red;
+        background-color: white;
+        border-radius: 50%;
+        position: absolute;
+        right: 1.25rem;
+        font-size: 1.5rem;
+        cursor: pointer;
     }
 }
 
