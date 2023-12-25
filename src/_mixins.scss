@@ -39,8 +39,9 @@ $blue-background: #00bfff;
 @mixin button-styles {
     all: unset;
     background-color: $blue-background;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     padding: .5rem 1.5rem;
-    border-radius: 15px;
+    border-radius: 7px;
     cursor: pointer;
     color: white;
 }

@@ -16,7 +16,7 @@ export class AlertService {
 
   private readonly alertValuesSubject = new Subject<IAlert>()
 
-  setAlertValues (showAlert: boolean, alertMessage: string): void {
+  setAlertValues (showAlert: boolean, alertMessage: string, duration: number = 5000): void {
     this.showAlert = showAlert
     this.alertMessage = alertMessage
 
@@ -36,7 +36,7 @@ export class AlertService {
         showAlert: false,
         alertMessage: this.alertMessage
       })
-    }, 5000)
+    }, duration)
   }
 
   getAlertValues (): Observable<IAlert> {

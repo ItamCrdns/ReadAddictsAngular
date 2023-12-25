@@ -21,13 +21,14 @@
           name="files"
           multiple
           (change)="setImages($event)"
+          accept="image/*"
         />
         <ng-icon
           name="heroPhoto"
           class="image-picker"
           (click)="triggerImagesInput()"
         />
-        <button type="submit">Post</button>
+        <button type="submit">Create post</button>
       </form>
     </div>
     @if (images.length >= 0) {

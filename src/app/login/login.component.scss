@@ -1,3 +1,5 @@
+@import '../../mixins';
+
 .login {
     display: flex;
     justify-content: center;
@@ -19,12 +21,10 @@
     }
 
     button {
-        all: unset;
+        @include button-styles;
         border: 1px solid #03A9F4;
+        background-color: rgba(0, 0, 0, 0);
         color: black;
-        padding: .5rem 1rem;
-        border-radius: 10px;
-        cursor: pointer;
     }
 }
 

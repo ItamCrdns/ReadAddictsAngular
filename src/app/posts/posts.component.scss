@@ -50,8 +50,7 @@
 }
 
 button {
-    all: unset;
+    @include button-styles;
     background-color: whitesmoke;
-    padding: .5rem 1rem;
-    border-radius: 10px;
+    color: #000;
 }

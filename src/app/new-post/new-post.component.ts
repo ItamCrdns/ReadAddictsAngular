@@ -80,13 +80,22 @@ export class NewPostComponent {
   }
 
   createNewPost (newPostForm: NgForm): void {
+    const content: string = newPostForm.value.content
+    if (content === '' || content.length < 8) {
+      this.alertService.setAlertValues(
+        true,
+        'Your post must be at least 8 characters long'
+      )
+      return
+    }
+
     // TODO: Add images to post
     if (newPostForm.valid === true) {
+      this.alertService.setAlertValues(true, 'Creating new post...')
       // * Currently: if post content is provided
       const fd = new FormData()
-      const postContent: string = newPostForm.value.content
 
-      fd.append('content', postContent)
+      fd.append('content', content)
 
       this.images.forEach((img) => {
         fd.append('files', img)
@@ -98,6 +107,10 @@ export class NewPostComponent {
         .subscribe({
           next: (res) => {
             if (res.status === 200) {
+              this.alertService.setAlertValues(
+                true,
+                'Your post has been created'
+              )
               this.router.navigate(['/post', res.body]).catch((err) => {
                 console.error('Error while redirecting to post', err)
               })

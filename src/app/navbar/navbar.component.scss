@@ -1,4 +1,5 @@
 @import '../../variables.scss';
+@import '../../mixins.scss';
 
 nav {
     background-color: white;
@@ -84,15 +85,12 @@ nav {
 }
 
 .log-out {
-    background-color: $pinkred;
-    padding: .25rem 1rem;
-    margin: 0;
-    border-radius: 10px;
+    @include button-styles;
     display: flex;
     align-items: center;
     gap: .5rem;
-    cursor: pointer;
-
+    background-color: $pinkred;
+    
     .log-out-btn {
         color: white;
     }
