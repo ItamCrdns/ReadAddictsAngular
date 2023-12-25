@@ -1,24 +1,23 @@
 <section class="post-and-comments-wrapper">
+  @if (post$ | async; as post) {
   <article class="post">
     <header>
       <img
-        ngSrc="{{ (post$ | async)?.profile_Picture }}"
-        alt="{{ (post$ | async)?.author }}"
+        ngSrc="{{ post.profile_Picture }}"
+        alt="{{ post.author }}"
         width="50"
         height="50"
       />
       <h1>
-        <a [routerLink]="['/user', (post$ | async)?.author]">{{
-          (post$ | async)?.author
-        }}</a>
+        <a [routerLink]="['/user', post.author]">{{ post.author }}</a>
       </h1>
-      <h2>{{ "@" }}{{ (post$ | async)?.author }}</h2>
-      <p>{{ (post$ | async)?.created || "" | dateAgo }}</p>
+      <h2>{{ "@" }}{{ post.author }}</h2>
+      <p>{{ post.created || "" | dateAgo }}</p>
     </header>
-    <p>{{ (post$ | async)?.content }}</p>
-    @if ((post$ | async)?.images?.length ?? 0 > 0) {
+    <p>{{ post.content }}</p>
+    @if (post.images.length > 0) {
     <div class="image-wrapper">
-      @for (image of (post$ | async)?.images ?? []; track image.image_Id) {
+      @for (image of post.images; track image.image_Id) {
       <img
         ngSrc="{{ image.image_Url }}"
         [alt]="image.user_Id"
@@ -30,4 +29,5 @@
     </div>
     }
   </article>
+  }
 </section>
