@@ -1,5 +1,6 @@
 <div class="alert-wrapper">
   <div class="alert" [@fadeInOut]="show ? 'open' : 'close'">
     <p>{{ message }}</p>
+    <ng-icon name="ionCloseCircleSharp" class="close-icon" (click)="closeAlert()" />
   </div>
 </div>

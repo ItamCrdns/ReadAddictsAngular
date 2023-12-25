@@ -5,7 +5,10 @@ import {
   transition,
   trigger
 } from '@angular/animations'
-import { Component, Input } from '@angular/core'
+import { Component, Inject, Input } from '@angular/core'
+import { NgIconComponent, provideIcons } from '@ng-icons/core'
+import { ionCloseCircleSharp } from '@ng-icons/ionicons'
+import { AlertService } from './alert.service'
 
 const fadeInOut = trigger('fadeInOut', [
   state(
@@ -29,7 +32,8 @@ const fadeInOut = trigger('fadeInOut', [
 @Component({
   selector: 'app-alert',
   standalone: true,
-  imports: [],
+  imports: [NgIconComponent],
+  providers: [provideIcons({ ionCloseCircleSharp })],
   templateUrl: './alert.component.html',
   styleUrl: './alert.component.scss',
   animations: [fadeInOut]
@@ -37,4 +41,12 @@ const fadeInOut = trigger('fadeInOut', [
 export class AlertComponent {
   @Input() message: string = 'Set a default message...'
   @Input() show: boolean = false
+
+  constructor (@Inject(AlertService) private readonly alertService: AlertService) {
+
+  }
+
+  closeAlert (): void {
+    this.alertService.setAlertValues(false, this.message)
+  }
 }
