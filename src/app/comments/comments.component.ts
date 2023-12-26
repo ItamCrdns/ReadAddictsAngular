@@ -3,7 +3,7 @@ import { BehaviorSubject, type Observable, take, tap } from 'rxjs'
 import { type IComment } from './IComment'
 import { GetCommentsService } from './get-comments.service'
 import { CommonModule, NgOptimizedImage } from '@angular/common'
-import { RouterLink } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type DataCountAndLimit } from './DataCountAndLimit'
 
@@ -30,17 +30,30 @@ export class CommentsComponent implements OnInit {
   page: number = 1
 
   constructor (
+    @Inject(Router) private readonly router: Router,
+    @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
     @Inject(GetCommentsService)
     private readonly getCommentsService: GetCommentsService
-  ) {}
+  ) {
+    this.route.queryParams.subscribe((params) => {
+      const pageParam: number = params['page']
 
-  ngOnInit (): void {
-    this.loadComments(1)
+      if (!isNaN(pageParam) && pageParam > 0) {
+        this.page = pageParam
+      } else {
+        this.page = 1
+      }
+    })
   }
 
-  private loadComments (page: number): void {
+  ngOnInit (): void {
+    const commentsToShow = Math.ceil(this.page * 5)
+    this.loadComments(1, commentsToShow)
+  }
+
+  private loadComments (page: number, limit: number = 5): void {
     this.getCommentsService
-      .getComments(this.postId, page, 5)
+      .getComments(this.postId, page, limit)
       .pipe(
         take(1),
         tap((newComments) => {
@@ -62,6 +75,14 @@ export class CommentsComponent implements OnInit {
 
   loadMoreComments (): void {
     this.page++
+    this.router
+      .navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: this.page }
+      })
+      .catch((err) => {
+        console.error('Error while navigating to page', err)
+      })
     this.loadComments(this.page)
   }
 }
