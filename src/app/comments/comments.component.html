@@ -1,5 +1,6 @@
+@if (comments$ | async; as comments) {
 <section class="comments-wrapper">
-  @for (comment of (comments$ | async); track comment.comment_Id) {
+  @for (comment of comments.data; track comment.comment_Id) {
   <article class="comment">
     <header>
       <img
@@ -17,7 +18,13 @@
     <p>{{ comment.content }}</p>
   </article>
   <p>Leave a reply</p>
-  } @empty {
-  <h1>No comments yet.</h1>
   }
+  <footer>
+    @if (comments.data.length < comments.count) {
+    <button (click)="loadMoreComments()">Load more comments</button>
+    } @else {
+    <button class='disabled-button'>You have reached the end</button>
+    }
+  </footer>
 </section>
+}
