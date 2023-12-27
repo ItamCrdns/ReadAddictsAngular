@@ -1,29 +1,13 @@
 @if (comments$ | async; as comments) {
 <section class="comments-wrapper">
   @for (comment of comments.data; track comment.comment_Id) {
-  <article class="comment">
-    <header>
-      <img
-        ngSrc="{{ comment.profile_Picture }}"
-        alt="{{ comment.author }}"
-        width="30"
-        height="30"
-      />
-      <h1>
-        <a [routerLink]="['/user', comment.author]">{{ comment.author }}</a>
-      </h1>
-      <h2>{{ "@" }}{{ comment.author }}</h2>
-      <p>{{ comment.created || "" | dateAgo }}</p>
-    </header>
-    <p>{{ comment.content }}</p>
-  </article>
-  <p>Leave a reply</p>
+  <app-comment-ui [comment]="comment" />
   }
   <footer>
     @if (comments.data.length < comments.count) {
     <button (click)="loadMoreComments()">Load more comments</button>
     } @else {
-    <button class='disabled-button'>You have reached the end</button>
+    <button class="disabled-button">You have reached the end</button>
     }
   </footer>
 </section>

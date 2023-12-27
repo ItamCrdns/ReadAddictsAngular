@@ -1,0 +1,5 @@
+<section class="comments-wrapper">
+  @for (comment of (comment$ | async); track comment.comment_Id) {
+  <app-recursive-comment [comment]="comment" />
+  }
+</section>

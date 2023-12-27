@@ -31,7 +31,10 @@
   </article>
   <section class="comments-section-wrapper">
     <app-new-comment />
+    @if (showComments) {
     <app-comments [postId]="post.post_Id" />
+    }
+    <router-outlet></router-outlet>
   </section>
   }
 </section>

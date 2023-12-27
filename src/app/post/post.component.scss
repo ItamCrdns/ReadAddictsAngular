@@ -8,6 +8,10 @@
     margin-top: 2rem;
 }
 
+.comments-section-wrapper router-outlet {
+    display: contents;
+}
+
 .comments-section-wrapper {
     display: flex;
     flex-direction: column;

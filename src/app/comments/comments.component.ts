@@ -6,11 +6,18 @@ import { CommonModule, NgOptimizedImage } from '@angular/common'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type DataCountAndLimit } from './DataCountAndLimit'
+import { CommentUiComponent } from '../comment/comment-ui/comment-ui.component'
 
 @Component({
   selector: 'app-comments',
   standalone: true,
-  imports: [DateAgoPipe, CommonModule, NgOptimizedImage, RouterLink],
+  imports: [
+    DateAgoPipe,
+    CommonModule,
+    NgOptimizedImage,
+    RouterLink,
+    CommentUiComponent
+  ],
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.scss'
 })
