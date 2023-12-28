@@ -1,5 +1,7 @@
 <app-comment-ui [comment]="comment" />
-@for (child of comment.childComments; track child.comment_Id) {
+@if (comment.comment_Id === paramsCommentId) {
+<router-outlet></router-outlet>
+} @for (child of comment.childComments; track child.comment_Id) {
 <section class="child-comment">
   <app-recursive-comment [comment]="child" />
 </section>

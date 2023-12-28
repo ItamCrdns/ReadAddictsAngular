@@ -1,0 +1,19 @@
+@if((user$ | async); as user) {
+<section class="reply">
+  <img
+    ngSrc="{{ user.profile_Picture || null }}"
+    alt="{{ user.username }}"
+    width="45"
+    height="45"
+  />
+  <!-- TODO: Make the input smaller. pass styles as props. tomorrow!!! -->
+  <app-input
+    [(ngModel)]="content"
+    (modelChange)="content = $event"
+    labelText="Write a reply.."
+    name="content"
+    sizeModifier="0.5rem"
+  />
+  <button type="submit">Reply</button>
+</section>
+}

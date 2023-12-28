@@ -1,0 +1,17 @@
+@import '../../../mixins';
+
+.reply {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: .75rem 0;
+    
+    img {
+        border-radius: 50%;
+    }
+
+    button {
+        @include button-styles;
+    }
+}

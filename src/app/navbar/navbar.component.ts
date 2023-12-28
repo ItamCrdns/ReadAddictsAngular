@@ -12,7 +12,7 @@ import { LogOutService } from '../../services/log-out.service'
 import { Router, RouterLink } from '@angular/router'
 import { AlertService } from '../alert/alert.service'
 import { AuthService } from '../../services/auth.service'
-import { take } from 'rxjs'
+import { type Observable, take } from 'rxjs'
 import { type IUser } from '../login/IUser'
 
 @Component({
@@ -30,7 +30,7 @@ import { type IUser } from '../login/IUser'
 export class NavbarComponent implements OnInit {
   items = navItems
   toggle: boolean = false
-  currentUser: Partial<IUser> = {}
+  user$: Observable<Partial<IUser>> = this.authService.currentUser$
 
   constructor (
     private readonly logOutService: LogOutService,
@@ -38,17 +38,14 @@ export class NavbarComponent implements OnInit {
     private readonly authService: AuthService,
     @Inject(AlertService) private readonly alertService: AlertService,
     @Inject(Router) private readonly router: Router
-  ) {
-    this.authService.currentUser$.subscribe((res) => {
-      this.currentUser = res
-    })
-  }
+  ) {}
 
   toggleUserMenu (): void {
     this.toggle = !this.toggle
   }
 
   ngOnInit (): void {
+    // we need to run the getCurrentUser somewhere and the navbar is the best place to do it (it's always there)
     this.authService.getCurrentUser()
   }
 

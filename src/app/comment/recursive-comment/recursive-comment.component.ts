@@ -1,9 +1,16 @@
-import { Component, Input } from '@angular/core'
+import {
+  Component,
+  Inject,
+  Input,
+  type OnDestroy,
+  type OnInit
+} from '@angular/core'
 import { type IComment } from '../../comments/IComment'
 import { CommonModule, NgOptimizedImage } from '@angular/common'
-import { RouterLink } from '@angular/router'
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { CommentUiComponent } from '../comment-ui/comment-ui.component'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-recursive-comment',
@@ -13,7 +20,8 @@ import { CommentUiComponent } from '../comment-ui/comment-ui.component'
     CommonModule,
     NgOptimizedImage,
     RouterLink,
-    CommentUiComponent
+    CommentUiComponent,
+    RouterOutlet
   ],
   templateUrl: './recursive-comment.component.html',
   styles: `
@@ -25,6 +33,22 @@ import { CommentUiComponent } from '../comment-ui/comment-ui.component'
       }
     `
 })
-export class RecursiveCommentComponent {
+export class RecursiveCommentComponent implements OnInit, OnDestroy {
   @Input() comment: Partial<IComment> = {}
+  paramsCommentId: number = 0
+  sub: Subscription = new Subscription()
+
+  constructor (@Inject(ActivatedRoute) private readonly route: ActivatedRoute) {}
+
+  ngOnInit (): void {
+    // i tried passing it as props but didnt work. so i had to use the route
+    this.sub = this.route.params.subscribe((params) => {
+      this.paramsCommentId = +params['id']
+    })
+  }
+
+  ngOnDestroy (): void {
+    this.paramsCommentId = 0
+    this.sub.unsubscribe()
+  }
 }

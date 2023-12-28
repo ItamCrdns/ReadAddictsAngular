@@ -33,7 +33,10 @@ import { NgOptimizedImage } from '@angular/common'
       >
       <span>·</span>
       }
-      <p>Leave a reply</p>
+      <a
+        [routerLink]="['/post', comment.post_Id, 'comment', comment.comment_Id, 'reply']"
+        >Reply</a
+      >
     </div>
   `,
   styleUrl: '../../comments/comments.component.scss'

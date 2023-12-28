@@ -1,10 +1,11 @@
 <section class="newpost-wrapper">
+  @if((user$ | async); as user) {
   <div class="newpost">
     <div class="newpost-form">
       <!-- Todo: `ngSrc` has an invalid value (``). To fix this, change the value to a non-empty string -->
       <img
-        ngSrc="{{ currentUser.profile_Picture || null }}"
-        alt="{{ currentUser.username }}"
+        ngSrc="{{ user.profile_Picture || null }}"
+        alt="{{ user.username }}"
         width="75"
         height="75"
       />
@@ -37,7 +38,7 @@
       <div>
         <img
           src="{{ getImgUrl(image) }}"
-          alt="{{ currentUser.username }}"
+          alt="{{ user.username }}"
           width="75"
           height="75"
         />
@@ -51,4 +52,5 @@
     </div>
     }
   </div>
+  }
 </section>

@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component'
 import { PostComponent } from './post/post.component'
 import { UserComponent } from './user/user.component'
 import { CommentComponent } from './comment/comment.component'
+import { ReplyComponent } from './comment/reply/reply.component'
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -11,7 +12,18 @@ export const routes: Routes = [
   {
     path: 'post/:id',
     component: PostComponent,
-    children: [{ path: 'comment/:id', component: CommentComponent }]
+    children: [
+      {
+        path: 'comment/:id',
+        component: CommentComponent,
+        children: [
+          {
+            path: 'reply',
+            component: ReplyComponent
+          }
+        ]
+      }
+    ]
   },
   { path: 'user/:username', component: UserComponent },
   { path: '**', redirectTo: '' }

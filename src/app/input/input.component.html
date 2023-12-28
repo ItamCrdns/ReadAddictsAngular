@@ -7,14 +7,12 @@
     (input)="updateCharacterInfo(postForm.value)"
     [maxLength]="maxLength"
     [style.background-color]="inputBgColor"
+    [style.padding]="sizeModifier"
   />
-  <label
-    class="placeholder-label"
-    >{{ labelText }}</label
-  >
-  @if (characterCount > 0 && showCharacterCount) {
-  <label class="char-label">{{
-    characterCount
+  <label class="placeholder-label" [style.top]="sizeModifier">{{
+    labelText
   }}</label>
+  @if (characterCount > 0 && showCharacterCount) {
+  <label class="char-label">{{ characterCount }}</label>
   }
 </div>

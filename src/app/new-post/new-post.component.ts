@@ -6,7 +6,7 @@ import { ionRemoveCircle } from '@ng-icons/ionicons'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { FormsModule, type NgForm } from '@angular/forms'
 import { NewPostService } from './new-post.service'
-import { take } from 'rxjs'
+import { type Observable, take } from 'rxjs'
 import { Router } from '@angular/router'
 import { AlertService } from '../alert/alert.service'
 import { type IUser } from '../login/IUser'
@@ -28,7 +28,7 @@ import { AuthService } from '../../services/auth.service'
 })
 export class NewPostComponent {
   newPostText: string = ''
-  currentUser: Partial<IUser> = {}
+  user$: Observable<Partial<IUser>> = this.authService.currentUser$
   content: string = ''
   images: File[] = []
 
@@ -41,11 +41,7 @@ export class NewPostComponent {
     @Inject(NewPostService)
     private readonly newPostService: NewPostService,
     @Inject(AlertService) private readonly alertService: AlertService
-  ) {
-    this.authService.currentUser$.subscribe((res) => {
-      this.currentUser = res
-    })
-  }
+  ) {}
 
   getNewPostText (newPostText: string): void {
     this.newPostText = newPostText

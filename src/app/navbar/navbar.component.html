@@ -6,6 +6,7 @@
     }
   </div>
   <div class="user-wrapper">
+    @if((user$ | async); as currentUser) {
     <!-- Todo: when logging in, profile picture wont show automatically we have to reload the page -->
     @if (currentUser.profile_Picture) {
     <img
@@ -39,6 +40,6 @@
         <p>Logout</p>
       </div>
     </div>
-    }
+    } }
   </div>
 </nav>
