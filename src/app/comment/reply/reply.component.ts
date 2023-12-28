@@ -15,7 +15,6 @@ import { FormsModule } from '@angular/forms'
 })
 export class ReplyComponent {
   user$: Observable<Partial<IUser>> = this.authService.currentUser$
-  content: string = ''
 
   constructor (
     @Inject(AuthService)

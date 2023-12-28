@@ -1,5 +1,5 @@
-import { Component, Inject, Input, type OnInit } from '@angular/core'
-import { BehaviorSubject, type Observable, take, tap } from 'rxjs'
+import { Component, Inject, Input, type OnDestroy, type OnInit } from '@angular/core'
+import { BehaviorSubject, type Observable, take, tap, Subscription } from 'rxjs'
 import { type IComment } from './IComment'
 import { GetCommentsService } from './get-comments.service'
 import { CommonModule, NgOptimizedImage } from '@angular/common'
@@ -21,7 +21,7 @@ import { CommentUiComponent } from '../comment/comment-ui/comment-ui.component'
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.scss'
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent implements OnInit, OnDestroy {
   @Input() postId: number = 0
   private readonly commentsSubject = new BehaviorSubject<
   DataCountAndLimit<IComment>
@@ -35,6 +35,7 @@ export class CommentsComponent implements OnInit {
     this.commentsSubject.asObservable()
 
   page: number = 1
+  sub: Subscription = new Subscription()
 
   constructor (
     @Inject(Router) private readonly router: Router,
@@ -42,7 +43,7 @@ export class CommentsComponent implements OnInit {
     @Inject(GetCommentsService)
     private readonly getCommentsService: GetCommentsService
   ) {
-    this.route.queryParams.subscribe((params) => {
+    this.sub = this.route.queryParams.subscribe((params) => {
       const pageParam: number = params['page']
 
       if (!isNaN(pageParam) && pageParam > 0) {
@@ -56,6 +57,10 @@ export class CommentsComponent implements OnInit {
   ngOnInit (): void {
     const commentsToShow = Math.ceil(this.page * 5)
     this.loadComments(1, commentsToShow)
+  }
+
+  ngOnDestroy (): void {
+    this.sub.unsubscribe()
   }
 
   private loadComments (page: number, limit: number = 5): void {
