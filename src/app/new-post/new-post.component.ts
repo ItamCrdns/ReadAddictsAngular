@@ -33,6 +33,7 @@ export class NewPostComponent {
   images: File[] = []
 
   @ViewChild('imagesInput') imagesInput: ElementRef = new ElementRef('')
+  @ViewChild(InputComponent) inputComponent!: InputComponent
 
   constructor (
     @Inject(Router) private readonly router: Router,
@@ -109,6 +110,8 @@ export class NewPostComponent {
         .subscribe({
           next: (res) => {
             if (res.status === 200) {
+              newPostForm.resetForm()
+              this.inputComponent.clear()
               this.alertService.setAlertValues(
                 true,
                 'Your post has been created'

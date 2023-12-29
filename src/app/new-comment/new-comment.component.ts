@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common'
-import { Component, Inject } from '@angular/core'
+import { Component, Inject, ViewChild } from '@angular/core'
 import { InputComponent } from '../input/input.component'
 import { FormsModule, type NgForm } from '@angular/forms'
 import { AuthService } from '../../services/auth.service'
@@ -20,6 +20,8 @@ export class NewCommentComponent {
   user: Partial<IUser> = {}
   content: string = ''
   postId: number = 0
+
+  @ViewChild(InputComponent) inputComponent!: InputComponent
 
   constructor (
     @Inject(AuthService)
@@ -60,6 +62,8 @@ export class NewCommentComponent {
         .subscribe({
           next: (res) => {
             if (res.status === 200) {
+              newCommentForm.resetForm()
+              this.inputComponent.clear()
               // TODO: Clear input field after comment is created
               this.alertService.setAlertValues(
                 true,

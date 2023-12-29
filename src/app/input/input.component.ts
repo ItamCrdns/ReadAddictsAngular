@@ -13,14 +13,15 @@ import {
   NG_VALUE_ACCESSOR,
   NG_VALIDATORS,
   type Validator,
-  type ValidationErrors
+  type ValidationErrors,
+  FormsModule
 } from '@angular/forms'
 import { AlertService } from '../alert/alert.service'
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
   providers: [
@@ -87,5 +88,10 @@ export class InputComponent implements ControlValueAccessor, Validator {
       return { required: true }
     }
     return null
+  }
+
+  clear (): void {
+    this.inputValue = ''
+    this.characterCount = 0
   }
 }
