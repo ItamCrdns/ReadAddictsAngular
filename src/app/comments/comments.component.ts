@@ -2,7 +2,7 @@ import { Component, Inject, Input, type OnDestroy, type OnInit } from '@angular/
 import { BehaviorSubject, type Observable, take, tap, Subscription } from 'rxjs'
 import { type IComment } from './IComment'
 import { GetCommentsService } from './get-comments.service'
-import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type DataCountAndLimit } from './DataCountAndLimit'
@@ -13,7 +13,7 @@ import { CommentUiComponent } from '../comment/comment-ui/comment-ui.component'
   standalone: true,
   imports: [
     DateAgoPipe,
-    CommonModule,
+    AsyncPipe,
     NgOptimizedImage,
     RouterLink,
     CommentUiComponent

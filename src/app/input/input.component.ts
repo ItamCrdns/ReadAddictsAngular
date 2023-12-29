@@ -45,6 +45,7 @@ export class InputComponent implements ControlValueAccessor, Validator {
   @Input() type: string = 'text'
   @Input() maxLength: number = 255
   @Input() sizeModifier: string = '' // Pass a number between 0 and 1rem (e.g. 0.5rem) to reduce the size of the input
+  @Input() fontSize: string = '' // If we modify the size we might also want to modify the font size
 
   @Output() modelChange = new EventEmitter<string>()
 

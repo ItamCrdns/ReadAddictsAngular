@@ -1,4 +1,4 @@
-import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Component, Inject, ViewChild } from '@angular/core'
 import { InputComponent } from '../input/input.component'
 import { FormsModule, type NgForm } from '@angular/forms'
@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 @Component({
   selector: 'app-new-comment',
   standalone: true,
-  imports: [NgOptimizedImage, InputComponent, CommonModule, FormsModule],
+  imports: [NgOptimizedImage, InputComponent, AsyncPipe, FormsModule],
   templateUrl: './new-comment.component.html',
   styleUrl: '../new-post/new-post.component.scss' // pretty much the same styles as new-post
 })

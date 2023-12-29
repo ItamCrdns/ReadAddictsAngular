@@ -9,11 +9,20 @@
     [maxLength]="maxLength"
     [style.background-color]="inputBgColor"
     [style.padding]="sizeModifier"
+    [style.font-size]="fontSize"
   />
-  <label class="placeholder-label" [style.top]="sizeModifier">{{
-    labelText
-  }}</label>
+  <label
+    class="placeholder-label"
+    [style.top]="sizeModifier"
+    [style.font-size]="fontSize"
+    >{{ labelText }}</label
+  >
   @if (characterCount > 0 && showCharacterCount) {
-  <label class="char-label">{{ characterCount }}</label>
+  <label
+    class="char-label"
+    [style.top]="sizeModifier"
+    [style.font-size]="fontSize"
+    >{{ characterCount }}</label
+  >
   }
 </div>

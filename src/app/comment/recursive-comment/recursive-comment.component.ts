@@ -6,7 +6,7 @@ import {
   type OnInit
 } from '@angular/core'
 import { type IComment } from '../../comments/IComment'
-import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { CommentUiComponent } from '../comment-ui/comment-ui.component'
@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs'
   standalone: true,
   imports: [
     DateAgoPipe,
-    CommonModule,
+    AsyncPipe,
     NgOptimizedImage,
     RouterLink,
     CommentUiComponent,
@@ -27,7 +27,7 @@ import { Subscription } from 'rxjs'
   styles: `
       .child-comment {
         padding-top: 1rem;
-        margin-left: 2rem;
+        margin-left: 1rem;
         border-left: 3px solid whitesmoke;
         padding-left: 1rem;
       }

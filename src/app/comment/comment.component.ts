@@ -3,13 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { GetCommentService } from './get-comment.service'
 import { Observable, Subscription } from 'rxjs'
 import { type IComment } from '../comments/IComment'
-import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { RecursiveCommentComponent } from './recursive-comment/recursive-comment.component'
 
 @Component({
   selector: 'app-comment',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, RecursiveCommentComponent],
+  imports: [AsyncPipe, NgOptimizedImage, RecursiveCommentComponent],
   templateUrl: './comment.component.html',
   styleUrl: '../comments/comments.component.scss'
 })

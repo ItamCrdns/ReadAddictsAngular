@@ -7,7 +7,7 @@ import {
 } from '@angular/core'
 import { InputComponent } from '../../input/input.component'
 import { AuthService } from '../../../services/auth.service'
-import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Subscription, type Observable, take } from 'rxjs'
 import { type IUser } from '../../login/IUser'
 import { FormsModule, type NgForm } from '@angular/forms'
@@ -18,7 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 @Component({
   selector: 'app-reply',
   standalone: true,
-  imports: [InputComponent, NgOptimizedImage, CommonModule, FormsModule],
+  imports: [InputComponent, NgOptimizedImage, AsyncPipe, FormsModule],
   templateUrl: './reply.component.html',
   styleUrl: './reply.component.scss'
 })

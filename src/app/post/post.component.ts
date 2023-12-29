@@ -8,7 +8,7 @@ import {
   RouterOutlet
 } from '@angular/router'
 import { GetPostService } from './get-post.service'
-import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { type IPost } from '../posts/IPost'
 import { Observable, filter } from 'rxjs'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
@@ -22,7 +22,7 @@ import { NewCommentComponent } from '../new-comment/new-comment.component'
     RouterOutlet,
     DateAgoPipe,
     NgOptimizedImage,
-    CommonModule,
+    AsyncPipe,
     RouterLink,
     CommentsComponent,
     NewCommentComponent,

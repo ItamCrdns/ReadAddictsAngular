@@ -11,13 +11,13 @@ import { GetPostsService } from './get-posts.service'
 import { type IPost } from './IPost'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type Observable, BehaviorSubject, tap, take } from 'rxjs'
-import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-posts',
   standalone: true,
-  imports: [DateAgoPipe, NgOptimizedImage, CommonModule, RouterLink],
+  imports: [DateAgoPipe, NgOptimizedImage, AsyncPipe, RouterLink],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss'
 })

@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core'
-import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { InputComponent } from '../input/input.component'
 import { heroPhoto } from '@ng-icons/heroicons/outline'
 import { ionRemoveCircle } from '@ng-icons/ionicons'
@@ -19,7 +19,7 @@ import { AuthService } from '../../services/auth.service'
     NgOptimizedImage,
     NgIconComponent,
     InputComponent,
-    CommonModule,
+    AsyncPipe,
     FormsModule
   ],
   providers: [provideIcons({ heroPhoto, ionRemoveCircle })],

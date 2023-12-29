@@ -1,5 +1,5 @@
 import { Component, Inject, type OnInit } from '@angular/core'
-import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { navItems } from './navItems'
 import { heroChatBubbleLeftRight } from '@ng-icons/heroicons/outline'
 import { ionLogOutOutline } from '@ng-icons/ionicons'
@@ -18,7 +18,7 @@ import { type IUser } from '../login/IUser'
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [NgOptimizedImage, NgIconComponent, CommonModule, RouterLink],
+  imports: [NgOptimizedImage, NgIconComponent, AsyncPipe, RouterLink],
   providers: [
     provideIcons({ heroChatBubbleLeftRight, ionLogOutOutline }),
     provideNgIconsConfig({ size: '1.75rem' }),
