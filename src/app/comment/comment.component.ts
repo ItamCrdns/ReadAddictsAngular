@@ -25,7 +25,7 @@ export class CommentComponent implements OnDestroy {
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute
   ) {
     this.sub = this.route.params.subscribe((params) => {
-      const id = +params['id']
+      const id = +params['commentId']
 
       if (!isNaN(id) && id > 0) {
         this.comment$ = this.getCommentService.getComment(id)

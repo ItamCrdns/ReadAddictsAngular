@@ -10,11 +10,11 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   {
-    path: 'post/:id',
+    path: 'post/:postId',
     component: PostComponent,
     children: [
       {
-        path: 'comment/:id',
+        path: 'comment/:commentId',
         component: CommentComponent,
         children: [
           {

@@ -6,14 +6,16 @@
     width="45"
     height="45"
   />
-  <!-- TODO: Make the input smaller. pass styles as props. tomorrow!!! -->
-  <!-- <app-input
-    [(ngModel)]="content"
-    (modelChange)="content = $event"
-    labelText="Write a reply.."
-    name="content"
-    sizeModifier="0.5rem"
-  /> -->
-  <button type="submit">Reply</button>
+  <form #replyForm="ngForm" (ngSubmit)="reply(replyForm)">
+    <app-input
+      [(ngModel)]="content"
+      (modelChange)="content = $event"
+      labelText="Write a reply.."
+      name="content"
+      sizeModifier="0.5rem"
+    />
+    <button type="submit">Reply</button>
+    <!-- <button type="submit" [disabled]="!replyForm.valid">Reply</button> -->
+  </form>
 </section>
 }

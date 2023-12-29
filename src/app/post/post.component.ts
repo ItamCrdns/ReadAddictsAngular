@@ -55,7 +55,7 @@ export class PostComponent implements OnInit {
 
   ngOnInit (): void {
     this.post$ = this.getPostService.getPost(
-      this.route.snapshot.params['id'] as number
+      this.route.snapshot.params['postId'] as number
     )
   }
 }

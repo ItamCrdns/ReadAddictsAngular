@@ -14,4 +14,10 @@
     button {
         @include button-styles;
     }
+
+    form {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+    }
 }

@@ -1,4 +1,4 @@
-@if (comments$ | async; as comments) {
+@if (comments$ | async; as comments) { @if (comments.count > 0) {
 <section class="comments-wrapper">
   @for (comment of comments.data; track comment.comment_Id) {
   <app-comment-ui [comment]="comment" />
@@ -6,9 +6,9 @@
   <footer>
     @if (comments.data.length < comments.count) {
     <button (click)="loadMoreComments()">Load more comments</button>
-    } @else {
+    } @else if (comments.count > 5 && comments.data.length === comments.count) {
     <button class="disabled-button">You have reached the end</button>
     }
   </footer>
 </section>
-}
+} }

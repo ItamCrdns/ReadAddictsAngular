@@ -14,9 +14,14 @@ export class NewCommentService {
     comment: string,
     parentId?: number
   ): Observable<HttpResponse<number>> {
+    const body = {
+      content: comment,
+      parent_Comment_Id: parentId
+    }
+
     return this.http.post<number>(
       environment.apiUrl + 'Comment/post/' + postId,
-      { content: comment },
+      body,
       {
         observe: 'response',
         withCredentials: true

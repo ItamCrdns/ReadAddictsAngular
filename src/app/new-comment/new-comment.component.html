@@ -7,11 +7,11 @@
         width="55"
         height="55"
       />
-      <form #postForm="ngForm" (ngSubmit)="createNewComment(postForm)">
+      <form #commentForm="ngForm" (ngSubmit)="createNewComment(commentForm)">
         <app-input
           [(ngModel)]="content"
           (modelChange)="content = $event"
-          labelText="Add a new comment"
+          labelText="Write a comment..."
           name="content"
         />
         <button type="submit">Post comment</button>

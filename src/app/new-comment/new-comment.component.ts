@@ -36,7 +36,7 @@ export class NewCommentComponent {
       this.user = res
     })
 
-    this.postId = this.route.snapshot.params['id'] as number
+    this.postId = +this.route.snapshot.params['postId']
   }
 
   createNewComment (newCommentForm: NgForm): void {
@@ -64,7 +64,6 @@ export class NewCommentComponent {
             if (res.status === 200) {
               newCommentForm.resetForm()
               this.inputComponent.clear()
-              // TODO: Clear input field after comment is created
               this.alertService.setAlertValues(
                 true,
                 'Your comment was created'

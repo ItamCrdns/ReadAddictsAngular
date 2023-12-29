@@ -43,7 +43,7 @@ export class RecursiveCommentComponent implements OnInit, OnDestroy {
   ngOnInit (): void {
     // i tried passing it as props but didnt work. so i had to use the route
     this.sub = this.route.params.subscribe((params) => {
-      this.paramsCommentId = +params['id']
+      this.paramsCommentId = +params['commentId']
     })
   }
 
