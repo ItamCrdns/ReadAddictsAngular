@@ -1,4 +1,4 @@
-import { Component, Inject, type OnDestroy } from '@angular/core'
+import { Component, Inject, type OnInit, type OnDestroy } from '@angular/core'
 import {
   ActivatedRoute,
   NavigationEnd,
@@ -31,13 +31,14 @@ import { AlertService } from '../alert/alert.service'
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
 })
-export class PostComponent implements OnDestroy {
+export class PostComponent implements OnInit, OnDestroy {
   post$ = this.getPostService.getPost(
     this.route.snapshot.params['postId'] as number
   )
 
   showComments: boolean = false
   sub: Subscription = new Subscription()
+  routerSub: Subscription = new Subscription()
 
   constructor (
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
@@ -45,18 +46,16 @@ export class PostComponent implements OnDestroy {
     @Inject(GetPostService) private readonly getPostService: GetPostService,
     @Inject(AlertService) private readonly alertService: AlertService
   ) {
-    this.router.events
-      .pipe(
-        filter(
-          (event): event is NavigationEnd => event instanceof NavigationEnd
-        )
-      )
+    this.routerSub = this.router.events
+      .pipe(filter((event: any) => event instanceof NavigationEnd))
       .subscribe({
         next: (event: NavigationEnd) => {
           this.showComments = !event.url.includes('comment')
         }
       })
+  }
 
+  ngOnInit (): void {
     this.sub = this.post$.subscribe({
       error: (_) => {
         this.alertService.setAlertValues(
@@ -72,5 +71,6 @@ export class PostComponent implements OnDestroy {
 
   ngOnDestroy (): void {
     this.sub.unsubscribe()
+    this.routerSub.unsubscribe()
   }
 }

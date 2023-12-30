@@ -1,3 +1,35 @@
 @if (user$ | async; as user) {
-<p>{{ user.username }}</p>
+<section class="user-wrapper">
+  <div class="user">
+    <img
+      ngSrc="{{ user.profile_Picture }}"
+      alt="{{ user.username }}"
+      width="250"
+      height="250"
+    />
+    <section class="user-info-wrapper">
+      <header class="name-wrapper">
+        @if (user.first_Name && user.last_Name) {
+        <h1>
+          <span>{{ user.first_Name }}</span
+          >&nbsp;<span>{{ user.last_Name }}</span>
+        </h1>
+        <h2>{{ "@" }}{{ user.username }}</h2>
+        } @else {
+        <h1>{{ "@" }}{{ user.username }}</h1>
+        }
+      </header>
+      <div class="user-info">
+        <div class="tier-last-seen-wrapper">
+          <p>{{ user.tier_Name }}</p>
+          <span>·</span>
+          <p>Last seen {{ user.last_Login | dateAgo }}</p>
+        </div>
+        @if (user.bio) {
+        <p>{{ user.bio }}</p>
+        }
+      </div>
+    </section>
+  </div>
+</section>
 }

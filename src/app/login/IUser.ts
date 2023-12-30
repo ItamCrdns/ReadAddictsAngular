@@ -12,7 +12,7 @@ export interface IUser {
   profile_Picture: string
   bio: string
   status: string
-  last_long: string
+  last_Login: string
   tier_Id: number
   tier_Name: string
 }

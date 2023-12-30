@@ -1,5 +1,5 @@
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
-import { Component, Inject, ViewChild } from '@angular/core'
+import { Component, Inject, type OnInit, ViewChild } from '@angular/core'
 import { InputComponent } from '../input/input.component'
 import { FormsModule, type NgForm } from '@angular/forms'
 import { AuthService } from '../../services/auth.service'
@@ -16,7 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router'
   templateUrl: './new-comment.component.html',
   styleUrl: '../new-post/new-post.component.scss' // pretty much the same styles as new-post
 })
-export class NewCommentComponent {
+export class NewCommentComponent implements OnInit {
   user: Partial<IUser> = {}
   content: string = ''
   postId: number = 0
@@ -31,7 +31,9 @@ export class NewCommentComponent {
     @Inject(AlertService) private readonly alertService: AlertService,
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
     @Inject(Router) private readonly router: Router
-  ) {
+  ) {}
+
+  ngOnInit (): void {
     this.authService.currentUser$.subscribe((res) => {
       this.user = res
     })
@@ -68,9 +70,11 @@ export class NewCommentComponent {
                 true,
                 'Your comment was created'
               )
-              this.router.navigate(['/post', this.postId, 'comment', res.body]).catch((err) => {
-                console.error('Error while redirecting to new comment', err)
-              })
+              this.router
+                .navigate(['/post', this.postId, 'comment', res.body])
+                .catch((err) => {
+                  console.error('Error while redirecting to new comment', err)
+                })
             }
           },
           error: (_) => {

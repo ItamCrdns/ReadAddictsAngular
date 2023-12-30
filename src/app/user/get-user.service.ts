@@ -12,7 +12,7 @@ export class GetUserService {
 
   getUser (username: string): Observable<IUser> {
     return this.http.get<IUser>(
-      environment.apiUrl + 'User/username/name/' + username,
+      environment.apiUrl + 'User/username/' + username,
       {
         withCredentials: true
       }
