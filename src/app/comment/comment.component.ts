@@ -53,6 +53,11 @@ export class CommentComponent implements OnInit, OnDestroy {
           true,
           'Sorry, we could not find the comment you were looking for.'
         )
+        this.router
+          .navigate(['/post', this.route.snapshot.parent?.params['postId']])
+          .catch((err) => {
+            console.error('Error while redirecting', err)
+          })
         if (err.status === 404) {
           this.router
             .navigate(['/post', this.route.snapshot.parent?.params['postId']])

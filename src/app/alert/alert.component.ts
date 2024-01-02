@@ -1,33 +1,8 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger
-} from '@angular/animations'
 import { Component, Inject, Input } from '@angular/core'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { ionCloseCircleSharp } from '@ng-icons/ionicons'
 import { AlertService } from './alert.service'
-
-const fadeInOut = trigger('fadeInOut', [
-  state(
-    'open',
-    style({
-      bottom: 25,
-      opacity: 1
-    })
-  ),
-  state(
-    'close',
-    style({
-      bottom: 0,
-      opacity: 0
-    })
-  ),
-  transition('open => close', [animate('.5s 0s ease-out')]), // * Alert stays open for 5 seconds (currently handling this in the parent component with a setTimeout)
-  transition('close => open', [animate('.5s 0s  ease-out')])
-])
+import { slideInOut } from '../animations/slide'
 
 @Component({
   selector: 'app-alert',
@@ -36,7 +11,7 @@ const fadeInOut = trigger('fadeInOut', [
   providers: [provideIcons({ ionCloseCircleSharp })],
   templateUrl: './alert.component.html',
   styleUrl: './alert.component.scss',
-  animations: [fadeInOut]
+  animations: [slideInOut]
 })
 export class AlertComponent {
   @Input() message: string = 'Set a default message...'

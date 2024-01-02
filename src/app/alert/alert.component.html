@@ -1,6 +1,12 @@
 <div class="alert-wrapper">
-  <div class="alert" [@fadeInOut]="show ? 'open' : 'close'">
+  @if (show) {
+  <div class="alert" [@slideInOut]="'slideInOut'">
     <p>{{ message }}</p>
-    <ng-icon name="ionCloseCircleSharp" class="close-icon" (click)="closeAlert()" />
+    <ng-icon
+      name="ionCloseCircleSharp"
+      class="close-icon"
+      (click)="closeAlert()"
+    />
   </div>
+  }
 </div>
