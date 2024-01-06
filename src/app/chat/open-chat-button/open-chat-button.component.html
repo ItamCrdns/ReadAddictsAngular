@@ -1,0 +1,11 @@
+<aside class="chat-wrapper">
+  @if (toggle) {
+  <div [style]="{ position: 'relative' }" [@slideInOut]="'slideInOut'">
+    <app-chat />
+  </div>
+  }
+  <div class="bubble" (click)="toggleChat()">
+    <ng-icon [style]="{ 'font-size': '1.25rem' }" [name]="toggle ? 'ionCloseCircleSharp' : 'ionChatbubble'" />
+    <p>{{ toggle ? "Close chat" : "Open chat" }}</p>
+  </div>
+</aside>

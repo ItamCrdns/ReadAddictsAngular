@@ -1,0 +1,68 @@
+<section class="chat">
+  <div class="chat-header">
+    <div class="user-wrapper">
+      <img
+        ngSrc="{{ selectedUserChat?.profile_Picture }}"
+        alt="{{ selectedUserChat?.username }}"
+        width="60"
+        height="60"
+      />
+      <h1>{{ "@" }}{{ selectedUserChat?.username }}</h1>
+      <p>{{ selectedUserChat?.last_Login ?? '' | dateAgo }}</p>
+    </div>
+    <ng-icon class="vertical-ellipsis" name="ionEllipsisVerticalSharp" />
+  </div>
+  <div class="messages-wrapper">
+    <div class="chat-users">
+      @for (user of (recentMessageSenders$ | async); track user?.user_Id) {
+      <img
+        ngSrc="{{ user?.profile_Picture }}"
+        alt="{{ user?.username }}"
+        width="60"
+        height="60"
+      />
+      }
+      <ng-icon class="add-user" name="ionAddCircleSharp" />
+    </div>
+    <div class="messages">
+      @if((currentUser$ | async); as user) {
+      <div class="scrolleable">
+        @for (message of (selectedChatConversation$ | async); track
+        message.message_Id) {
+        <div
+          class="message"
+          [style]="{
+            'align-self':
+              message.sender_User_Id == user.user_Id ? 'flex-end' : 'flex-start'
+          }"
+        >
+          <p>{{ message.content }}</p>
+        </div>
+        }
+      </div>
+      <div class="write-msg">
+        <img
+          ngSrc="{{ user.profile_Picture }}"
+          alt="{{ user.username }}"
+          width="50"
+          height="50"
+        />
+        <div class="textarea-container">
+          <textarea
+            [(ngModel)]="message"
+            #textarea
+            (input)="textareaChange()"
+            maxlength="255"
+            placeholder="Write a message..."
+          ></textarea>
+          @if (message.length > 0) {
+          <ng-icon class="send-icon-blue" name="ionSend" />
+          } @else {
+          <ng-icon class="send-icon" name="ionSendOutline" />
+          }
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</section>
