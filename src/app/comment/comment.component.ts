@@ -1,11 +1,11 @@
 import { Component, Inject, type OnInit, type OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { GetCommentService } from './get-comment.service'
-import { Observable, Subscription } from 'rxjs'
-import { type IComment } from '../comments/IComment'
+import { Subscription } from 'rxjs'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { RecursiveCommentComponent } from './recursive-comment/recursive-comment.component'
 import { AlertService } from '../alert/alert.service'
+import { type IComment } from '../comments/IComment'
 
 @Component({
   selector: 'app-comment',
@@ -15,9 +15,24 @@ import { AlertService } from '../alert/alert.service'
   styleUrl: '../comments/comments.component.scss'
 })
 export class CommentComponent implements OnInit, OnDestroy {
-  comment$: Observable<IComment[]> = new Observable<IComment[]>()
   commentIdSub: Subscription = new Subscription()
   commentSub: Subscription = new Subscription()
+  comment: IComment = {
+    id: '',
+    userId: '',
+    postId: '',
+    parentId: '',
+    content: '',
+    created: '',
+    modified: '',
+    user: {
+      id: '',
+      userName: '',
+      profilePicture: ''
+    },
+    replyCount: 0,
+    children: []
+  }
 
   constructor (
     @Inject(Router) private readonly router: Router,
@@ -29,43 +44,32 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   ngOnInit (): void {
     this.commentIdSub = this.route.params.subscribe((params) => {
-      const id = +params['commentId']
+      const id = params['commentId'] as string
 
-      if (!isNaN(id) && id > 0) {
-        this.comment$ = this.getCommentService.getComment(id)
-      } else {
-        // * if user tries to access a comment with an invalid id
-        this.alertService.setAlertValues(
-          true,
-          'Something went wrong. Please try again later.'
-        )
-        this.router
-          .navigate(['/post', this.route.snapshot.parent?.params['postId']])
-          .catch((err) => {
-            console.error('Error while redirecting', err)
-          })
-      }
-    })
-
-    this.commentSub = this.comment$.subscribe({
-      error: (err) => {
-        this.alertService.setAlertValues(
-          true,
-          'Sorry, we could not find the comment you were looking for.'
-        )
-        this.router
-          .navigate(['/post', this.route.snapshot.parent?.params['postId']])
-          .catch((err) => {
-            console.error('Error while redirecting', err)
-          })
-        if (err.status === 404) {
+      this.commentSub = this.getCommentService.getComment(id).subscribe({
+        next: (res) => {
+          console.log(res)
+          this.comment = res
+        },
+        error: (err) => {
+          this.alertService.setAlertValues(
+            true,
+            'Sorry, we could not find the comment you were looking for.'
+          )
           this.router
             .navigate(['/post', this.route.snapshot.parent?.params['postId']])
             .catch((err) => {
               console.error('Error while redirecting', err)
             })
+          if (err.status === 404) {
+            this.router
+              .navigate(['/post', this.route.snapshot.parent?.params['postId']])
+              .catch((err) => {
+                console.error('Error while redirecting', err)
+              })
+          }
         }
-      }
+      })
     })
   }
 

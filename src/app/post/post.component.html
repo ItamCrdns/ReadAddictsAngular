@@ -3,24 +3,26 @@
   <article class="post">
     <header>
       <img
-        ngSrc="{{ post.profile_Picture }}"
-        alt="{{ post.author }}"
+        ngSrc="{{ post.creator.profilePicture }}"
+        alt="{{ post.creator.userName }}"
         width="50"
         height="50"
       />
       <h1>
-        <a [routerLink]="['/user', post.author]">{{ post.author }}</a>
+        <a [routerLink]="['/user', post.creator.userName]">{{
+          post.creator.userName
+        }}</a>
       </h1>
-      <h2>{{ "@" }}{{ post.author }}</h2>
+      <h2>{{ "@" }}{{ post.creator.userName }}</h2>
       <p>{{ post.created || "" | dateAgo }}</p>
     </header>
     <p>{{ post.content }}</p>
     @if (post.images.length > 0) {
     <div class="image-wrapper">
-      @for (image of post.images; track image.image_Id) {
+      @for (image of post.images; track image.id) {
       <img
-        ngSrc="{{ image.image_Url }}"
-        [alt]="image.user_Id"
+        ngSrc="{{ image.url }}"
+        [alt]="image.id"
         width="100"
         height="100"
         priority="true"
@@ -31,8 +33,8 @@
   </article>
   <section class="comments-section-wrapper">
     <app-new-comment />
-    @if (showComments) {
-    <app-comments [postId]="post.post_Id" />
+    @if (showComments && post.commentCount > 0) {
+    <app-comments [postId]="post.id" />
     }
     <router-outlet></router-outlet>
   </section>

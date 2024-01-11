@@ -1,31 +1,33 @@
+import { type IComment } from '../comments/IComment'
+import { type IUser } from '../login/IUser'
+
 interface IImage {
-  image_Id: number
-  post_Id: number
-  user_Id: number
-  image_Url: string
+  id: string
+  postId: string
+  userId: string
+  url: string
+  cloudinaryPublicId: string
+  created: string
 }
 
-interface IGroup {
-  group_Id: number
-  group_Name: string
-  group_Description: string
-  group_Owner: number
-  group_Picture: string
-}
+// interface IGroup {
+//   id: string
+//   name: string
+//   description: string
+//   creatorId: string
+//   picture: string
+//   created: string
+// }
 
 export interface IPost {
-  post_Id: number
-  user_Id: number
-  author: string
+  id: string
+  userId: string
   created: string
-  modified: string
   content: string
-  profile_Picture: string
-  first_Name: string
-  last_Name: string
-  comments: number
-  group_Id: number
+  modified: string
+  groupId: string
+  creator: IUser
   images: IImage[]
-  group: IGroup
-  allowed: boolean
+  comments: IComment[]
+  commentCount: number
 }

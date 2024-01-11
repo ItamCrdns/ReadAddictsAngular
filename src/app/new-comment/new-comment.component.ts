@@ -19,7 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 export class NewCommentComponent implements OnInit {
   user: Partial<IUser> = {}
   content: string = ''
-  postId: number = 0
+  postId: string = ''
 
   @ViewChild(InputComponent) inputComponent!: InputComponent
 
@@ -38,17 +38,17 @@ export class NewCommentComponent implements OnInit {
       this.user = res
     })
 
-    this.postId = +this.route.snapshot.params['postId']
+    this.postId = this.route.snapshot.params['postId']
   }
 
   createNewComment (newCommentForm: NgForm): void {
-    const content: string = newCommentForm.value.content
+    const comment: string = newCommentForm.value.content
 
-    if (content.length === 0) {
+    if (comment.length === 0) {
       this.alertService.setAlertValues(true, 'Your comment cannot be empty')
     }
 
-    if (content.length > 0 && content.length < 8) {
+    if (comment.length > 0 && comment.length < 8) {
       this.alertService.setAlertValues(
         true,
         'Your comment must be at least 8 characters long'
@@ -59,7 +59,7 @@ export class NewCommentComponent implements OnInit {
       this.alertService.setAlertValues(true, 'Creating your comment...')
 
       this.newCommentService
-        .create(this.postId, content)
+        .create(comment, this.postId)
         .pipe(take(1))
         .subscribe({
           next: (res) => {
@@ -71,7 +71,7 @@ export class NewCommentComponent implements OnInit {
                 'Your comment was created'
               )
               this.router
-                .navigate(['/post', this.postId, 'comment', res.body])
+                .navigate(['/post', this.postId, 'comment', res.body?.id])
                 .catch((err) => {
                   console.error('Error while redirecting to new comment', err)
                 })

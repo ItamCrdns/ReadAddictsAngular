@@ -1,4 +1,4 @@
-export interface DataCountAndLimit<T> {
+export interface DataCountPagesDto<T> {
   data: T[]
   count: number
   pages: number

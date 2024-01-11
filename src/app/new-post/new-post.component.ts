@@ -101,7 +101,7 @@ export class NewPostComponent {
       fd.append('content', content)
 
       this.images.forEach((img) => {
-        fd.append('files', img)
+        fd.append('images', img)
       })
 
       this.newPostService

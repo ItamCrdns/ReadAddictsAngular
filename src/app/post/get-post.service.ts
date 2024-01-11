@@ -10,8 +10,8 @@ import { environment } from '../../environment/environment'
 export class GetPostService {
   constructor (@Inject(HttpClient) private readonly http: HttpClient) {}
 
-  getPost (id: number): Observable<IPost> {
-    return this.http.get<IPost>(environment.apiUrl + 'Post/' + id, {
+  getPost (id: string): Observable<IPost> {
+    return this.http.get<IPost>(environment.apiUrl + 'posts/' + id, {
       withCredentials: true
     })
   }

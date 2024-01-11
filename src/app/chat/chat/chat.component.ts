@@ -78,16 +78,16 @@ export class ChatComponent implements OnInit {
       ([recentMessageSenders, currentUser]) => {
         if (recentMessageSenders.length > 0) {
           this.selectedUserChat = recentMessageSenders[0]
-          console.log(this.selectedUserChat?.last_Login)
+          console.log(this.selectedUserChat?.lastLogin)
         }
 
-        this.currentUsername = currentUser.username
+        this.currentUsername = currentUser.userName
 
         this.selectedChatConversation$ =
           this.getConversationService.getConversation(
             1,
             10,
-            this.selectedUserChat?.username ?? '',
+            this.selectedUserChat?.userName ?? '',
             this.currentUsername ?? ''
           )
       }

@@ -11,11 +11,8 @@ export class GetUserService {
   constructor (@Inject(HttpClient) private readonly http: HttpClient) {}
 
   getUser (username: string): Observable<IUser> {
-    return this.http.get<IUser>(
-      environment.apiUrl + 'User/username/' + username,
-      {
-        withCredentials: true
-      }
-    )
+    return this.http.get<IUser>(environment.apiUrl + 'users/' + username, {
+      withCredentials: true
+    })
   }
 }

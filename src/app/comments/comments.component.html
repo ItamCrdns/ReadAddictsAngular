@@ -1,6 +1,6 @@
 @if (comments$ | async; as comments) { @if (comments.count > 0) {
 <section class="comments-wrapper">
-  @for (comment of comments.data; track comment.comment_Id) {
+  @for (comment of comments.data; track comment.id) {
   <app-comment-ui [comment]="comment" />
   }
   <footer>

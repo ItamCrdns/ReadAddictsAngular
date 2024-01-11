@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
 import { type Observable, take, BehaviorSubject } from 'rxjs'
 import { type IUser } from '../app/login/IUser'
@@ -22,9 +22,7 @@ export class AuthService {
 
   // Get the username in the /login component
   getUsername (username: string): Observable<IUser> {
-    return this.http.get<IUser>(
-      environment.apiUrl + 'User/username/' + username
-    )
+    return this.http.get<IUser>(environment.apiUrl + 'users/' + username)
   }
 
   // Set the current user value after we login
@@ -34,21 +32,23 @@ export class AuthService {
 
   // Will be called on /login component after providing username and password
   login (username: string, password: string): Observable<Partial<IUser>> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
+    const url = environment.apiUrl + 'users/login'
 
-    return this.http.post<Partial<IUser>>(
-      environment.apiUrl + 'User/login',
-      { username, password },
-      { headers, withCredentials: true }
-    )
+    const options = {
+      params: {
+        username,
+        password
+      },
+      withCredentials: true
+    }
+
+    return this.http.post<Partial<IUser>>(url, null, options)
   }
 
   // Gets the current user from the cookies, if any
   getCurrentUser (): Observable<Partial<IUser>> {
     const user$ = this.http.get<Partial<IUser>>(
-      environment.apiUrl + 'User/current',
+      environment.apiUrl + 'users/current',
       {
         withCredentials: true
       }

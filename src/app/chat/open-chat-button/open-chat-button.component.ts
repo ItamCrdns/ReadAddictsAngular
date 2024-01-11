@@ -19,7 +19,7 @@ import { slideInOut } from '../../animations/slide'
   animations: [slideInOut]
 })
 export class OpenChatButtonComponent {
-  toggle: boolean = true
+  toggle: boolean = false
 
   toggleChat (): void {
     this.toggle = !this.toggle

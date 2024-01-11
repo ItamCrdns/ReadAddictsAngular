@@ -4,8 +4,8 @@
     <div class="newpost-form">
       <!-- Todo: `ngSrc` has an invalid value (``). To fix this, change the value to a non-empty string -->
       <img
-        ngSrc="{{ user.profile_Picture || null }}"
-        alt="{{ user.username }}"
+        ngSrc="{{ user.profilePicture || null }}"
+        alt="{{ user.userName }}"
         width="75"
         height="75"
       />
@@ -38,7 +38,7 @@
       <div>
         <img
           src="{{ getImgUrl(image) }}"
-          alt="{{ user.username }}"
+          alt="{{ user.userName }}"
           width="75"
           height="75"
         />

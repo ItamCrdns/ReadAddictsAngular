@@ -25,8 +25,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 export class ReplyComponent implements OnInit, OnDestroy {
   user$: Observable<Partial<IUser>> = this.authService.currentUser$
   content: string = ''
-  postId: number = 0
-  commentId: number = 0
+  postId: string = ''
+  commentId: string = ''
   postIdSub: Subscription | undefined = new Subscription()
   commentIdSub: Subscription | undefined = new Subscription()
 
@@ -43,22 +43,15 @@ export class ReplyComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit (): void {
-    this.postIdSub = this.route.parent?.parent?.paramMap.subscribe({
-      next: (params) => {
-        const postIdParam = params.get('postId')
-        this.postId =
-          postIdParam !== null && postIdParam !== undefined ? +postIdParam : 0
-      }
+    // Can also use paramMap
+    this.postIdSub = this.route.parent?.parent?.params.subscribe((params) => {
+      this.postId = params['postId']
+      console.log(this.postId)
     })
 
-    this.commentIdSub = this.route.parent?.paramMap.subscribe({
-      next: (params) => {
-        const commentIdParam = params.get('commentId')
-        this.commentId =
-          commentIdParam !== null && commentIdParam !== undefined
-            ? +commentIdParam
-            : 0
-      }
+    this.commentIdSub = this.route.parent?.params.subscribe((params) => {
+      this.commentId = params['commentId']
+      console.log(this.commentId)
     })
   }
 
@@ -68,13 +61,13 @@ export class ReplyComponent implements OnInit, OnDestroy {
   }
 
   reply (reply: NgForm): void {
-    const content: string = reply.value.content
+    const comment: string = reply.value.content
 
-    if (content.length === 0) {
+    if (comment.length === 0) {
       this.alertService.setAlertValues(true, 'Your reply cannot be empty')
     }
 
-    if (content.length > 0 && content.length < 8) {
+    if (comment.length > 0 && comment.length < 8) {
       this.alertService.setAlertValues(
         true,
         'Your reply must be at least 8 characters long'
@@ -85,7 +78,7 @@ export class ReplyComponent implements OnInit, OnDestroy {
       this.alertService.setAlertValues(true, 'Creating your reply...')
 
       this.newCommentService
-        .create(this.postId, content, this.commentId)
+        .create(comment, this.postId, this.commentId)
         .pipe(take(1))
         .subscribe({
           next: (res) => {
@@ -97,7 +90,7 @@ export class ReplyComponent implements OnInit, OnDestroy {
                 'Your reply was successfully sent'
               )
               this.router
-                .navigate(['/post', this.postId, 'comment', res.body])
+                .navigate(['/post', this.postId, 'comment', res.body?.id])
                 .catch((err) => {
                   console.error('Error while redirecting to new comment', err)
                 })

@@ -1,11 +1,23 @@
-import { Component, Inject, Input, type OnDestroy, type OnInit } from '@angular/core'
-import { BehaviorSubject, type Observable, take, tap, Subscription } from 'rxjs'
+import {
+  Component,
+  Inject,
+  Input,
+  type OnDestroy,
+  type OnInit
+} from '@angular/core'
+import {
+  BehaviorSubject,
+  type Observable,
+  take,
+  tap,
+  Subscription
+} from 'rxjs'
 import { type IComment } from './IComment'
 import { GetCommentsService } from './get-comments.service'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
-import { type DataCountAndLimit } from './DataCountAndLimit'
+import { type DataCountPagesDto } from './DataCountPagesDto'
 import { CommentUiComponent } from '../comment/comment-ui/comment-ui.component'
 
 @Component({
@@ -22,16 +34,16 @@ import { CommentUiComponent } from '../comment/comment-ui/comment-ui.component'
   styleUrl: './comments.component.scss'
 })
 export class CommentsComponent implements OnInit, OnDestroy {
-  @Input() postId: number = 0
+  @Input() postId: string = ''
   private readonly commentsSubject = new BehaviorSubject<
-  DataCountAndLimit<IComment>
+  DataCountPagesDto<IComment>
   >({
     data: [],
     count: 0,
     pages: 0
   })
 
-  comments$: Observable<DataCountAndLimit<IComment>> =
+  comments$: Observable<DataCountPagesDto<IComment>> =
     this.commentsSubject.asObservable()
 
   page: number = 1

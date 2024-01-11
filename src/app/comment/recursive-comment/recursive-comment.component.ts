@@ -34,8 +34,24 @@ import { Subscription } from 'rxjs'
     `
 })
 export class RecursiveCommentComponent implements OnInit, OnDestroy {
-  @Input() comment: Partial<IComment> = {}
-  paramsCommentId: number = 0
+  @Input() comment: IComment = {
+    id: '',
+    userId: '',
+    postId: '',
+    parentId: '',
+    content: '',
+    created: '',
+    modified: '',
+    user: {
+      id: '',
+      userName: '',
+      profilePicture: ''
+    },
+    replyCount: 0,
+    children: []
+  }
+
+  paramsCommentId: string = ''
   sub: Subscription = new Subscription()
 
   constructor (@Inject(ActivatedRoute) private readonly route: ActivatedRoute) {}
@@ -43,12 +59,12 @@ export class RecursiveCommentComponent implements OnInit, OnDestroy {
   ngOnInit (): void {
     // i tried passing it as props but didnt work. so i had to use the route
     this.sub = this.route.params.subscribe((params) => {
-      this.paramsCommentId = +params['commentId']
+      this.paramsCommentId = params['commentId']
     })
   }
 
   ngOnDestroy (): void {
-    this.paramsCommentId = 0
+    this.paramsCommentId = ''
     this.sub.unsubscribe()
   }
 }

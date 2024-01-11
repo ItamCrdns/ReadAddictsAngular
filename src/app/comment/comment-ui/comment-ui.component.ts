@@ -12,29 +12,32 @@ import { NgOptimizedImage } from '@angular/common'
     <article class="comment">
       <header>
         <img
-          ngSrc="{{ comment.profile_Picture }}"
-          alt="{{ comment.author }}"
+          ngSrc="{{ comment.user?.profilePicture }}"
+          alt="{{ comment.user?.userName }}"
           width="30"
           height="30"
         />
         <h1>
-          <a [routerLink]="['/user', comment.author]">{{ comment.author }}</a>
+          <a [routerLink]="['/user', comment.user?.userName]">{{
+            comment.user?.userName
+          }}</a>
         </h1>
-        <h2>{{ '@' }}{{ comment.author }}</h2>
+        <h2>{{ '@' }}{{ comment.user?.userName }}</h2>
         <p>{{ comment.created || '' | dateAgo }}</p>
       </header>
       <p>{{ comment.content }}</p>
     </article>
     <div class="replies">
-      @if (comment.replies ?? 0 > 0) {
-      <a
-        [routerLink]="['/post', comment.post_Id, 'comment', comment.comment_Id]"
-        >Replies</a
-      >
+      @if (comment.replyCount !== undefined && comment.replyCount > 0) {
+      <a [routerLink]="['/post', comment.postId, 'comment', comment.id]">{{
+        comment.replyCount > 1
+          ? comment.replyCount + ' users replied'
+          : comment.replyCount + ' user replied'
+      }}</a>
       <span>·</span>
       }
       <a
-        [routerLink]="['/post', comment.post_Id, 'comment', comment.comment_Id, 'reply']"
+        [routerLink]="['/post', comment.postId, 'comment', comment.id, 'reply']"
         >Reply</a
       >
     </div>

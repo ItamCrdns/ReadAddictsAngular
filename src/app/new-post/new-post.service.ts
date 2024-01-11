@@ -10,10 +10,9 @@ export class NewPostService {
   constructor (@Inject(HttpClient) private readonly http: HttpClient) {}
 
   create (post: FormData): Observable<HttpResponse<number>> {
-    return this.http.post<number>(
-      environment.apiUrl + 'Post',
-      post,
-      { observe: 'response', withCredentials: true }
-    )
+    return this.http.post<number>(environment.apiUrl + 'posts/create', post, {
+      observe: 'response',
+      withCredentials: true
+    })
   }
 }

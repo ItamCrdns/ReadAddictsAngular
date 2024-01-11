@@ -8,26 +8,26 @@
   <div class="user-wrapper">
     @if((user$ | async); as currentUser) {
     <!-- Todo: when logging in, profile picture wont show automatically we have to reload the page -->
-    @if (currentUser.profile_Picture) {
+    @if (currentUser.profilePicture) {
     <img
-      ngSrc="{{ currentUser.profile_Picture }}"
-      alt="{{ currentUser.username }}"
+      ngSrc="{{ currentUser.profilePicture }}"
+      alt="{{ currentUser.userName }}"
       width="50"
       height="50"
       (click)="toggle = !toggle"
     />
-    } @if (toggle && currentUser.user_Id !== undefined) {
+    } @if (toggle && currentUser.id !== undefined) {
     <div class="user-menu">
       <div class="user-menu-wrapper">
         <img
-          ngSrc="{{ currentUser.profile_Picture }}"
-          alt="{{ currentUser.username }}"
+          ngSrc="{{ currentUser.profilePicture }}"
+          alt="{{ currentUser.userName }}"
           width="50"
           height="50"
         />
         <p>
-          <a [routerLink]="['/user', currentUser.username]">{{
-            currentUser.username
+          <a [routerLink]="['/user', currentUser.userName]">{{
+            currentUser.userName
           }}</a>
         </p>
       </div>

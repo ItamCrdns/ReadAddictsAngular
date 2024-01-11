@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core'
 import { type Observable } from 'rxjs'
 import { type IComment } from './IComment'
 import { environment } from '../../environment/environment'
-import { type DataCountAndLimit } from './DataCountAndLimit'
+import { type DataCountPagesDto } from './DataCountPagesDto'
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +12,16 @@ export class GetCommentsService {
   constructor (@Inject(HttpClient) private readonly http: HttpClient) {}
 
   getComments (
-    id: number,
+    id: string,
     page: number = 1,
-    pageSize: number = 5
-  ): Observable<DataCountAndLimit<IComment>> {
-    return this.http.get<DataCountAndLimit<IComment>>(
-      environment.apiUrl + 'Comment/' + id,
+    limit: number = 5
+  ): Observable<DataCountPagesDto<IComment>> {
+    return this.http.get<DataCountPagesDto<IComment>>(
+      environment.apiUrl + 'posts/' + id + '/comments',
       {
         params: {
           page,
-          pageSize
+          limit
         },
         withCredentials: true
       }

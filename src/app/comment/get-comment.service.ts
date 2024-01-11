@@ -10,8 +10,8 @@ import { environment } from '../../environment/environment'
 export class GetCommentService {
   constructor (@Inject(HttpClient) private readonly http: HttpClient) {}
 
-  getComment (id: number): Observable<IComment[]> {
-    return this.http.get<IComment[]>(environment.apiUrl + 'Comment/id/' + id, {
+  getComment (id: string): Observable<IComment> {
+    return this.http.get<IComment>(environment.apiUrl + 'comments/' + id, {
       withCredentials: true
     })
   }
