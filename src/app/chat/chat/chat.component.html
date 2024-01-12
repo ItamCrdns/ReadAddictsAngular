@@ -7,8 +7,12 @@
         width="60"
         height="60"
       />
-      <h1>{{ "@" }}{{ selectedUserChat?.userName }}</h1>
-      <p>{{ selectedUserChat?.lastLogin ?? "" | dateAgo }}</p>
+      <h1>
+        <a [routerLink]="['/user', selectedUserChat?.userName]">
+          {{ "@" }}{{ selectedUserChat?.userName }}
+        </a>
+      </h1>
+      <p>Last seen {{ selectedUserChat?.lastLogin ?? "" | dateAgo }}</p>
     </div>
     <ng-icon class="vertical-ellipsis" name="ionEllipsisVerticalSharp" />
   </div>

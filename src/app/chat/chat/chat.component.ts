@@ -23,6 +23,7 @@ import { type Subscription, type Observable } from 'rxjs'
 import { type IMessage } from '../IMessage'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { ChatService } from '../../../services/Chat/chat.service'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-chat',
@@ -32,7 +33,8 @@ import { ChatService } from '../../../services/Chat/chat.service'
     NgOptimizedImage,
     FormsModule,
     AsyncPipe,
-    DateAgoPipe
+    DateAgoPipe,
+    RouterLink
   ],
   providers: [
     provideIcons({

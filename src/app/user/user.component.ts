@@ -1,12 +1,12 @@
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Component, Inject, type OnInit, type OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Observable, Subscription } from 'rxjs'
-import { type HttpErrorResponse } from '@angular/common/http'
+import { Subscription } from 'rxjs'
 import { AlertService } from '../../services/Alert/alert.service'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type IUser } from '../login/IUser'
 import { GetEntityService } from '../../services/Get entity/get-entity.service'
+import { type HttpErrorResponse } from '@angular/common/http'
 
 @Component({
   selector: 'app-user',
@@ -16,14 +16,10 @@ import { GetEntityService } from '../../services/Get entity/get-entity.service'
   styleUrl: './user.component.scss'
 })
 export class UserComponent implements OnInit, OnDestroy {
-  // username: string = ''
-  user$: Observable<IUser> = new Observable<IUser>()
-  // user$ = this.getUserService.getUser(
-  //   this.route.snapshot.params['username'] as string
-  // )
+  user: Partial<IUser> = {}
 
-  sub: Subscription = new Subscription()
   userSub: Subscription = new Subscription()
+  paramsSub: Subscription = new Subscription()
 
   constructor (
     @Inject(Router) private readonly router: Router,
@@ -34,26 +30,30 @@ export class UserComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit (): void {
-    this.userSub = this.route.params.subscribe((params) => {
-      this.user$ = this.getEntityService.getUser(params['username'] as string)
-    })
-
-    this.sub = this.user$.subscribe({
-      error: (err: HttpErrorResponse) => {
-        if (err.status === 404) {
-          this.alertService.setAlertValues(
-            true,
-            'Sorry, we could not find the user you were looking for.'
-          )
-          this.router.navigate(['/']).catch((err) => {
-            console.error('Error while redirecting', err)
-          })
-        }
-      }
+    this.paramsSub = this.route.params.subscribe((params) => {
+      this.userSub = this.getEntityService
+        .getUser(params['username'] as string)
+        .subscribe({
+          next: (user: Partial<IUser>) => {
+            this.user = user
+          },
+          error: (err: HttpErrorResponse) => {
+            if (err.status === 404) {
+              this.alertService.setAlertValues(
+                true,
+                'Sorry, we could not find the user you were looking for.'
+              )
+            }
+            this.router.navigate(['/']).catch((err) => {
+              console.error('Error while redirecting', err)
+            })
+          }
+        })
     })
   }
 
   ngOnDestroy (): void {
-    this.sub.unsubscribe()
+    this.userSub.unsubscribe()
+    this.paramsSub.unsubscribe()
   }
 }
