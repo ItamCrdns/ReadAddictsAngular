@@ -62,18 +62,16 @@ export class LoginComponent {
       .pipe(take(1))
       .subscribe({
         next: (res) => {
-          if (res !== null) {
-            this.authService.setCurrentUser(res)
-            this.alertService.setAlertValues(
-              true,
-              `Welcome back, ${this.username
-                .slice(0, 1)
-                .toUpperCase()}${this.username.slice(1).toLowerCase()}`
-            )
-            this.router.navigateByUrl('/').catch((err) => {
-              console.error('Error while redirecting to home page: ', err)
-            })
-          }
+          this.authService.setCurrentUser(res)
+          this.alertService.setAlertValues(
+            true,
+            `Welcome back, ${this.username
+              .slice(0, 1)
+              .toUpperCase()}${this.username.slice(1).toLowerCase()}`
+          )
+          this.router.navigateByUrl('/').catch((err) => {
+            console.error('Error while redirecting to home page: ', err)
+          })
         },
         error: (err) => {
           if (err.status === 401) {

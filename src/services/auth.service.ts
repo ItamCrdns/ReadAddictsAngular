@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, type HttpResponse } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
 import { type Observable, take, BehaviorSubject } from 'rxjs'
 import { type IUser } from '../app/login/IUser'
@@ -43,6 +43,17 @@ export class AuthService {
     }
 
     return this.http.post<Partial<IUser>>(url, null, options)
+  }
+
+  logout (): Observable<HttpResponse<any>> {
+    return this.http.post<HttpResponse<any>>(
+      environment.apiUrl + 'users/logout',
+      null,
+      {
+        observe: 'response',
+        withCredentials: true
+      }
+    )
   }
 
   // Gets the current user from the cookies, if any

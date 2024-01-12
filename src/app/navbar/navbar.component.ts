@@ -8,7 +8,6 @@ import {
   provideIcons,
   provideNgIconsConfig
 } from '@ng-icons/core'
-import { LogOutService } from '../../services/log-out.service'
 import { Router, RouterLink } from '@angular/router'
 import { AlertService } from '../alert/alert.service'
 import { AuthService } from '../../services/auth.service'
@@ -21,8 +20,7 @@ import { type IUser } from '../login/IUser'
   imports: [NgOptimizedImage, NgIconComponent, AsyncPipe, RouterLink],
   providers: [
     provideIcons({ heroChatBubbleLeftRight, ionLogOutOutline }),
-    provideNgIconsConfig({ size: '1.75rem' }),
-    LogOutService
+    provideNgIconsConfig({ size: '1.75rem' })
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
@@ -33,7 +31,6 @@ export class NavbarComponent implements OnInit {
   user$: Observable<Partial<IUser>> = this.authService.currentUser$
 
   constructor (
-    private readonly logOutService: LogOutService,
     @Inject(AuthService)
     private readonly authService: AuthService,
     @Inject(AlertService) private readonly alertService: AlertService,
@@ -50,11 +47,11 @@ export class NavbarComponent implements OnInit {
   }
 
   userLogOut (): void {
-    this.logOutService
-      .userLogOut()
+    this.authService
+      .logout()
       .pipe(take(1))
       .subscribe((res) => {
-        if (res === 'Logged out') {
+        if (res.status === 200) {
           this.toggle = false
           this.authService.removeCurrentUser()
           this.alertService.setAlertValues(true, 'Successfully logged out')

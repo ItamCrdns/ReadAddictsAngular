@@ -12,7 +12,7 @@ export class GetRecentMessageSendersService {
   constructor (@Inject(HttpClient) private readonly http: HttpClient) { }
 
   getRecentMessageSenders (): Observable<Partial<IUser[]>> {
-    return this.http.get<Partial<IUser[]>>(environment.apiUrl + 'Message/users', {
+    return this.http.get<Partial<IUser[]>>(environment.apiUrl + 'messages/recent-chats', {
       withCredentials: true
     })
   }
