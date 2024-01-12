@@ -1,11 +1,11 @@
 import { Component, Inject, type OnInit, type OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { GetCommentService } from './get-comment.service'
 import { Subscription } from 'rxjs'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { RecursiveCommentComponent } from './recursive-comment/recursive-comment.component'
-import { AlertService } from '../alert/alert.service'
+import { AlertService } from '../../services/Alert/alert.service'
 import { type IComment } from '../comments/IComment'
+import { GetEntityService } from '../../services/Get entity/get-entity.service'
 
 @Component({
   selector: 'app-comment',
@@ -36,8 +36,8 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   constructor (
     @Inject(Router) private readonly router: Router,
-    @Inject(GetCommentService)
-    private readonly getCommentService: GetCommentService,
+    @Inject(GetEntityService)
+    private readonly getEntityService: GetEntityService,
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
     @Inject(AlertService) private readonly alertService: AlertService
   ) {}
@@ -46,7 +46,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.commentIdSub = this.route.params.subscribe((params) => {
       const id = params['commentId'] as string
 
-      this.commentSub = this.getCommentService.getComment(id).subscribe({
+      this.commentSub = this.getEntityService.getComment(id).subscribe({
         next: (res) => {
           console.log(res)
           this.comment = res

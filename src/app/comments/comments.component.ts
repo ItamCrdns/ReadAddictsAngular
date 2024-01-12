@@ -13,12 +13,12 @@ import {
   Subscription
 } from 'rxjs'
 import { type IComment } from './IComment'
-import { GetCommentsService } from './get-comments.service'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
-import { type DataCountPagesDto } from './DataCountPagesDto'
+import { type DataCountPagesDto } from '../../services/Get entity/DataCountPagesDto'
 import { CommentUiComponent } from '../comment/comment-ui/comment-ui.component'
+import { GetEntityService } from '../../services/Get entity/get-entity.service'
 
 @Component({
   selector: 'app-comments',
@@ -52,8 +52,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
   constructor (
     @Inject(Router) private readonly router: Router,
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
-    @Inject(GetCommentsService)
-    private readonly getCommentsService: GetCommentsService
+    @Inject(GetEntityService)
+    private readonly getEntityService: GetEntityService
   ) {
     this.sub = this.route.queryParams.subscribe((params) => {
       const pageParam: number = params['page']
@@ -76,7 +76,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   private loadComments (page: number, limit: number = 5): void {
-    this.getCommentsService
+    this.getEntityService
       .getComments(this.postId, page, limit)
       .pipe(
         take(1),

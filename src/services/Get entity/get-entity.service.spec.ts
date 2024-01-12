@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing'
 
-import { GetCommentService } from './get-comment.service'
+import { GetEntityService } from './get-entity.service'
 
-describe('GetCommentService', () => {
-  let service: GetCommentService
+describe('GetEntityService', () => {
+  let service: GetEntityService
 
   beforeEach(() => {
     TestBed.configureTestingModule({})
-    service = TestBed.inject(GetCommentService)
+    service = TestBed.inject(GetEntityService)
   })
 
   it('should be created', () => {

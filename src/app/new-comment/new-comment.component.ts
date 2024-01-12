@@ -4,10 +4,10 @@ import { InputComponent } from '../input/input.component'
 import { FormsModule, type NgForm } from '@angular/forms'
 import { AuthService } from '../../services/Authentication/auth.service'
 import { type IUser } from '../login/IUser'
-import { NewCommentService } from './new-comment.service'
-import { AlertService } from '../alert/alert.service'
+import { AlertService } from '../../services/Alert/alert.service'
 import { take } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
+import { NewEntityService } from '../../services/New entity/new-entity.service'
 
 @Component({
   selector: 'app-new-comment',
@@ -26,8 +26,8 @@ export class NewCommentComponent implements OnInit {
   constructor (
     @Inject(AuthService)
     private readonly authService: AuthService,
-    @Inject(NewCommentService)
-    private readonly newCommentService: NewCommentService,
+    @Inject(NewEntityService)
+    private readonly newEntityService: NewEntityService,
     @Inject(AlertService) private readonly alertService: AlertService,
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
     @Inject(Router) private readonly router: Router
@@ -58,8 +58,8 @@ export class NewCommentComponent implements OnInit {
     if (newCommentForm.valid === true) {
       this.alertService.setAlertValues(true, 'Creating your comment...')
 
-      this.newCommentService
-        .create(comment, this.postId)
+      this.newEntityService
+        .newComment(comment, this.postId)
         .pipe(take(1))
         .subscribe({
           next: (res) => {

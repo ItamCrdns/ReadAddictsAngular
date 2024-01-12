@@ -1,7 +1,7 @@
 import { Component, Inject, Input } from '@angular/core'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { ionCloseCircleSharp } from '@ng-icons/ionicons'
-import { AlertService } from './alert.service'
+import { AlertService } from '../../services/Alert/alert.service'
 import { slideInOut } from '../animations/slide'
 
 @Component({

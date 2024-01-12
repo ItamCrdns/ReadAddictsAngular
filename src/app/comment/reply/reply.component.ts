@@ -11,9 +11,9 @@ import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Subscription, type Observable, take } from 'rxjs'
 import { type IUser } from '../../login/IUser'
 import { FormsModule, type NgForm } from '@angular/forms'
-import { AlertService } from '../../alert/alert.service'
-import { NewCommentService } from '../../new-comment/new-comment.service'
+import { AlertService } from '../../../services/Alert/alert.service'
 import { ActivatedRoute, Router } from '@angular/router'
+import { NewEntityService } from '../../../services/New entity/new-entity.service'
 
 @Component({
   selector: 'app-reply',
@@ -36,8 +36,8 @@ export class ReplyComponent implements OnInit, OnDestroy {
     @Inject(AlertService) private readonly alertService: AlertService,
     @Inject(AuthService)
     private readonly authService: AuthService,
-    @Inject(NewCommentService)
-    private readonly newCommentService: NewCommentService,
+    @Inject(NewEntityService)
+    private readonly newEntityService: NewEntityService,
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
     @Inject(Router) private readonly router: Router
   ) {}
@@ -77,8 +77,8 @@ export class ReplyComponent implements OnInit, OnDestroy {
     if (reply.valid === true) {
       this.alertService.setAlertValues(true, 'Creating your reply...')
 
-      this.newCommentService
-        .create(comment, this.postId, this.commentId)
+      this.newEntityService
+        .newComment(comment, this.postId, this.commentId)
         .pipe(take(1))
         .subscribe({
           next: (res) => {

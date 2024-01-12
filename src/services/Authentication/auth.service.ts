@@ -4,7 +4,7 @@ import { type Observable, take, BehaviorSubject } from 'rxjs'
 import { type IUser } from '../../app/login/IUser'
 import { environment } from '../../environment/environment'
 import { Router } from '@angular/router'
-import { AlertService } from '../../app/alert/alert.service'
+import { AlertService } from '../Alert/alert.service'
 
 @Injectable({
   providedIn: 'root'

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing'
 
-import { GetUserService } from './get-user.service'
+import { NewEntityService } from './new-entity.service'
 
-describe('GetUserService', () => {
-  let service: GetUserService
+describe('NewEntityService', () => {
+  let service: NewEntityService
 
   beforeEach(() => {
     TestBed.configureTestingModule({})
-    service = TestBed.inject(GetUserService)
+    service = TestBed.inject(NewEntityService)
   })
 
   it('should be created', () => {

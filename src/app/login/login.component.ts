@@ -4,7 +4,7 @@ import { take } from 'rxjs'
 import { type IUser } from './IUser'
 import { NgOptimizedImage } from '@angular/common'
 import { Router } from '@angular/router'
-import { AlertService } from '../alert/alert.service'
+import { AlertService } from '../../services/Alert/alert.service'
 import { AuthService } from '../../services/Authentication/auth.service'
 
 @Component({

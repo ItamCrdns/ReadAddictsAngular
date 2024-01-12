@@ -9,7 +9,7 @@ import {
   provideNgIconsConfig
 } from '@ng-icons/core'
 import { Router, RouterLink } from '@angular/router'
-import { AlertService } from '../alert/alert.service'
+import { AlertService } from '../../services/Alert/alert.service'
 import { AuthService } from '../../services/Authentication/auth.service'
 import { type Observable, take } from 'rxjs'
 import { type IUser } from '../login/IUser'

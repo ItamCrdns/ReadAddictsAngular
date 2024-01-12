@@ -16,7 +16,7 @@ import {
   type ValidationErrors,
   FormsModule
 } from '@angular/forms'
-import { AlertService } from '../alert/alert.service'
+import { AlertService } from '../../services/Alert/alert.service'
 
 @Component({
   selector: 'app-input',

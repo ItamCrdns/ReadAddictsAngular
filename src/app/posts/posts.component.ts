@@ -7,12 +7,12 @@ import {
   type ElementRef,
   type OnInit
 } from '@angular/core'
-import { GetPostsService } from './get-posts.service'
 import { type IPost } from './IPost'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type Observable, BehaviorSubject, tap, take } from 'rxjs'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { RouterLink } from '@angular/router'
+import { GetEntityService } from '../../services/Get entity/get-entity.service'
 
 @Component({
   selector: 'app-posts',
@@ -27,11 +27,12 @@ export class PostsComponent implements OnInit, OnDestroy, AfterViewInit {
   page: number = 5
 
   constructor (
-    @Inject(GetPostsService) private readonly getPostsService: GetPostsService
+    @Inject(GetEntityService)
+    private readonly getEntityService: GetEntityService
   ) {}
 
   private loadPosts (page: number, limit: number): void {
-    this.getPostsService
+    this.getEntityService
       .getPosts(page, limit)
       .pipe(
         take(1),

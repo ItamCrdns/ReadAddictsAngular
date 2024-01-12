@@ -7,12 +7,12 @@ import {
   RouterModule,
   RouterOutlet
 } from '@angular/router'
-import { GetPostService } from './get-post.service'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Subscription, filter } from 'rxjs'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { CommentsComponent } from '../comments/comments.component'
 import { NewCommentComponent } from '../new-comment/new-comment.component'
+import { GetEntityService } from '../../services/Get entity/get-entity.service'
 
 @Component({
   selector: 'app-post',
@@ -31,7 +31,7 @@ import { NewCommentComponent } from '../new-comment/new-comment.component'
   styleUrl: './post.component.scss'
 })
 export class PostComponent implements OnDestroy {
-  post$ = this.getPostService.getPost(
+  post$ = this.getEntityService.getPost(
     this.route.snapshot.params['postId'] as string
   )
 
@@ -42,7 +42,8 @@ export class PostComponent implements OnDestroy {
   constructor (
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
     @Inject(Router) private readonly router: Router,
-    @Inject(GetPostService) private readonly getPostService: GetPostService
+    @Inject(GetEntityService)
+    private readonly getEntityService: GetEntityService
   ) {
     this.routerSub = this.router.events
       .pipe(filter((event: any) => event instanceof NavigationEnd))

@@ -1,12 +1,12 @@
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Component, Inject, type OnInit, type OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { GetUserService } from './get-user.service'
 import { Observable, Subscription } from 'rxjs'
 import { type HttpErrorResponse } from '@angular/common/http'
-import { AlertService } from '../alert/alert.service'
+import { AlertService } from '../../services/Alert/alert.service'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type IUser } from '../login/IUser'
+import { GetEntityService } from '../../services/Get entity/get-entity.service'
 
 @Component({
   selector: 'app-user',
@@ -28,13 +28,14 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor (
     @Inject(Router) private readonly router: Router,
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
-    @Inject(GetUserService) private readonly getUserService: GetUserService,
+    @Inject(GetEntityService)
+    private readonly getEntityService: GetEntityService,
     @Inject(AlertService) private readonly alertService: AlertService
   ) {}
 
   ngOnInit (): void {
     this.userSub = this.route.params.subscribe((params) => {
-      this.user$ = this.getUserService.getUser(params['username'] as string)
+      this.user$ = this.getEntityService.getUser(params['username'] as string)
     })
 
     this.sub = this.user$.subscribe({

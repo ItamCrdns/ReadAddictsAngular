@@ -5,12 +5,12 @@ import { heroPhoto } from '@ng-icons/heroicons/outline'
 import { ionRemoveCircle } from '@ng-icons/ionicons'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { FormsModule, type NgForm } from '@angular/forms'
-import { NewPostService } from './new-post.service'
 import { type Observable, take } from 'rxjs'
 import { Router } from '@angular/router'
-import { AlertService } from '../alert/alert.service'
+import { AlertService } from '../../services/Alert/alert.service'
 import { type IUser } from '../login/IUser'
 import { AuthService } from '../../services/Authentication/auth.service'
+import { NewEntityService } from '../../services/New entity/new-entity.service'
 
 @Component({
   selector: 'app-new-post',
@@ -39,8 +39,8 @@ export class NewPostComponent {
     @Inject(Router) private readonly router: Router,
     @Inject(AuthService)
     private readonly authService: AuthService,
-    @Inject(NewPostService)
-    private readonly newPostService: NewPostService,
+    @Inject(NewEntityService)
+    private readonly newEntityService: NewEntityService,
     @Inject(AlertService) private readonly alertService: AlertService
   ) {}
 
@@ -104,8 +104,8 @@ export class NewPostComponent {
         fd.append('images', img)
       })
 
-      this.newPostService
-        .create(fd)
+      this.newEntityService
+        .newPost(fd)
         .pipe(take(1))
         .subscribe({
           next: (res) => {

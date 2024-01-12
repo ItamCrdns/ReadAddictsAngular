@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing'
 
-import { GetCommentsService } from './get-comments.service'
+import { AlertService } from './alert.service'
 
-describe('GetCommentsService', () => {
-  let service: GetCommentsService
+describe('AlertService', () => {
+  let service: AlertService
 
   beforeEach(() => {
     TestBed.configureTestingModule({})
-    service = TestBed.inject(GetCommentsService)
+    service = TestBed.inject(AlertService)
   })
 
   it('should be created', () => {

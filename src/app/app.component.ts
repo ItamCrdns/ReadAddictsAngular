@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { NavbarComponent } from './navbar/navbar.component'
 import { AlertComponent } from './alert/alert.component'
-import { AlertService } from './alert/alert.service'
+import { AlertService } from '../services/Alert/alert.service'
 import { OpenChatButtonComponent } from './chat/open-chat-button/open-chat-button.component'
 
 @Component({
