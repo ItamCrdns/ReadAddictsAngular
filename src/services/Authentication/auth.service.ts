@@ -1,10 +1,10 @@
 import { HttpClient, type HttpResponse } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
 import { type Observable, take, BehaviorSubject } from 'rxjs'
-import { type IUser } from '../app/login/IUser'
-import { environment } from '../environment/environment'
+import { type IUser } from '../../app/login/IUser'
+import { environment } from '../../environment/environment'
 import { Router } from '@angular/router'
-import { AlertService } from '../app/alert/alert.service'
+import { AlertService } from '../../app/alert/alert.service'
 
 @Injectable({
   providedIn: 'root'

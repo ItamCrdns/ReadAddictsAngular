@@ -1,3 +1,5 @@
+import { type IUser } from '../login/IUser'
+
 export interface IMessage {
   id: string
   senderId: string
@@ -5,4 +7,6 @@ export interface IMessage {
   content: string
   timestamp: string
   isRead: boolean
+  sender: IUser
+  receiver: IUser
 }

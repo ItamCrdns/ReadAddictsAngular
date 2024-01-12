@@ -14,7 +14,7 @@
   </div>
   <div class="messages-wrapper">
     <div class="chat-users">
-      @for (user of (recentMessageSenders$ | async); track user?.id) {
+      @for (user of recentChats; track user?.id) {
       <img
         ngSrc="{{ user?.profilePicture }}"
         alt="{{ user?.userName }}"

@@ -10,7 +10,7 @@ import { type Observable, take } from 'rxjs'
 import { Router } from '@angular/router'
 import { AlertService } from '../alert/alert.service'
 import { type IUser } from '../login/IUser'
-import { AuthService } from '../../services/auth.service'
+import { AuthService } from '../../services/Authentication/auth.service'
 
 @Component({
   selector: 'app-new-post',

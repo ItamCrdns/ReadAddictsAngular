@@ -5,7 +5,7 @@ import { type IUser } from './IUser'
 import { NgOptimizedImage } from '@angular/common'
 import { Router } from '@angular/router'
 import { AlertService } from '../alert/alert.service'
-import { AuthService } from '../../services/auth.service'
+import { AuthService } from '../../services/Authentication/auth.service'
 
 @Component({
   selector: 'app-login',

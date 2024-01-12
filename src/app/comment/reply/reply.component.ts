@@ -6,7 +6,7 @@ import {
   type OnDestroy
 } from '@angular/core'
 import { InputComponent } from '../../input/input.component'
-import { AuthService } from '../../../services/auth.service'
+import { AuthService } from '../../../services/Authentication/auth.service'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Subscription, type Observable, take } from 'rxjs'
 import { type IUser } from '../../login/IUser'

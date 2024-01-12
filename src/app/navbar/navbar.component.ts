@@ -10,7 +10,7 @@ import {
 } from '@ng-icons/core'
 import { Router, RouterLink } from '@angular/router'
 import { AlertService } from '../alert/alert.service'
-import { AuthService } from '../../services/auth.service'
+import { AuthService } from '../../services/Authentication/auth.service'
 import { type Observable, take } from 'rxjs'
 import { type IUser } from '../login/IUser'
 

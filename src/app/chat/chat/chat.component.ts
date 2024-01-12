@@ -3,7 +3,8 @@ import {
   ElementRef,
   Inject,
   type OnInit,
-  ViewChild
+  ViewChild,
+  type OnDestroy
 } from '@angular/core'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import {
@@ -16,13 +17,12 @@ import {
 } from '@ng-icons/ionicons'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { FormsModule } from '@angular/forms'
-import { GetRecentMessageSendersService } from './get-recent-message-senders.service'
-import { AuthService } from '../../../services/auth.service'
+import { AuthService } from '../../../services/Authentication/auth.service'
 import { type IUser } from '../../login/IUser'
-import { GetConversationService } from './get-conversation.service'
-import { combineLatest, type Observable } from 'rxjs'
+import { type Subscription, type Observable } from 'rxjs'
 import { type IMessage } from '../IMessage'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
+import { ChatService } from '../../../services/Chat/chat.service'
 
 @Component({
   selector: 'app-chat',
@@ -47,13 +47,12 @@ import { DateAgoPipe } from '../../pipes/date-ago.pipe'
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   message: string = '' // Store the message to be sent
-  recentMessageSenders$ =
-    this.getRecentMessageSendersService.getRecentMessageSenders()
+  recentChats: Partial<IUser[]> | undefined
+  recentChatSubscription: Subscription | undefined
 
   currentUser$ = this.authService.currentUser$
-  currentUsername: string | undefined = ''
 
   selectedUserChat: IUser | undefined
 
@@ -62,36 +61,30 @@ export class ChatComponent implements OnInit {
   constructor (
     @Inject(AuthService)
     private readonly authService: AuthService,
-    @Inject(GetRecentMessageSendersService)
-    private readonly getRecentMessageSendersService: GetRecentMessageSendersService,
-    @Inject(GetConversationService)
-    private readonly getConversationService: GetConversationService
+    @Inject(ChatService)
+    private readonly chatService: ChatService
   ) {}
 
   ngOnInit (): void {
-    const recentMessageSenders$ =
-      this.getRecentMessageSendersService.getRecentMessageSenders()
-    const currentUser$ = this.authService.currentUser$
-
-    // * Wait until both observables emit a value and then subscribe to them
-    combineLatest([recentMessageSenders$, currentUser$]).subscribe(
-      ([recentMessageSenders, currentUser]) => {
-        if (recentMessageSenders.length > 0) {
-          this.selectedUserChat = recentMessageSenders[0]
-          console.log(this.selectedUserChat?.lastLogin)
+    this.recentChatSubscription = this.chatService.getRecentChats().subscribe({
+      next: (res) => {
+        if (res.length > 0) {
+          this.selectedUserChat = res[0]
         }
 
-        this.currentUsername = currentUser.userName
-
-        this.selectedChatConversation$ =
-          this.getConversationService.getConversation(
+        if (this.selectedUserChat !== undefined) {
+          this.selectedChatConversation$ = this.chatService.getConversation(
             1,
             10,
-            this.selectedUserChat?.userName ?? '',
-            this.currentUsername ?? ''
+            this.selectedUserChat.id
           )
+        }
       }
-    )
+    })
+  }
+
+  ngOnDestroy (): void {
+    this.recentChatSubscription?.unsubscribe()
   }
 
   @ViewChild('textarea') textarea: ElementRef = new ElementRef('')

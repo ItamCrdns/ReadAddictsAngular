@@ -7,7 +7,7 @@ import {
   forwardRef,
   inject
 } from '@angular/core'
-import { CharacterCountService } from '../../services/character-count.service'
+import { CharacterCountService } from '../../services/Character count/character-count.service'
 import {
   type ControlValueAccessor,
   NG_VALUE_ACCESSOR,
