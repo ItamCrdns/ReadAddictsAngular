@@ -1,7 +1,7 @@
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Component, Inject, type OnInit, type OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { type Observable, Subscription } from 'rxjs'
+import { type Observable, Subject, takeUntil } from 'rxjs'
 import { AlertService } from '../../services/Alert/alert.service'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type IUser } from '../login/IUser'
@@ -24,8 +24,9 @@ export class UserComponent implements OnInit, OnDestroy {
   user: Partial<IUser> = {}
   currentUser$: Observable<Partial<IUser>> = this.authService.currentUser$
 
-  userSub: Subscription = new Subscription()
-  paramsSub: Subscription = new Subscription()
+  currentToggleValue: boolean = false
+
+  private readonly destroy$ = new Subject<void>()
 
   constructor (
     @Inject(Router) private readonly router: Router,
@@ -38,9 +39,10 @@ export class UserComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit (): void {
-    this.paramsSub = this.route.params.subscribe((params) => {
-      this.userSub = this.getEntityService
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.getEntityService
         .getUser(params['username'] as string)
+        .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (user: Partial<IUser>) => {
             this.user = user
@@ -58,19 +60,26 @@ export class UserComponent implements OnInit, OnDestroy {
           }
         })
     })
+
+    this.openChatService.toggle$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.currentToggleValue = res.toggle
+      })
   }
 
   ngOnDestroy (): void {
-    this.userSub.unsubscribe()
-    this.paramsSub.unsubscribe()
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
   openChat (userId: string | undefined): void {
     if (userId !== undefined) {
       const newState: ISendMessage = {
-        toggle: true,
+        toggle: !this.currentToggleValue,
         userId
       }
+
       this.openChatService.updateToggle(newState)
     }
   }

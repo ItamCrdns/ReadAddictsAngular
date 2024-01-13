@@ -81,15 +81,16 @@ export class ChatComponent implements OnInit, OnDestroy {
           this.selectedUserChat = res
         }
       })
-    } else {
-      this.recentChatSubscription = this.chatService
-        .getRecentChats()
-        .subscribe({
-          next: (res: Partial<IUser[]>) => {
-            this.selectedUserChat = res[0]
-          }
-        })
     }
+
+    this.recentChatSubscription = this.chatService.getRecentChats().subscribe({
+      next: (res: Partial<IUser[]>) => {
+        if (this.anyUserId === undefined || this.anyUserId === '') {
+          this.selectedUserChat = res[0]
+        }
+        this.recentChats = res
+      }
+    })
 
     if (this.selectedUserChat !== undefined) {
       this.selectedChatConversation$ = this.chatService.getConversation(
