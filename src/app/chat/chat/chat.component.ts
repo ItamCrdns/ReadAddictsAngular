@@ -4,7 +4,8 @@ import {
   Inject,
   type OnInit,
   ViewChild,
-  type OnDestroy
+  type OnDestroy,
+  Input
 } from '@angular/core'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import {
@@ -24,6 +25,7 @@ import { type IMessage } from '../IMessage'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { ChatService } from '../../../services/Chat/chat.service'
 import { RouterLink } from '@angular/router'
+import { GetEntityService } from '../../../services/Get entity/get-entity.service'
 
 @Component({
   selector: 'app-chat',
@@ -50,6 +52,9 @@ import { RouterLink } from '@angular/router'
   styleUrl: './chat.component.scss'
 })
 export class ChatComponent implements OnInit, OnDestroy {
+  // * User if the chat is opened from the user page
+  @Input() anyUserId: string | undefined
+
   message: string = '' // Store the message to be sent
   recentChats: Partial<IUser[]> | undefined
   recentChatSubscription: Subscription | undefined
@@ -64,25 +69,35 @@ export class ChatComponent implements OnInit, OnDestroy {
     @Inject(AuthService)
     private readonly authService: AuthService,
     @Inject(ChatService)
-    private readonly chatService: ChatService
+    private readonly chatService: ChatService,
+    @Inject(GetEntityService)
+    private readonly getEntityService: GetEntityService
   ) {}
 
   ngOnInit (): void {
-    this.recentChatSubscription = this.chatService.getRecentChats().subscribe({
-      next: (res) => {
-        if (res.length > 0) {
-          this.selectedUserChat = res[0]
+    if (this.anyUserId !== undefined && this.anyUserId !== '') {
+      this.getEntityService.getUserById(this.anyUserId).subscribe({
+        next: (res: IUser) => {
+          this.selectedUserChat = res
         }
+      })
+    } else {
+      this.recentChatSubscription = this.chatService
+        .getRecentChats()
+        .subscribe({
+          next: (res: Partial<IUser[]>) => {
+            this.selectedUserChat = res[0]
+          }
+        })
+    }
 
-        if (this.selectedUserChat !== undefined) {
-          this.selectedChatConversation$ = this.chatService.getConversation(
-            1,
-            10,
-            this.selectedUserChat.id
-          )
-        }
-      }
-    })
+    if (this.selectedUserChat !== undefined) {
+      this.selectedChatConversation$ = this.chatService.getConversation(
+        1,
+        10,
+        this.selectedUserChat.id
+      )
+    }
   }
 
   ngOnDestroy (): void {

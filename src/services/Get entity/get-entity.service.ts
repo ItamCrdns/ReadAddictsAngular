@@ -19,6 +19,12 @@ export class GetEntityService {
     })
   }
 
+  getUserById (id: string): Observable<IUser> {
+    return this.http.get<IUser>(environment.apiUrl + 'users/id/' + id, {
+      withCredentials: true
+    })
+  }
+
   getPosts (page: number = 1, limit: number = 1): Observable<IPost[]> {
     return this.http.get<IPost[]>(environment.apiUrl + 'posts/all', {
       params: {

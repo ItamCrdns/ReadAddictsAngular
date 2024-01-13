@@ -1,12 +1,17 @@
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Component, Inject, type OnInit, type OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Subscription } from 'rxjs'
+import { type Observable, Subscription } from 'rxjs'
 import { AlertService } from '../../services/Alert/alert.service'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type IUser } from '../login/IUser'
 import { GetEntityService } from '../../services/Get entity/get-entity.service'
 import { type HttpErrorResponse } from '@angular/common/http'
+import { AuthService } from '../../services/Authentication/auth.service'
+import {
+  type ISendMessage,
+  OpenChatService
+} from '../../services/Open chat/open-chat.service'
 
 @Component({
   selector: 'app-user',
@@ -17,6 +22,7 @@ import { type HttpErrorResponse } from '@angular/common/http'
 })
 export class UserComponent implements OnInit, OnDestroy {
   user: Partial<IUser> = {}
+  currentUser$: Observable<Partial<IUser>> = this.authService.currentUser$
 
   userSub: Subscription = new Subscription()
   paramsSub: Subscription = new Subscription()
@@ -26,7 +32,9 @@ export class UserComponent implements OnInit, OnDestroy {
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
     @Inject(GetEntityService)
     private readonly getEntityService: GetEntityService,
-    @Inject(AlertService) private readonly alertService: AlertService
+    @Inject(AlertService) private readonly alertService: AlertService,
+    @Inject(AuthService) private readonly authService: AuthService,
+    @Inject(OpenChatService) private readonly openChatService: OpenChatService
   ) {}
 
   ngOnInit (): void {
@@ -55,5 +63,15 @@ export class UserComponent implements OnInit, OnDestroy {
   ngOnDestroy (): void {
     this.userSub.unsubscribe()
     this.paramsSub.unsubscribe()
+  }
+
+  openChat (userId: string | undefined): void {
+    if (userId !== undefined) {
+      const newState: ISendMessage = {
+        toggle: true,
+        userId
+      }
+      this.openChatService.updateToggle(newState)
+    }
   }
 }

@@ -7,9 +7,17 @@
       height="250"
     />
     <section class="user-info-wrapper">
-      <header class="name-wrapper">
-        <h1>{{ "@" }}{{ user.userName }}</h1>
-      </header>
+      <div class="usernamame-button-wrapper">
+        <header class="name-wrapper">
+          <h1>{{ "@" }}{{ user.userName }}</h1>
+        </header>
+        @if (currentUser$ | async; as currentUser) { @if (user.id !==
+        currentUser.id) {
+        <button (click)="openChat(user.id)">Message</button>
+        } @else {
+        <button>Settings</button>
+        } }
+      </div>
       <div class="user-info">
         <div class="tier-last-seen-wrapper">
           <p>{{ user.tierName }}</p>
