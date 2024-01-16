@@ -7,6 +7,7 @@ import { Inject, Injectable } from '@angular/core'
 import { type Observable } from 'rxjs'
 import { environment } from '../../environment/environment'
 import { type IComment } from '../../app/comments/IComment'
+import { type IMessage } from '../../app/chat/IMessage'
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,9 @@ export class NewEntityService {
   constructor (@Inject(HttpClient) private readonly http: HttpClient) {}
 
   newPost (post: FormData): Observable<HttpResponse<number>> {
-    return this.http.post<number>(environment.apiUrl + 'posts/create', post, {
+    const url = environment.apiUrl + 'posts/create'
+
+    return this.http.post<number>(url, post, {
       observe: 'response',
       withCredentials: true
     })
@@ -37,6 +40,17 @@ export class NewEntityService {
     return this.http.post<IComment>(url, null, {
       params,
       observe: 'response',
+      withCredentials: true
+    })
+  }
+
+  newMessage (receiverId: string, message: string): Observable<IMessage> {
+    const url = environment.apiUrl + 'messages/send/' + receiverId
+
+    const params = new HttpParams().set('message', message)
+
+    return this.http.post<IMessage>(url, null, {
+      params,
       withCredentials: true
     })
   }

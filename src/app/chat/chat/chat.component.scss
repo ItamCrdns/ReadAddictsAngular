@@ -157,6 +157,16 @@
         padding: .75rem;
         gap: .75rem;
 
+        .no-messages {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            span {
+                text-transform: capitalize;
+            }
+        }
+
         .message {
             background-color: white;
             border-radius: 5px;

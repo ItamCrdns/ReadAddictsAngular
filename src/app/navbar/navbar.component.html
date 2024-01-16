@@ -2,7 +2,7 @@
   <div class="nav-links">
     <h1>Readaddicts</h1>
     @for(item of items; track item.name) {
-    <a href="{{ item.path }}">{{ item.name }}</a>
+    <a [routerLink]="[item.path]">{{ item.name }}</a>
     }
   </div>
   <div class="user-wrapper">

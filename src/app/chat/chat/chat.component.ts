@@ -20,12 +20,13 @@ import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { AuthService } from '../../../services/Authentication/auth.service'
 import { type IUser } from '../../login/IUser'
-import { type Subscription, type Observable } from 'rxjs'
+import { takeUntil, Subject } from 'rxjs'
 import { type IMessage } from '../IMessage'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { ChatService } from '../../../services/Chat/chat.service'
 import { RouterLink } from '@angular/router'
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
+import { NewEntityService } from '../../../services/New entity/new-entity.service'
 
 @Component({
   selector: 'app-chat',
@@ -56,14 +57,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   @Input() anyUserId: string | undefined
 
   message: string = '' // Store the message to be sent
-  recentChats: Partial<IUser[]> | undefined
-  recentChatSubscription: Subscription | undefined
+  recentChats: Partial<IUser[]> | undefined // Store user profile pictures for recent chats (tho it stores more than the picture) // TODO: Maybe add user username on profile picture hover
 
-  currentUser$ = this.authService.currentUser$
+  currentUser$ = this.authService.currentUser$ // Current logged in user
+  selectedUser: IUser | undefined // User selected to chat with
+  selectedConversation: IMessage[] | [] = []
 
-  selectedUserChat: IUser | undefined
-
-  selectedChatConversation$: Observable<IMessage[]> | undefined
+  private readonly destroy$ = new Subject<void>()
 
   constructor (
     @Inject(AuthService)
@@ -71,38 +71,87 @@ export class ChatComponent implements OnInit, OnDestroy {
     @Inject(ChatService)
     private readonly chatService: ChatService,
     @Inject(GetEntityService)
-    private readonly getEntityService: GetEntityService
+    private readonly getEntityService: GetEntityService,
+    @Inject(NewEntityService)
+    private readonly newEntityService: NewEntityService
   ) {}
 
   ngOnInit (): void {
     if (this.anyUserId !== undefined && this.anyUserId !== '') {
-      this.getEntityService.getUserById(this.anyUserId).subscribe({
-        next: (res: IUser) => {
-          this.selectedUserChat = res
+      this.getEntityService
+        .getUserById(this.anyUserId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res: IUser) => {
+            this.selectedUser = res
+            this.chatService
+              .getConversation(1, 10, this.selectedUser.id)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe({
+                next: (res: IMessage[]) => {
+                  this.selectedConversation = res
+                }
+              })
+          }
+        })
+    }
+
+    this.chatService
+      .getRecentChats()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: Partial<IUser[]>) => {
+          if (this.anyUserId === undefined || this.anyUserId === '') {
+            this.selectedUser = res[0]
+            if (this.selectedUser !== undefined) {
+              this.chatService
+                .getConversation(1, 10, this.selectedUser.id)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                  next: (res: IMessage[]) => {
+                    this.selectedConversation = res
+                  }
+                })
+            }
+          }
+          this.recentChats = res
         }
       })
-    }
-
-    this.recentChatSubscription = this.chatService.getRecentChats().subscribe({
-      next: (res: Partial<IUser[]>) => {
-        if (this.anyUserId === undefined || this.anyUserId === '') {
-          this.selectedUserChat = res[0]
-        }
-        this.recentChats = res
-      }
-    })
-
-    if (this.selectedUserChat !== undefined) {
-      this.selectedChatConversation$ = this.chatService.getConversation(
-        1,
-        10,
-        this.selectedUserChat.id
-      )
-    }
   }
 
   ngOnDestroy (): void {
-    this.recentChatSubscription?.unsubscribe()
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
+
+  selectConversation (user: IUser): void {
+    if (this.selectedUser !== user) {
+      this.selectedUser = user
+      this.chatService
+        .getConversation(1, 10, this.selectedUser.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res: IMessage[]) => {
+            this.selectedConversation = res
+          }
+        })
+    }
+  }
+
+  sendMessage (): void {
+    if (this.selectedUser !== undefined) {
+      this.newEntityService
+        .newMessage(this.selectedUser.id, this.message)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res) => {
+            this.message = ''
+            if (this.selectedUser !== undefined) {
+              this.selectedConversation = [...this.selectedConversation, res]
+            }
+          }
+        })
+    }
   }
 
   @ViewChild('textarea') textarea: ElementRef = new ElementRef('')
