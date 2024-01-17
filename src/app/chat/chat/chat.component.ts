@@ -5,7 +5,8 @@ import {
   type OnInit,
   ViewChild,
   type OnDestroy,
-  Input
+  Input,
+  ChangeDetectorRef
 } from '@angular/core'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import {
@@ -74,34 +75,48 @@ export class ChatComponent implements OnInit, OnDestroy {
     @Inject(GetEntityService)
     private readonly getEntityService: GetEntityService,
     @Inject(NewEntityService)
-    private readonly newEntityService: NewEntityService
+    private readonly newEntityService: NewEntityService,
+    @Inject(ChangeDetectorRef)
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
+  @ViewChild('chatArea') chatArea: ElementRef = new ElementRef('')
+
   ngOnInit (): void {
-    this.getEntityService
-      .getUserById(this.anyUserId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res: IUser) => {
-          this.selectedUser = res
+    // * If the chat is opened from the user page, open the chat with that user
+    if (this.anyUserId !== '') {
+      this.getEntityService
+        .getUserById(this.anyUserId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res: IUser) => {
+            this.selectedUser = res
 
-          this.chatService
-            .getConversation(1, 10, this.selectedUser.id ?? '')
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-              next: (res: IMessage[]) => {
-                this.selectedConversation = res
-              }
-            })
-        }
-      })
+            this.chatService
+              .getConversation(1, 10, this.selectedUser.id ?? '')
+              .pipe(takeUntil(this.destroy$))
+              .subscribe({
+                next: (res: IMessage[]) => {
+                  this.selectedConversation = res
 
+                  this.cdr.detectChanges()
+                  this.chatArea.nativeElement.scrollTop = this.chatArea.nativeElement.scrollHeight
+                }
+              })
+          }
+        })
+    }
+
+    // * Regardless of where the chat is opened from, get the recent chats
     this.chatService
       .getRecentChats()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: Partial<IUser[]>) => {
-          this.selectedUser = res[0] ?? {}
+          // * But don't select a user if the chat is opened from the user page. The user is already selected
+          if (this.anyUserId === '') {
+            this.selectedUser = res[0] ?? {}
+          }
 
           this.chatService
             .getConversation(1, 10, this.selectedUser.id ?? '')
@@ -109,6 +124,9 @@ export class ChatComponent implements OnInit, OnDestroy {
             .subscribe({
               next: (res: IMessage[]) => {
                 this.selectedConversation = res
+
+                this.cdr.detectChanges()
+                this.chatArea.nativeElement.scrollTop = this.chatArea.nativeElement.scrollHeight
               }
             })
 

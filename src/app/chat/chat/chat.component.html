@@ -37,7 +37,7 @@
     </div>
     <div class="messages">
       @if((currentUser$ | async); as user) {
-      <div class="scrolleable">
+      <div class="chat-area" #chatArea>
         <p style="text-align: center" #loadMore>&middot;</p>
         @for (message of selectedConversation; track message.id) {
         <div
