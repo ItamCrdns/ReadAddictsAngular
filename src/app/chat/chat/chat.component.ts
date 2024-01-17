@@ -54,13 +54,14 @@ import { NewEntityService } from '../../../services/New entity/new-entity.servic
 })
 export class ChatComponent implements OnInit, OnDestroy {
   // * User if the chat is opened from the user page
-  @Input() anyUserId: string | undefined
+  @Input() anyUserId: string = ''
 
   message: string = '' // Store the message to be sent
   recentChats: Partial<IUser[]> | undefined // Store user profile pictures for recent chats (tho it stores more than the picture) // TODO: Maybe add user username on profile picture hover
 
   currentUser$ = this.authService.currentUser$ // Current logged in user
-  selectedUser: IUser | undefined // User selected to chat with
+  selectedUser: Partial<IUser> = {}
+
   selectedConversation: IMessage[] | [] = []
 
   private readonly destroy$ = new Subject<void>()
@@ -77,43 +78,40 @@ export class ChatComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit (): void {
-    if (this.anyUserId !== undefined && this.anyUserId !== '') {
-      this.getEntityService
-        .getUserById(this.anyUserId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (res: IUser) => {
-            this.selectedUser = res
-            this.chatService
-              .getConversation(1, 10, this.selectedUser.id)
-              .pipe(takeUntil(this.destroy$))
-              .subscribe({
-                next: (res: IMessage[]) => {
-                  this.selectedConversation = res
-                }
-              })
-          }
-        })
-    }
+    this.getEntityService
+      .getUserById(this.anyUserId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: IUser) => {
+          this.selectedUser = res
+
+          this.chatService
+            .getConversation(1, 10, this.selectedUser.id ?? '')
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: (res: IMessage[]) => {
+                this.selectedConversation = res
+              }
+            })
+        }
+      })
 
     this.chatService
       .getRecentChats()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: Partial<IUser[]>) => {
-          if (this.anyUserId === undefined || this.anyUserId === '') {
-            this.selectedUser = res[0]
-            if (this.selectedUser !== undefined) {
-              this.chatService
-                .getConversation(1, 10, this.selectedUser.id)
-                .pipe(takeUntil(this.destroy$))
-                .subscribe({
-                  next: (res: IMessage[]) => {
-                    this.selectedConversation = res
-                  }
-                })
-            }
-          }
+          this.selectedUser = res[0] ?? {}
+
+          this.chatService
+            .getConversation(1, 10, this.selectedUser.id ?? '')
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: (res: IMessage[]) => {
+                this.selectedConversation = res
+              }
+            })
+
           this.recentChats = res
         }
       })
@@ -128,7 +126,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (this.selectedUser !== user) {
       this.selectedUser = user
       this.chatService
-        .getConversation(1, 10, this.selectedUser.id)
+        .getConversation(1, 10, this.selectedUser.id ?? '')
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res: IMessage[]) => {
@@ -141,14 +139,12 @@ export class ChatComponent implements OnInit, OnDestroy {
   sendMessage (): void {
     if (this.selectedUser !== undefined) {
       this.newEntityService
-        .newMessage(this.selectedUser.id, this.message)
+        .newMessage(this.selectedUser.id ?? '', this.message)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res) => {
             this.message = ''
-            if (this.selectedUser !== undefined) {
-              this.selectedConversation = [...this.selectedConversation, res]
-            }
+            this.selectedConversation = [...this.selectedConversation, res]
           }
         })
     }

@@ -30,4 +30,5 @@ export interface IPost {
   images: IImage[]
   comments: IComment[]
   commentCount: number
+  imageCount: number
 }

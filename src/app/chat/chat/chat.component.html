@@ -2,17 +2,17 @@
   <div class="chat-header">
     <div class="user-wrapper">
       <img
-        ngSrc="{{ selectedUser?.profilePicture }}"
-        alt="{{ selectedUser?.userName }}"
+        ngSrc="{{ selectedUser.profilePicture }}"
+        alt="{{ selectedUser.userName }}"
         width="60"
         height="60"
       />
       <h1>
-        <a [routerLink]="['/user', selectedUser?.userName]">
-          {{ "@" }}{{ selectedUser?.userName }}
+        <a [routerLink]="['/user', selectedUser.userName]">
+          {{ "@" }}{{ selectedUser.userName }}
         </a>
       </h1>
-      <p>Last seen {{ selectedUser?.lastLogin ?? "" | dateAgo }}</p>
+      <p>Last seen {{ selectedUser.lastLogin ?? "" | dateAgo }}</p>
     </div>
     <ng-icon class="vertical-ellipsis" name="ionEllipsisVerticalSharp" />
   </div>
@@ -26,7 +26,7 @@
         height="60"
         [style]="{
           'box-shadow':
-            selectedUser?.id == user?.id
+            selectedUser.id == user?.id
               ? '0 0 10px 1px rgba(0, 0, 0, 0.2)'
               : 'none'
         }"
@@ -38,6 +38,7 @@
     <div class="messages">
       @if((currentUser$ | async); as user) {
       <div class="scrolleable">
+        <p style="text-align: center" #loadMore>&middot;</p>
         @for (message of selectedConversation; track message.id) {
         <div
           class="message"
@@ -53,7 +54,7 @@
         <div class="no-messages">
           <p>
             Your chat with
-            <span>{{ selectedUser?.userName }}</span>
+            <span>{{ selectedUser.userName }}</span>
             it's empty. Say hi!
           </p>
         </div>

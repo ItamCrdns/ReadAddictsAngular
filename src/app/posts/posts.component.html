@@ -18,8 +18,8 @@
     </header>
     <a [routerLink]="['/post', post.id]">{{ post.content }}</a>
     <div class="image-wrapper">
-      @if (post.images.length > 0) { @for (image of post.images; track
-      image.id) {
+      @if (post.images.length > 0) { @for (image of post.images; track image.id)
+      {
       <img
         ngSrc="{{ image.url }}"
         [alt]="image.id"
@@ -27,7 +27,11 @@
         height="100"
         priority="true"
       />
-      } }
+      } } @if (post.imageCount > 5) {
+      <div class="moreimages">
+        <a [routerLink]="['/post', post.id]">+{{ post.imageCount - 5 }}</a>
+      </div>
+      }
     </div>
     <div class="button-wrapper">
       @if (post.commentCount > 0) {
