@@ -58,10 +58,31 @@ export class ChatComponent implements OnInit, OnDestroy {
   @Input() anyUserId: string = ''
 
   message: string = '' // Store the message to be sent
-  recentChats: Partial<IUser[]> | undefined // Store user profile pictures for recent chats (tho it stores more than the picture) // TODO: Maybe add user username on profile picture hover
+  recentChats: Partial<IUser[]> = [] // Store user profile pictures for recent chats (tho it stores more than the picture) // TODO: Maybe add user username on profile picture hover
 
   currentUser$ = this.authService.currentUser$ // Current logged in user
-  selectedUser: Partial<IUser> = {}
+  selectedUser: IUser = {
+    id: '',
+    lastLogin: '',
+    tierId: '',
+    biography: '',
+    profilePicture: '',
+    userName: '',
+    normalizedUserName: '',
+    email: '',
+    normalizedEmail: '',
+    emailConfirmed: false,
+    passwordHash: '',
+    securityStamp: '',
+    concurrencyStamp: '',
+    phoneNumber: '',
+    phoneNumberConfirmed: false,
+    twoFactorEnabled: false,
+    lockoutEnd: '',
+    lockoutEnabled: false,
+    accessFailedCount: 0,
+    tierName: ''
+  }
 
   selectedConversation: IMessage[] | [] = []
 
@@ -99,8 +120,7 @@ export class ChatComponent implements OnInit, OnDestroy {
                 next: (res: IMessage[]) => {
                   this.selectedConversation = res
 
-                  this.cdr.detectChanges()
-                  this.chatArea.nativeElement.scrollTop = this.chatArea.nativeElement.scrollHeight
+                  this.goBottom()
                 }
               })
           }
@@ -112,10 +132,10 @@ export class ChatComponent implements OnInit, OnDestroy {
       .getRecentChats()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (res: Partial<IUser[]>) => {
+        next: (res: IUser[]) => {
           // * But don't select a user if the chat is opened from the user page. The user is already selected
           if (this.anyUserId === '') {
-            this.selectedUser = res[0] ?? {}
+            this.selectedUser = res[0]
           }
 
           this.chatService
@@ -125,8 +145,7 @@ export class ChatComponent implements OnInit, OnDestroy {
               next: (res: IMessage[]) => {
                 this.selectedConversation = res
 
-                this.cdr.detectChanges()
-                this.chatArea.nativeElement.scrollTop = this.chatArea.nativeElement.scrollHeight
+                this.goBottom()
               }
             })
 
@@ -149,6 +168,9 @@ export class ChatComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (res: IMessage[]) => {
             this.selectedConversation = res
+
+            // * Scroll to bottom when a new conversation is selected
+            this.goBottom()
           }
         })
     }
@@ -163,9 +185,22 @@ export class ChatComponent implements OnInit, OnDestroy {
           next: (res) => {
             this.message = ''
             this.selectedConversation = [...this.selectedConversation, res]
+
+            // * Scroll to bottom when a new message is sent
+            this.goBottom()
+
+            // * And push the user I have just sent a message to to the top of the recent chats
+            this.recentChats = this.recentChats.filter((user) => user?.id !== this.selectedUser.id)
+            this.recentChats?.unshift(this.selectedUser)
           }
         })
     }
+  }
+
+  goBottom (): void {
+    this.cdr.detectChanges()
+    this.chatArea.nativeElement.scrollTop =
+      this.chatArea.nativeElement.scrollHeight
   }
 
   @ViewChild('textarea') textarea: ElementRef = new ElementRef('')

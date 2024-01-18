@@ -12,8 +12,8 @@ export class ChatService {
   constructor (@Inject(HttpClient) private readonly http: HttpClient) {}
 
   // ? Gets ordered list of users that have sent a message to the current user
-  getRecentChats (): Observable<Partial<IUser[]>> {
-    return this.http.get<Partial<IUser[]>>(
+  getRecentChats (): Observable<IUser[]> {
+    return this.http.get<IUser[]>(
       environment.apiUrl + 'messages/recent-chats',
       {
         withCredentials: true
