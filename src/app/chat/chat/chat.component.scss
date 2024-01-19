@@ -78,6 +78,27 @@
         gap: 1rem;
         padding: 1rem;
         border-right: 1px solid rgba(0, 0, 0, .1);
+        position: relative;
+    }
+
+    .profile-pic-wrapper {
+        position: inherit;
+
+        .notification-dot {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: rgb(255, 60, 60);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
     }
     
     .add-user {

@@ -19,25 +19,30 @@
   <div class="messages-wrapper">
     <div class="chat-users">
       @for (user of recentChats; track user?.id) { @if (user !== undefined) {
-      <img
-        ngSrc="{{ user?.profilePicture }}"
-        alt="{{ user?.userName }}"
-        width="60"
-        height="60"
-        [style]="{
-          'box-shadow':
-            selectedUser.id == user?.id
-              ? '0 0 10px 1px rgba(0, 0, 0, 0.2)'
-              : 'none'
-        }"
-        (click)="selectConversation(user)"
-      />
+      <div class="profile-pic-wrapper">
+        @if (userHasNotifications(user.id)) {
+        <div class="notification-dot"></div>
+        }
+        <img
+          ngSrc="{{ user?.profilePicture }}"
+          alt="{{ user?.userName }}"
+          width="60"
+          height="60"
+          [style]="{
+            'box-shadow':
+              selectedUser.id == user?.id
+                ? '0 0 10px 1px rgba(0, 0, 0, 0.2)'
+                : 'none'
+          }"
+          (click)="selectConversation(user)"
+        />
+      </div>
       } }
       <ng-icon class="add-user" name="ionAddCircleSharp" />
     </div>
     <div class="messages">
       @if((currentUser$ | async); as user) {
-      <div class="chat-area" #chatArea>
+      <div class="chat-area" #chatArea (click)="chatAreaClick(selectedUser.id)">
         <p style="text-align: center" #loadMore>&middot;</p>
         @for (message of selectedConversation; track message.id) {
         <div

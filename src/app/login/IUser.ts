@@ -20,3 +20,26 @@ export interface IUser {
   accessFailedCount: number
   tierName: string
 }
+
+export const userInitialState: IUser = {
+  id: '',
+  lastLogin: '',
+  tierId: '',
+  biography: '',
+  profilePicture: '',
+  userName: '',
+  normalizedUserName: '',
+  email: '',
+  normalizedEmail: '',
+  emailConfirmed: false,
+  passwordHash: '',
+  securityStamp: '',
+  concurrencyStamp: '',
+  phoneNumber: '',
+  phoneNumberConfirmed: false,
+  twoFactorEnabled: false,
+  lockoutEnd: '',
+  lockoutEnabled: false,
+  accessFailedCount: 0,
+  tierName: ''
+}
