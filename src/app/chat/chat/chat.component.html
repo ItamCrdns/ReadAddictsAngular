@@ -20,8 +20,8 @@
     <div class="chat-users">
       @for (user of recentChats; track user?.id) { @if (user !== undefined) {
       <div class="profile-pic-wrapper">
-        @if (userHasNotifications(user.id)) {
-        <div class="notification-dot"></div>
+        @if (user.unreadMessages > 0) {
+        <div class="notification-dot">{{ user.unreadMessages }}</div>
         }
         <img
           ngSrc="{{ user?.profilePicture }}"
@@ -42,7 +42,11 @@
     </div>
     <div class="messages">
       @if((currentUser$ | async); as user) {
-      <div class="chat-area" #chatArea (click)="chatAreaClick(selectedUser.id)">
+      <div
+        class="chat-area"
+        #chatArea
+        (click)="clearNotificationForUser(selectedUser.id)"
+      >
         <p style="text-align: center" #loadMore>&middot;</p>
         @for (message of selectedConversation; track message.id) {
         <div
@@ -79,6 +83,7 @@
             (input)="textareaChange()"
             maxlength="255"
             placeholder="Write a message..."
+            (click)="clearNotificationForUser(selectedUser.id)"
           ></textarea>
           @if (message.length > 0) {
           <ng-icon

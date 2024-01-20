@@ -4,12 +4,14 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { ionChatbubble, ionCloseCircleSharp } from '@ng-icons/ionicons'
 import { slideInOut } from '../../animations/slide'
 import { OpenChatService } from '../../../services/Open chat/open-chat.service'
-import { Subscription } from 'rxjs'
+import { type Observable, Subscription } from 'rxjs'
+import { GetEntityService } from '../../../services/Get entity/get-entity.service'
+import { AsyncPipe } from '@angular/common'
 
 @Component({
   selector: 'app-open-chat-button',
   standalone: true,
-  imports: [NgIconComponent, ChatComponent],
+  imports: [NgIconComponent, ChatComponent, AsyncPipe],
   providers: [
     provideIcons({
       ionChatbubble,
@@ -23,17 +25,22 @@ import { Subscription } from 'rxjs'
 export class OpenChatButtonComponent implements OnInit, OnDestroy {
   toggle: boolean = false
   user: string = ''
+  notificationCount$: Observable<number> = this.getEntityService.getMessageNotificationsCount()
+
   sub: Subscription = new Subscription()
 
   constructor (
-    @Inject(OpenChatService) private readonly openChatService: OpenChatService
+    @Inject(OpenChatService) private readonly openChatService: OpenChatService,
+    @Inject(GetEntityService) private readonly getEntityService: GetEntityService
   ) {}
 
   ngOnInit (): void {
-    this.sub = this.openChatService.toggle$.subscribe((res) => {
-      this.toggle = res.toggle
-      if (res.userId !== undefined) {
-        this.user = res.userId
+    this.sub = this.openChatService.toggle$.subscribe({
+      next: (res) => {
+        this.toggle = res.toggle
+        if (res.userId !== undefined) {
+          this.user = res.userId
+        }
       }
     })
   }

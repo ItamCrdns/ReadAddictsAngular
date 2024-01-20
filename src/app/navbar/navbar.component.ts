@@ -1,7 +1,6 @@
 import { Component, Inject, type OnInit } from '@angular/core'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { navItems } from './navItems'
-import { heroChatBubbleLeftRight } from '@ng-icons/heroicons/outline'
 import { ionLogOutOutline } from '@ng-icons/ionicons'
 import {
   NgIconComponent,
@@ -19,7 +18,7 @@ import { type IUser } from '../login/IUser'
   standalone: true,
   imports: [NgOptimizedImage, NgIconComponent, AsyncPipe, RouterLink],
   providers: [
-    provideIcons({ heroChatBubbleLeftRight, ionLogOutOutline }),
+    provideIcons({ ionLogOutOutline }),
     provideNgIconsConfig({ size: '1.75rem' })
   ],
   templateUrl: './navbar.component.html',

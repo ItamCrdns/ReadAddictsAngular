@@ -5,6 +5,11 @@
   </div>
   }
   <div class="bubble" (click)="toggleChat()">
+    @if ((notificationCount$ | async); as count) {
+    <div class="notification-dot">
+      {{ count > 99 ? "+99" : count }}
+    </div>
+    }
     <ng-icon
       [style]="{ 'font-size': '1.25rem' }"
       [name]="toggle ? 'ionCloseCircleSharp' : 'ionChatbubble'"

@@ -63,4 +63,13 @@ export class GetEntityService {
       withCredentials: true
     })
   }
+
+  getMessageNotificationsCount (): Observable<number> {
+    return this.http.get<number>(
+      environment.apiUrl + 'messages/notification-count',
+      {
+        withCredentials: true
+      }
+    )
+  }
 }

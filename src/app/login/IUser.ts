@@ -19,6 +19,7 @@ export interface IUser {
   lockoutEnabled: boolean
   accessFailedCount: number
   tierName: string
+  unreadMessages: number
 }
 
 export const userInitialState: IUser = {
@@ -41,5 +42,6 @@ export const userInitialState: IUser = {
   lockoutEnd: '',
   lockoutEnabled: false,
   accessFailedCount: 0,
-  tierName: ''
+  tierName: '',
+  unreadMessages: 0
 }

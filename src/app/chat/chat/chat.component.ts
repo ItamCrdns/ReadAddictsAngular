@@ -6,7 +6,8 @@ import {
   ViewChild,
   type OnDestroy,
   Input,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  Output
 } from '@angular/core'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import {
@@ -31,7 +32,7 @@ import { NewEntityService } from '../../../services/New entity/new-entity.servic
 import { HubConnectionBuilder, type HubConnection } from '@microsoft/signalr'
 import { environment } from '../../../environment/environment'
 import { AlertService } from '../../../services/Alert/alert.service'
-import { notificationInitialState, type INotification } from './INotification'
+import { type INotification } from './INotification'
 
 @Component({
   selector: 'app-chat',
@@ -60,13 +61,15 @@ import { notificationInitialState, type INotification } from './INotification'
 export class ChatComponent implements OnInit, OnDestroy {
   // * User if the chat is opened from the user page
   @Input() anyUserId: string = ''
+  @Output() notificationCount: number = 0
+
   message: string = '' // Store the message to be sent
   recentChats: Partial<IUser[]> = [] // Store user profile pictures for recent chats (tho it stores more than the picture) // TODO: Maybe add user username on profile picture hover
   currentUser$ = this.authService.currentUser$ // Current logged in user
   selectedUser: IUser = userInitialState
 
-  selectedConversation: IMessage[] | [] = []
-  notifications: INotification[] = notificationInitialState
+  selectedConversation: IMessage[] = []
+  notifications: INotification[] = []
 
   private readonly destroy$ = new Subject<void>()
   private readonly hubConnection: HubConnection
@@ -90,7 +93,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   ) {
     // * SignalR connection
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(environment.apiUrl + 'chatHub')
+      .withUrl(environment.url + 'chatHub')
       .build()
 
     this.hubConnection.start().catch(() => {
@@ -116,7 +119,7 @@ export class ChatComponent implements OnInit, OnDestroy {
             this.selectedUser = res
 
             this.chatService
-              .getConversation(1, 10, this.selectedUser.id ?? '')
+              .getConversation(1, 999, this.selectedUser.id ?? '')
               .pipe(takeUntil(this.destroy$))
               .subscribe({
                 next: (res: IMessage[]) => {
@@ -141,7 +144,7 @@ export class ChatComponent implements OnInit, OnDestroy {
           }
 
           this.chatService
-            .getConversation(1, 10, this.selectedUser.id ?? '')
+            .getConversation(1, 999, this.selectedUser.id ?? '')
             .pipe(takeUntil(this.destroy$))
             .subscribe({
               next: (res: IMessage[]) => {
@@ -168,7 +171,12 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
 
     // * Add a new notification
-    this.notifications = [...this.notifications, newNotification]
+    this.notifications = [...this.notifications, newNotification] // ? Id remove the notifications state, but later I might at an actual notification
+    this.recentChats.forEach((user) => {
+      if (user?.id === newNotification.userId) {
+        user.unreadMessages++
+      }
+    })
 
     if (this.selectedUser.id === message.senderId) {
       this.selectedConversation = [...this.selectedConversation, message]
@@ -186,15 +194,15 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   selectConversation (user: IUser): void {
-    if (this.selectedUser !== user) {
-      // * Clear notifications if any
-      this.notifications = this.notifications.filter(
-        (notification) => notification.userId !== user.id
-      )
+    // * Clear notifications if any
+    this.notifications = this.notifications.filter(
+      (notification) => notification.userId !== user.id
+    )
 
+    if (this.selectedUser !== user) {
       this.selectedUser = user
       this.chatService
-        .getConversation(1, 10, this.selectedUser.id ?? '')
+        .getConversation(1, 999, this.selectedUser.id ?? '')
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res: IMessage[]) => {
@@ -240,7 +248,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     return this.notifications.some((n) => n.userId === userId)
   }
 
-  chatAreaClick (userId?: string): void {
+  clearNotificationForUser (userId?: string): void {
     if (userId !== undefined && this.userHasNotifications(userId)) {
       // TODO: Mark as read in the server
       this.notifications = this.notifications.filter(

@@ -53,3 +53,21 @@ $blue-background: #00bfff;
     padding: 2rem;
     display: flex;
 }
+
+@mixin notification-dot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgb(255, 60, 60);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+
+    font-weight: bold;
+    user-select: none;
+}
