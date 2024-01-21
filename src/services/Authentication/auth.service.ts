@@ -1,6 +1,6 @@
 import { HttpClient, type HttpResponse } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
-import { type Observable, take, BehaviorSubject } from 'rxjs'
+import { type Observable, BehaviorSubject } from 'rxjs'
 import { type IUser } from '../../app/login/IUser'
 import { environment } from '../../environment/environment'
 import { Router } from '@angular/router'
@@ -65,7 +65,7 @@ export class AuthService {
       }
     )
 
-    user$.pipe(take(1)).subscribe({
+    user$.subscribe({
       next: (res) => {
         this.currentUserSubject.next(res)
       },
@@ -78,6 +78,22 @@ export class AuthService {
     })
 
     return user$
+  }
+
+  // Updates users last seen
+  updateLastSeen (): void {
+    const refresh$ = this.http.post(
+      environment.apiUrl + 'users/refresh',
+      null,
+      {
+        withCredentials: true
+      }
+    )
+
+    // Discard the response we don't need it
+    refresh$.subscribe({
+      next: () => {}
+    })
   }
 
   // Clear current user as we are logging out

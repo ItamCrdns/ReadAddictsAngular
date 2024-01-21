@@ -1,61 +1,45 @@
 import { Pipe, type PipeTransform } from '@angular/core'
-// TODO: Doesnt seem to work well with posts that are JUST created
+
 @Pipe({
   name: 'dateAgo',
   standalone: true
 })
 export class DateAgoPipe implements PipeTransform {
-  transform (date: string | null): string {
-    if (date === null) {
-      return ''
+  transform (date: string): string {
+    const currentDate = new Date()
+    const inputDate = new Date(date)
+
+    const timeDiff = currentDate.getTime() - inputDate.getTime()
+    const seconds = Math.floor(timeDiff / 1000)
+    const minutes = Math.floor(seconds / 60)
+    const hours = Math.floor(minutes / 60)
+    const days = Math.floor(hours / 24)
+    const months = Math.floor(days / 30)
+
+    if (months > 12) {
+      return 'Too long ago'
     }
 
-    const dateFromDatabase = new Date(date)
-    const userTimezoneOffset = dateFromDatabase.getTimezoneOffset() * 60000
-    const dateLocal = new Date(
-      dateFromDatabase.getTime() - userTimezoneOffset
-    )
-
-    const utcNow = new Date(
-      Date.UTC(
-        new Date().getUTCFullYear(),
-        new Date().getUTCMonth(),
-        new Date().getUTCDate(),
-        new Date().getUTCHours(),
-        new Date().getUTCMinutes(),
-        new Date().getUTCSeconds()
-      )
-    )
-
-    const seconds = Math.floor(
-      (utcNow.getTime() - dateLocal.getTime()) / 1000
-    )
-
-    if (seconds < 29) {
-      return 'Just now'
+    if (months > 0) {
+      return months === 1 ? '1 month ago' : months + ' months ago'
     }
 
-    const intervals: Record<string, number> = {
-      year: 31536000,
-      month: 2592000,
-      week: 604800,
-      day: 86400,
-      hour: 3600,
-      minute: 60,
-      second: 1
+    if (days > 0) {
+      return days === 1 ? '1 day ago' : days + ' days ago'
     }
 
-    let counter: number
-    for (const i in intervals) {
-      counter = Math.floor(seconds / intervals[i])
-      if (counter > 0) {
-        if (counter === 1) {
-          return counter + ' ' + i + ' ago'
-        } else {
-          return counter + ' ' + i + 's ago'
-        }
-      }
+    if (hours > 0) {
+      return hours === 1 ? '1 hour ago' : hours + ' hours ago'
     }
-    return date
+
+    if (minutes > 0) {
+      return minutes === 1 ? '1 minute ago' : minutes + ' minutes ago'
+    }
+
+    if (seconds > 0) {
+      return seconds === 1 ? '1 second ago' : seconds + ' seconds ago'
+    }
+
+    return 'Just now'
   }
 }

@@ -43,6 +43,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit (): void {
     // we need to run the getCurrentUser somewhere and the navbar is the best place to do it (it's always there)
     this.authService.getCurrentUser()
+    this.authService.updateLastSeen()
   }
 
   userLogOut (): void {
