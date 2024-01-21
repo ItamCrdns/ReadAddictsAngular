@@ -6,7 +6,9 @@ import {
   ViewChild,
   type OnDestroy,
   Input,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  Output,
+  EventEmitter
 } from '@angular/core'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import {
@@ -28,6 +30,7 @@ import { ChatService } from '../../../services/Chat/chat.service'
 import { RouterLink } from '@angular/router'
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
 import { NewEntityService } from '../../../services/New entity/new-entity.service'
+import { PatchEntityService } from '../../../services/Update entity/patch-entity.service'
 
 @Component({
   selector: 'app-chat',
@@ -57,10 +60,12 @@ export class ChatComponent implements OnInit, OnDestroy {
   // * User if the chat is opened from the user page
   @Input() anyUserId: string = ''
   @Input() receivedMessage$ = new Observable<IMessage>() // SignalR connection its on the parent component (the open chat button) so we will pass the received message as props
+  @Output() readMessages = new EventEmitter<number>() // Emit the number of messages read to the parent component (the open chat button) so it can update the messages count
+
   message: string = '' // Store the message to be sent
 
   recentChats: Partial<IUser[]> = [] // Store user profile pictures for recent chats (tho it stores more than the picture) // TODO: Maybe add user username on profile picture hover
-  currentUser$ = this.authService.currentUser$ // Current logged in user
+  currentUser$ = this.auth.currentUser$ // Current logged in user
   selectedUser: IUser = userInitialState
 
   selectedConversation: IMessage[] = []
@@ -72,28 +77,30 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   constructor (
     @Inject(AuthService)
-    private readonly authService: AuthService,
+    private readonly auth: AuthService,
     @Inject(ChatService)
-    private readonly chatService: ChatService,
+    private readonly chat: ChatService,
     @Inject(GetEntityService)
-    private readonly getEntityService: GetEntityService,
+    private readonly get: GetEntityService,
     @Inject(NewEntityService)
-    private readonly newEntityService: NewEntityService,
+    private readonly add: NewEntityService,
     @Inject(ChangeDetectorRef)
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    @Inject(PatchEntityService)
+    private readonly patch: PatchEntityService
   ) {}
 
   ngOnInit (): void {
     // * If the chat is opened from the user page, open the chat with that user
     if (this.anyUserId !== '') {
-      this.getEntityService
+      this.get
         .getUserById(this.anyUserId)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res: IUser) => {
             this.selectedUser = res
 
-            this.chatService
+            this.chat
               .getConversation(1, 999, this.selectedUser.id ?? '')
               .pipe(takeUntil(this.destroy$))
               .subscribe({
@@ -108,7 +115,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
 
     // * Regardless of where the chat is opened from, get the recent chats
-    this.chatService
+    this.chat
       .getRecentChats()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -118,7 +125,7 @@ export class ChatComponent implements OnInit, OnDestroy {
             this.selectedUser = res[0]
           }
 
-          this.chatService
+          this.chat
             .getConversation(1, 999, this.selectedUser.id ?? '')
             .pipe(takeUntil(this.destroy$))
             .subscribe({
@@ -163,10 +170,11 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   selectConversation (user: IUser): void {
-    // TODO: Selecting a conversation should clear messages
+    this.markAsRead(user.id)
+
     if (this.selectedUser !== user) {
       this.selectedUser = user
-      this.chatService
+      this.chat
         .getConversation(1, 999, this.selectedUser.id ?? '')
         .pipe(takeUntil(this.destroy$))
         .subscribe({
@@ -182,7 +190,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   sendMessage (): void {
     if (this.selectedUser !== undefined) {
-      this.newEntityService
+      this.add
         .newMessage(this.selectedUser.id ?? '', this.message)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
@@ -209,8 +217,17 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chatArea.nativeElement.scrollHeight
   }
 
-  clearNotificationForUser (userId?: string): void {
-    // TODO: This should mark messages as read in the database
+  markAsRead (userId: string): void {
+    this.patch.markMessagesAsRead(userId).subscribe({
+      next: (readMessages) => {
+        this.recentChats.forEach((user) => {
+          if (user !== undefined && user.id === userId) {
+            user.unreadMessages = 0
+          }
+        })
+        this.readMessages.emit(readMessages)
+      }
+    })
   }
 
   textareaChange (): void {

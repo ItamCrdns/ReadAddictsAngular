@@ -47,7 +47,7 @@
       <div
         class="chat-area"
         #chatArea
-        (click)="clearNotificationForUser(selectedUser.id)"
+        (click)="markAsRead(selectedUser.id)"
       >
         <p style="text-align: center" #loadMore>&middot;</p>
         @for (message of selectedConversation; track message.id) {
@@ -85,7 +85,7 @@
             (input)="textareaChange()"
             maxlength="255"
             placeholder="Write a message..."
-            (click)="clearNotificationForUser(selectedUser.id)"
+            (click)="markAsRead(selectedUser.id)"
           ></textarea>
           @if (message.length > 0) {
           <ng-icon

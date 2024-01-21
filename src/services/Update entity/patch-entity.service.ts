@@ -9,10 +9,10 @@ import { HttpClient } from '@angular/common/http'
 export class PatchEntityService {
   constructor (@Inject(HttpClient) private readonly http: HttpClient) {}
 
-  markMessagesAsRead (userId: string): Observable<boolean> {
+  markMessagesAsRead (userId: string): Observable<number> {
     const url = environment.apiUrl + 'messages/read-messages/' + userId
 
-    return this.http.patch<boolean>(url, null, {
+    return this.http.patch<number>(url, null, {
       withCredentials: true
     })
   }

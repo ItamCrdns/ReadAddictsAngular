@@ -64,7 +64,7 @@ export class GetEntityService {
     })
   }
 
-  getMessageNotificationsCount (): Observable<number> {
+  getUnreadMsgCount (): Observable<number> {
     return this.http.get<number>(
       environment.apiUrl + 'messages/notification-count',
       {

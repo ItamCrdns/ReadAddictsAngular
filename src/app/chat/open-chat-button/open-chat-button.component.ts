@@ -4,7 +4,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { ionChatbubble, ionCloseCircleSharp } from '@ng-icons/ionicons'
 import { slideInOut } from '../../animations/slide'
 import { OpenChatService } from '../../../services/Open chat/open-chat.service'
-import { type Observable, Subject, Subscription } from 'rxjs'
+import { Subject, BehaviorSubject, takeUntil } from 'rxjs'
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
 import { AsyncPipe } from '@angular/common'
 import { environment } from '../../../environment/environment'
@@ -29,13 +29,12 @@ import { type IMessage } from '../IMessage'
 export class OpenChatButtonComponent implements OnInit, OnDestroy {
   toggle: boolean = false
   user: string = ''
-  notificationCount$: Observable<number> =
-    this.getEntityService.getMessageNotificationsCount()
+  messagesCount$ = new BehaviorSubject<number>(0)
 
   newMessageSubject = new Subject<IMessage>()
-  newMessagesCount: number = 0
 
-  sub: Subscription = new Subscription()
+  private readonly destroy$ = new Subject<void>()
+
   private readonly hub: HubConnection
 
   constructor (
@@ -56,14 +55,22 @@ export class OpenChatButtonComponent implements OnInit, OnDestroy {
       )
     })
 
+    // * I could also create another connection for the messages count
     this.hub.on('ReceiveMessage', (message: IMessage) => {
       this.receiveMessage(message)
-      this.newMessagesCount++
+      this.messagesCount$.next(this.messagesCount$.value + 1)
     })
   }
 
   ngOnInit (): void {
-    this.sub = this.openChatService.toggle$.subscribe({
+    this.getEntityService
+      .getUnreadMsgCount()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((initialCount) => {
+        this.messagesCount$.next(initialCount)
+      })
+
+    this.openChatService.toggle$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (res) => {
         this.toggle = res.toggle
         if (res.userId !== undefined) {
@@ -74,11 +81,16 @@ export class OpenChatButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy (): void {
-    this.sub.unsubscribe()
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
   receiveMessage (message: IMessage): void {
     this.newMessageSubject.next(message)
+  }
+
+  removeMessageCount (readMessages: number): void {
+    this.messagesCount$.next(this.messagesCount$.value - readMessages)
   }
 
   toggleChat (): void {
