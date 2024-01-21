@@ -21,7 +21,9 @@
       @for (user of recentChats; track user?.id) { @if (user !== undefined) {
       <div class="profile-pic-wrapper">
         @if (user.unreadMessages > 0) {
-        <div class="notification-dot">{{ user.unreadMessages }}</div>
+        <div class="notification-dot">
+          {{ user.unreadMessages > 99 ? "+99" : user.unreadMessages }}
+        </div>
         }
         <img
           ngSrc="{{ user?.profilePicture }}"

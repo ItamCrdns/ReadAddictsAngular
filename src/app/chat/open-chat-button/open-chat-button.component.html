@@ -1,13 +1,13 @@
 <aside class="chat-wrapper">
   @if (toggle) {
   <div [style]="{ position: 'relative' }" [@slideInOut]="'slideInOut'">
-    <app-chat [anyUserId]="user" />
+    <app-chat [anyUserId]="user" [receivedMessage$]="newMessageSubject" />
   </div>
   }
   <div class="bubble" (click)="toggleChat()">
-    @if ((notificationCount$ | async); as count) {
+    @if (!toggle && (notificationCount$ | async); as count) {
     <div class="notification-dot">
-      {{ count > 99 ? "+99" : count }}
+      {{ count + newMessagesCount > 99 ? "+99" : count + newMessagesCount }}
     </div>
     }
     <ng-icon

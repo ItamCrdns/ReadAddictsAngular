@@ -6,8 +6,7 @@ import {
   ViewChild,
   type OnDestroy,
   Input,
-  ChangeDetectorRef,
-  Output
+  ChangeDetectorRef
 } from '@angular/core'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import {
@@ -22,17 +21,13 @@ import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { AuthService } from '../../../services/Authentication/auth.service'
 import { userInitialState, type IUser } from '../../login/IUser'
-import { takeUntil, Subject } from 'rxjs'
+import { takeUntil, Subject, Observable } from 'rxjs'
 import { type IMessage } from '../IMessage'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { ChatService } from '../../../services/Chat/chat.service'
 import { RouterLink } from '@angular/router'
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
 import { NewEntityService } from '../../../services/New entity/new-entity.service'
-import { HubConnectionBuilder, type HubConnection } from '@microsoft/signalr'
-import { environment } from '../../../environment/environment'
-import { AlertService } from '../../../services/Alert/alert.service'
-import { type INotification } from './INotification'
 
 @Component({
   selector: 'app-chat',
@@ -61,18 +56,16 @@ import { type INotification } from './INotification'
 export class ChatComponent implements OnInit, OnDestroy {
   // * User if the chat is opened from the user page
   @Input() anyUserId: string = ''
-  @Output() notificationCount: number = 0
-
+  @Input() receivedMessage$ = new Observable<IMessage>() // SignalR connection its on the parent component (the open chat button) so we will pass the received message as props
   message: string = '' // Store the message to be sent
+
   recentChats: Partial<IUser[]> = [] // Store user profile pictures for recent chats (tho it stores more than the picture) // TODO: Maybe add user username on profile picture hover
   currentUser$ = this.authService.currentUser$ // Current logged in user
   selectedUser: IUser = userInitialState
 
   selectedConversation: IMessage[] = []
-  notifications: INotification[] = []
 
   private readonly destroy$ = new Subject<void>()
-  private readonly hubConnection: HubConnection
 
   @ViewChild('chatArea') chatArea: ElementRef = new ElementRef('')
   @ViewChild('textarea') textarea: ElementRef = new ElementRef('')
@@ -87,26 +80,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     @Inject(NewEntityService)
     private readonly newEntityService: NewEntityService,
     @Inject(ChangeDetectorRef)
-    private readonly cdr: ChangeDetectorRef,
-    @Inject(AlertService)
-    private readonly alertService: AlertService
-  ) {
-    // * SignalR connection
-    this.hubConnection = new HubConnectionBuilder()
-      .withUrl(environment.url + 'chatHub')
-      .build()
-
-    this.hubConnection.start().catch(() => {
-      this.alertService.setAlertValues(
-        true,
-        'Something went wrong while connecting to the server. Try again.'
-      )
-    })
-
-    this.hubConnection.on('ReceiveMessage', (message: IMessage) => {
-      this.handleReceivedMessage(message)
-    })
-  }
+    private readonly cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit (): void {
     // * If the chat is opened from the user page, open the chat with that user
@@ -157,6 +132,29 @@ export class ChatComponent implements OnInit, OnDestroy {
           this.recentChats = res
         }
       })
+
+    this.receivedMessage$.subscribe({
+      next: (res: IMessage) => {
+        this.recentChats.forEach((user) => {
+          if (user !== undefined && user.id === res.senderId) {
+            user.unreadMessages++
+          }
+        })
+
+        if (this.selectedUser.id === res.senderId) {
+          this.selectedConversation = [...this.selectedConversation, res]
+          this.goBottom()
+        }
+
+        const user = this.recentChats.find((user) => user?.id === res.senderId)
+
+        this.recentChats = this.recentChats.filter(
+          (user) => user?.id !== res.senderId
+        )
+
+        this.recentChats?.unshift(user)
+      }
+    })
   }
 
   ngOnDestroy (): void {
@@ -164,41 +162,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.destroy$.complete()
   }
 
-  handleReceivedMessage (message: IMessage): void {
-    const newNotification: INotification = {
-      userId: message.senderId,
-      message: message.content
-    }
-
-    // * Add a new notification
-    this.notifications = [...this.notifications, newNotification] // ? Id remove the notifications state, but later I might at an actual notification
-    this.recentChats.forEach((user) => {
-      if (user?.id === newNotification.userId) {
-        user.unreadMessages++
-      }
-    })
-
-    if (this.selectedUser.id === message.senderId) {
-      this.selectedConversation = [...this.selectedConversation, message]
-      this.goBottom()
-    }
-
-    // * Find user in recent chats and push it to the top
-    const user = this.recentChats.find((user) => user?.id === message.senderId)
-
-    this.recentChats = this.recentChats.filter(
-      (user) => user?.id !== message.senderId
-    )
-
-    this.recentChats?.unshift(user)
-  }
-
   selectConversation (user: IUser): void {
-    // * Clear notifications if any
-    this.notifications = this.notifications.filter(
-      (notification) => notification.userId !== user.id
-    )
-
+    // TODO: Selecting a conversation should clear messages
     if (this.selectedUser !== user) {
       this.selectedUser = user
       this.chatService
@@ -244,17 +209,8 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chatArea.nativeElement.scrollHeight
   }
 
-  userHasNotifications (userId: string): boolean {
-    return this.notifications.some((n) => n.userId === userId)
-  }
-
   clearNotificationForUser (userId?: string): void {
-    if (userId !== undefined && this.userHasNotifications(userId)) {
-      // TODO: Mark as read in the server
-      this.notifications = this.notifications.filter(
-        (n) => n.userId !== userId
-      )
-    }
+    // TODO: This should mark messages as read in the database
   }
 
   textareaChange (): void {
