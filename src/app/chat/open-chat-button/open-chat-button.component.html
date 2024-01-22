@@ -2,7 +2,7 @@
   @if (toggle) {
   <div [style]="{ position: 'relative' }" [@slideInOut]="'slideInOut'">
     <app-chat
-      [anyUserId]="user"
+      [userIdFromUserPage]="user"
       [receivedMessage$]="newMessageSubject"
       (readMessages)="removeMessageCount($event)"
     />

@@ -21,17 +21,15 @@ import {
   ionAddCircleSharp
 } from '@ng-icons/ionicons'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
-import { FormsModule } from '@angular/forms'
 import { AuthService } from '../../../services/Authentication/auth.service'
 import { userInitialState, type IUser } from '../../login/IUser'
 import { takeUntil, Subject, Observable, BehaviorSubject } from 'rxjs'
 import { type IMessage } from '../IMessage'
-import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { ChatService } from '../../../services/Chat/chat.service'
-import { RouterLink } from '@angular/router'
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
-import { NewEntityService } from '../../../services/New entity/new-entity.service'
 import { PatchEntityService } from '../../../services/Update entity/patch-entity.service'
+import { NewMessageComponent } from './new-message/new-message.component'
+import { SelectedUserComponent } from './selected-user/selected-user.component'
 
 @Component({
   selector: 'app-chat',
@@ -39,10 +37,9 @@ import { PatchEntityService } from '../../../services/Update entity/patch-entity
   imports: [
     NgIconComponent,
     NgOptimizedImage,
-    FormsModule,
     AsyncPipe,
-    DateAgoPipe,
-    RouterLink
+    SelectedUserComponent,
+    NewMessageComponent
   ],
   providers: [
     provideIcons({
@@ -59,13 +56,11 @@ import { PatchEntityService } from '../../../services/Update entity/patch-entity
 })
 export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   // * User if the chat is opened from the user page
-  @Input() anyUserId: string = ''
+  @Input() userIdFromUserPage: string = ''
   @Input() receivedMessage$ = new Observable<IMessage>() // SignalR connection its on the parent component (the open chat button) so we will pass the received message as props
   @Output() readMessages = new EventEmitter<number>() // Emit the number of messages read to the parent component (the open chat button) so it can update the messages count
 
-  message: string = '' // Store the message to be sent
-
-  recentChats: Partial<IUser[]> = [] // Store user profile pictures for recent chats (tho it stores more than the picture) // TODO: Maybe add user username on profile picture hover
+  recentChats: IUser[] = [] // Store user profile pictures for recent chats (tho it stores more than the picture) // TODO: Maybe add user username on profile picture hover
   currentUser$ = this.auth.currentUser$ // Current logged in user
   selectedUser: IUser = userInitialState
 
@@ -75,7 +70,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>()
 
   @ViewChild('chatArea') chatArea!: ElementRef<HTMLElement>
-  @ViewChild('textarea') textarea!: ElementRef<HTMLElement>
   @ViewChild('loadMore') loadMore!: ElementRef<HTMLElement>
 
   constructor (
@@ -85,8 +79,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly chat: ChatService,
     @Inject(GetEntityService)
     private readonly get: GetEntityService,
-    @Inject(NewEntityService)
-    private readonly add: NewEntityService,
     @Inject(ChangeDetectorRef)
     private readonly cdr: ChangeDetectorRef,
     @Inject(PatchEntityService)
@@ -95,9 +87,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit (): void {
     // * If the chat is opened from the user page, open the chat with that user
-    if (this.anyUserId !== '') {
+    if (this.userIdFromUserPage !== '') {
       this.get
-        .getUserById(this.anyUserId)
+        .getUserById(this.userIdFromUserPage)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res: IUser) => {
@@ -115,7 +107,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (res: IUser[]) => {
           // * But don't select a user if the chat is opened from the user page. The user is already selected
-          if (this.anyUserId === '') {
+          if (this.userIdFromUserPage === '') {
             this.selectedUser = res[0]
           }
           this.loadConversation(1, 10)
@@ -143,7 +135,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
           (user) => user?.id !== res.senderId
         )
 
-        this.recentChats?.unshift(user)
+        if (user !== undefined) {
+          this.recentChats.unshift(user)
+        }
       }
     })
   }
@@ -197,27 +191,15 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  sendMessage (): void {
-    if (this.selectedUser !== undefined) {
-      this.add
-        .newMessage(this.selectedUser.id ?? '', this.message)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (res) => {
-            this.message = ''
-            this.conversation$.next([...this.conversation$.value, res])
+  getMessageFromChildren (message: IMessage): void {
+    this.conversation$.next([...this.conversation$.value, message])
+    this.goBottom()
 
-            // * Scroll to bottom when a new message is sent
-            this.goBottom()
-
-            // * And push the user I have just sent a message to to the top of the recent chats
-            this.recentChats = this.recentChats.filter(
-              (user) => user?.id !== this.selectedUser.id
-            )
-            this.recentChats?.unshift(this.selectedUser)
-          }
-        })
-    }
+    // * And push the user I have just sent a message to to the top of the recent chats
+    this.recentChats = this.recentChats.filter(
+      (user) => user?.id !== this.selectedUser.id
+    )
+    this.recentChats?.unshift(this.selectedUser)
   }
 
   goBottom (): void {
@@ -242,15 +224,5 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
         this.readMessages.emit(readMessages)
       }
     })
-  }
-
-  textareaChange (): void {
-    this.textarea.nativeElement.style.height = '48px'
-
-    const newHeight = Math.max(
-      Number(this.textarea.nativeElement.scrollHeight),
-      20
-    )
-    this.textarea.nativeElement.style.height = `${newHeight}px`
   }
 }
