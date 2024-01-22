@@ -38,12 +38,13 @@ import { type IMessage } from '../../IMessage'
           maxlength="255"
           placeholder="Write a message..."
           (click)="markAsRead(selectedUser.id)"
+          (keydown.enter)="sendMessageAndSendResToParent($event)"
         ></textarea>
         @if (message.length > 0) {
         <ng-icon
           class="send-icon-blue"
           name="ionSend"
-          (click)="sendMessageAndSendResToParent()"
+          (click)="sendMessageAndSendResToParent($event)"
         />
         } @else {
         <ng-icon class="send-icon" name="ionSendOutline" />
@@ -127,7 +128,9 @@ export class NewMessageComponent implements OnDestroy {
     this.textarea.nativeElement.style.height = `${newHeight}px`
   }
 
-  sendMessageAndSendResToParent (): void {
+  sendMessageAndSendResToParent (event: Event): void {
+    event.preventDefault()
+
     if (this.selectedUser !== undefined) {
       this.newEntity
         .newMessage(this.selectedUser.id, this.message)

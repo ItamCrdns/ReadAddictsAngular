@@ -1,8 +1,9 @@
 <section class="chat">
   <app-selected-user [selectedUser]="selectedUser" />
   <div class="messages-wrapper">
+    @if (recentChats.length > 0) {
     <div class="chat-users">
-      @for (user of recentChats; track user?.id) { @if (user !== undefined) {
+      @for (user of recentChats; track user?.id) {
       <div class="profile-pic-wrapper">
         @if (user.unreadMessages > 0) {
         <div class="notification-dot">
@@ -23,13 +24,15 @@
           (click)="selectConversation(user)"
         />
       </div>
-      } }
+      }
     </div>
+    }
     <div class="messages">
       @if((currentUser$ | async); as user) {
       <div class="chat-area" #chatArea (click)="markAsRead(selectedUser.id)">
-        <p style="text-align: center" #loadMore>&middot;</p>
-        @for (message of (conversation$ | async); track message.id) {
+        @if (selectedUser) {
+        <p class="load-more" #loadMore>&middot;</p>
+        } @for (message of (conversation$ | async); track message.id) {
         <div
           class="message-and-time"
           [style]="{
@@ -56,11 +59,15 @@
         } @empty {
         <!-- TODO: Fix @empty causes flicker while loading conversation -->
         <div class="no-messages">
+          @if (selectedUser) {
           <p>
             Your chat with
             <span>{{ selectedUser.userName }}</span>
             it's empty. Say hi!
           </p>
+          } @else {
+          <p>Select a user to start chatting</p>
+          }
         </div>
         }
       </div>
