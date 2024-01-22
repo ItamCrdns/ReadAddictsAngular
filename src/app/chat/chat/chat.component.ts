@@ -1,6 +1,6 @@
 import {
   Component,
-  ElementRef,
+  type ElementRef,
   Inject,
   type OnInit,
   ViewChild,
@@ -8,7 +8,8 @@ import {
   Input,
   ChangeDetectorRef,
   Output,
-  EventEmitter
+  EventEmitter,
+  type AfterViewInit
 } from '@angular/core'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import {
@@ -23,7 +24,7 @@ import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { AuthService } from '../../../services/Authentication/auth.service'
 import { userInitialState, type IUser } from '../../login/IUser'
-import { takeUntil, Subject, Observable } from 'rxjs'
+import { takeUntil, Subject, Observable, BehaviorSubject } from 'rxjs'
 import { type IMessage } from '../IMessage'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { ChatService } from '../../../services/Chat/chat.service'
@@ -56,7 +57,7 @@ import { PatchEntityService } from '../../../services/Update entity/patch-entity
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   // * User if the chat is opened from the user page
   @Input() anyUserId: string = ''
   @Input() receivedMessage$ = new Observable<IMessage>() // SignalR connection its on the parent component (the open chat button) so we will pass the received message as props
@@ -68,12 +69,14 @@ export class ChatComponent implements OnInit, OnDestroy {
   currentUser$ = this.auth.currentUser$ // Current logged in user
   selectedUser: IUser = userInitialState
 
-  selectedConversation: IMessage[] = []
+  conversation$ = new BehaviorSubject<IMessage[]>([])
+  page: number = 1
 
   private readonly destroy$ = new Subject<void>()
 
-  @ViewChild('chatArea') chatArea: ElementRef = new ElementRef('')
-  @ViewChild('textarea') textarea: ElementRef = new ElementRef('')
+  @ViewChild('chatArea') chatArea!: ElementRef<HTMLElement>
+  @ViewChild('textarea') textarea!: ElementRef<HTMLElement>
+  @ViewChild('loadMore') loadMore!: ElementRef<HTMLElement>
 
   constructor (
     @Inject(AuthService)
@@ -99,17 +102,8 @@ export class ChatComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (res: IUser) => {
             this.selectedUser = res
-
-            this.chat
-              .getConversation(1, 999, this.selectedUser.id ?? '')
-              .pipe(takeUntil(this.destroy$))
-              .subscribe({
-                next: (res: IMessage[]) => {
-                  this.selectedConversation = res
-
-                  this.goBottom()
-                }
-              })
+            this.loadConversation(1, 10)
+            this.goBottom()
           }
         })
     }
@@ -124,18 +118,8 @@ export class ChatComponent implements OnInit, OnDestroy {
           if (this.anyUserId === '') {
             this.selectedUser = res[0]
           }
-
-          this.chat
-            .getConversation(1, 999, this.selectedUser.id ?? '')
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-              next: (res: IMessage[]) => {
-                this.selectedConversation = res
-
-                this.goBottom()
-              }
-            })
-
+          this.loadConversation(1, 10)
+          this.goBottom()
           this.recentChats = res
         }
       })
@@ -149,7 +133,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         })
 
         if (this.selectedUser.id === res.senderId) {
-          this.selectedConversation = [...this.selectedConversation, res]
+          this.conversation$.next([...this.conversation$.value, res])
           this.goBottom()
         }
 
@@ -167,6 +151,38 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnDestroy (): void {
     this.destroy$.next()
     this.destroy$.complete()
+    this.observer.unobserve(this.loadMore.nativeElement)
+  }
+
+  ngAfterViewInit (): void {
+    this.observer.observe(this.loadMore.nativeElement)
+  }
+
+  private readonly observer: IntersectionObserver = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting && this.conversation$.value.length !== 0) {
+        this.page++
+        this.loadConversation(this.page, 1)
+      }
+    }
+  )
+
+  private loadConversation (page: number, limit: number): void {
+    this.chat
+      .getConversation(page, limit, this.selectedUser.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          if (res.length !== 0) {
+            this.conversation$.next([...res, ...this.conversation$.value])
+            if (page === 1) {
+              this.goBottom()
+            } else {
+              this.goBottomSlighly()
+            }
+          }
+        }
+      })
   }
 
   selectConversation (user: IUser): void {
@@ -174,17 +190,10 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     if (this.selectedUser !== user) {
       this.selectedUser = user
-      this.chat
-        .getConversation(1, 999, this.selectedUser.id ?? '')
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (res: IMessage[]) => {
-            this.selectedConversation = res
-
-            // * Scroll to bottom when a new conversation is selected
-            this.goBottom()
-          }
-        })
+      this.conversation$.next([]) // Avoid conversations merged together
+      this.page = 1 // Reset the page
+      this.loadConversation(1, 10)
+      this.goBottom()
     }
   }
 
@@ -196,7 +205,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (res) => {
             this.message = ''
-            this.selectedConversation = [...this.selectedConversation, res]
+            this.conversation$.next([...this.conversation$.value, res])
 
             // * Scroll to bottom when a new message is sent
             this.goBottom()
@@ -215,6 +224,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges()
     this.chatArea.nativeElement.scrollTop =
       this.chatArea.nativeElement.scrollHeight
+  }
+
+  goBottomSlighly (): void {
+    this.cdr.detectChanges()
+    this.chatArea.nativeElement.scrollTop = 150
   }
 
   markAsRead (userId: string): void {

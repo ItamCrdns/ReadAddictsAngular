@@ -12,7 +12,7 @@
           {{ "@" }}{{ selectedUser.userName }}
         </a>
       </h1>
-      <p>Last seen {{ selectedUser.lastLogin | dateAgo }}</p>
+      <p>{{ selectedUser.lastLogin | dateAgo }}</p>
     </div>
     <ng-icon class="vertical-ellipsis" name="ionEllipsisVerticalSharp" />
   </div>
@@ -50,7 +50,7 @@
         (click)="markAsRead(selectedUser.id)"
       >
         <p style="text-align: center" #loadMore>&middot;</p>
-        @for (message of selectedConversation; track message.id) {
+        @for (message of (conversation$ | async); track message.id) {
         <div
           class="message"
           [style]="{
