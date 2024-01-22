@@ -17,8 +17,7 @@ import {
   ionCloseCircleSharp,
   ionEllipsisVerticalSharp,
   ionSendOutline,
-  ionSend,
-  ionAddCircleSharp
+  ionSend
 } from '@ng-icons/ionicons'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { AuthService } from '../../../services/Authentication/auth.service'
@@ -30,6 +29,7 @@ import { GetEntityService } from '../../../services/Get entity/get-entity.servic
 import { PatchEntityService } from '../../../services/Update entity/patch-entity.service'
 import { NewMessageComponent } from './new-message/new-message.component'
 import { SelectedUserComponent } from './selected-user/selected-user.component'
+import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 
 @Component({
   selector: 'app-chat',
@@ -39,7 +39,8 @@ import { SelectedUserComponent } from './selected-user/selected-user.component'
     NgOptimizedImage,
     AsyncPipe,
     SelectedUserComponent,
-    NewMessageComponent
+    NewMessageComponent,
+    DateAgoPipe
   ],
   providers: [
     provideIcons({
@@ -47,8 +48,7 @@ import { SelectedUserComponent } from './selected-user/selected-user.component'
       ionCloseCircleSharp,
       ionEllipsisVerticalSharp,
       ionSendOutline,
-      ionSend,
-      ionAddCircleSharp
+      ionSend
     })
   ],
   templateUrl: './chat.component.html',
@@ -156,7 +156,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
     (entries) => {
       if (entries[0].isIntersecting && this.conversation$.value.length !== 0) {
         this.page++
-        this.loadConversation(this.page, 1)
+        this.loadConversation(this.page, 10) // Limit need to be equal to the amount of messages loaded on the first load
       }
     }
   )
@@ -210,7 +210,17 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
 
   goBottomSlighly (): void {
     this.cdr.detectChanges()
-    this.chatArea.nativeElement.scrollTop = 150
+    this.chatArea.nativeElement.scrollTop = 500 // Trying to simulate the 10 messages height
+  }
+
+  hoveredMessage: string = ''
+
+  mouseEnterMsg (index: string): void {
+    this.hoveredMessage = index
+  }
+
+  mouseLeaveMsg (): void {
+    this.hoveredMessage = ''
   }
 
   markAsRead (userId: string): void {

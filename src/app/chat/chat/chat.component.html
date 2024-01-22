@@ -24,7 +24,6 @@
         />
       </div>
       } }
-      <ng-icon class="add-user" name="ionAddCircleSharp" />
     </div>
     <div class="messages">
       @if((currentUser$ | async); as user) {
@@ -32,13 +31,27 @@
         <p style="text-align: center" #loadMore>&middot;</p>
         @for (message of (conversation$ | async); track message.id) {
         <div
-          class="message"
+          class="message-and-time"
           [style]="{
             'align-self':
               message.senderId == user.id ? 'flex-end' : 'flex-start'
           }"
+          (mouseenter)="mouseEnterMsg(message.id)"
+          (mouseleave)="mouseLeaveMsg()"
         >
-          <p>{{ message.content }}</p>
+          @if (message.senderId == user.id) {
+          <p class="msg-time" [class.hovered]="hoveredMessage === message.id">
+            {{ message.timestamp | dateAgo }}
+          </p>
+          }
+          <div class="message">
+            <p>{{ message.content }}</p>
+          </div>
+          @if (message.senderId !== user.id) {
+          <p class="msg-time" [class.hovered]="hoveredMessage === message.id">
+            {{ message.timestamp | dateAgo }}
+          </p>
+          }
         </div>
         } @empty {
         <!-- TODO: Fix @empty causes flicker while loading conversation -->

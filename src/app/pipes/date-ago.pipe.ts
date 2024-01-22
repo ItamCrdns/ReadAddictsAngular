@@ -1,11 +1,34 @@
-import { Pipe, type PipeTransform } from '@angular/core'
+import { type OnDestroy, Pipe, type PipeTransform } from '@angular/core'
 
 @Pipe({
   name: 'dateAgo',
-  standalone: true
+  standalone: true,
+  pure: false
 })
-export class DateAgoPipe implements PipeTransform {
+export class DateAgoPipe implements PipeTransform, OnDestroy {
+  private intervalId: number = 0
+
+  ngOnDestroy (): void {
+    this.clear()
+  }
+
   transform (date: string): string {
+    this.clear()
+
+    this.intervalId = setInterval(() => {
+      this.calculateTime(date)
+    }, 60000) // 1 minute
+
+    return this.calculateTime(date)
+  }
+
+  private clear (): void {
+    if (this.intervalId !== 0) {
+      clearInterval(this.intervalId)
+    }
+  }
+
+  private calculateTime (date: string): string {
     const currentDate = new Date()
     const inputDate = new Date(date)
 
