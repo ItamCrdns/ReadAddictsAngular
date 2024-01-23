@@ -118,6 +118,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.receivedMessage$.subscribe({
       next: (res: IMessage) => {
+        // * Chat its open and user has no messages. Set the sender user and add it to the recent chats. This will only be called when the user has no messages at all
+        if (this.selectedUser === undefined) {
+          this.selectedUser = res.sender
+          this.recentChats.unshift(res.sender)
+        }
+
         this.recentChats.forEach((user) => {
           if (user !== undefined && user.id === res.senderId) {
             user.unreadMessages++

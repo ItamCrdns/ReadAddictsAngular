@@ -131,7 +131,7 @@ export class NewMessageComponent implements OnDestroy {
   sendMessageAndSendResToParent (event: Event): void {
     event.preventDefault()
 
-    if (this.selectedUser !== undefined) {
+    if (this.selectedUser !== undefined && this.message.length > 0) {
       this.newEntity
         .newMessage(this.selectedUser.id, this.message)
         .pipe(takeUntil(this.destroy$))
