@@ -1,4 +1,4 @@
-@for (post of (posts$ | async); track post.id) {
+@if (posts$ | async; as posts) { @for (post of posts.data; track post.id) {
 <section class="posts-wrapper">
   <article class="post">
     <header class="title-wrapper">
@@ -43,4 +43,9 @@
   </article>
 </section>
 }
-<div #loadMore></div>
+<div #loadMore class='end'>
+  @if (page === posts.count) {
+  <p>Seems like you've reached the end.</p>
+  }
+</div>
+}

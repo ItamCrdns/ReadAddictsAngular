@@ -11,7 +11,7 @@ export interface ISendMessage {
 })
 export class OpenChatService {
   private readonly toggleSubject = new BehaviorSubject<ISendMessage>({
-    toggle: true
+    toggle: false
   })
 
   public toggle$: Observable<ISendMessage> = this.toggleSubject.asObservable()

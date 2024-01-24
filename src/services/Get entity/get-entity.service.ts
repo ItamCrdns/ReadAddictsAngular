@@ -25,14 +25,20 @@ export class GetEntityService {
     })
   }
 
-  getPosts (page: number = 1, limit: number = 1): Observable<IPost[]> {
-    return this.http.get<IPost[]>(environment.apiUrl + 'posts/all', {
-      params: {
-        page,
-        limit
-      },
-      withCredentials: true
-    })
+  getPosts (
+    page: number = 1,
+    limit: number = 1
+  ): Observable<DataCountPagesDto<IPost>> {
+    return this.http.get<DataCountPagesDto<IPost>>(
+      environment.apiUrl + 'posts/all',
+      {
+        params: {
+          page,
+          limit
+        },
+        withCredentials: true
+      }
+    )
   }
 
   getPost (id: string): Observable<IPost> {
@@ -71,5 +77,15 @@ export class GetEntityService {
         withCredentials: true
       }
     )
+  }
+
+  getUsers (page: number = 1, limit: number = 5): Observable<IUser[]> {
+    return this.http.get<IUser[]>(environment.apiUrl + 'users/all', {
+      params: {
+        page,
+        limit
+      },
+      withCredentials: true
+    })
   }
 }

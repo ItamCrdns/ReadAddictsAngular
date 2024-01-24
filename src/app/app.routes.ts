@@ -5,6 +5,7 @@ import { PostComponent } from './post/post.component'
 import { UserComponent } from './user/user.component'
 import { CommentComponent } from './comment/comment.component'
 import { ReplyComponent } from './comment/reply/reply.component'
+import { ReadersComponent } from './readers/readers.component'
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,5 +27,6 @@ export const routes: Routes = [
     ]
   },
   { path: 'user/:username', component: UserComponent },
+  { path: 'users', component: ReadersComponent },
   { path: '**', redirectTo: '' }
 ]
