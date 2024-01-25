@@ -1,9 +1,9 @@
-@if (posts$ | async; as posts) { @for (post of posts.data; track post.id) {
+@if (items$ | async; as posts) { @for (post of posts.data; track post.id) {
 <section class="posts-wrapper">
   <article class="post">
     <header class="title-wrapper">
       <img
-        ngSrc="{{ post.creator.profilePicture }}"
+        [ngSrc]="post.creator.profilePicture"
         alt="{{ post.creator.userName }}"
         width="50"
         height="50"
@@ -21,7 +21,7 @@
       @if (post.images.length > 0) { @for (image of post.images; track image.id)
       {
       <img
-        ngSrc="{{ image.url }}"
+        [ngSrc]="image.url"
         [alt]="image.id"
         width="100"
         height="100"
@@ -43,7 +43,7 @@
   </article>
 </section>
 }
-<div #loadMore class='end'>
+<div #loadMore class="end">
   @if (page === posts.count) {
   <p>Seems like you've reached the end.</p>
   }

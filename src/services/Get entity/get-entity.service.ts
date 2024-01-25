@@ -79,13 +79,19 @@ export class GetEntityService {
     )
   }
 
-  getUsers (page: number = 1, limit: number = 5): Observable<IUser[]> {
-    return this.http.get<IUser[]>(environment.apiUrl + 'users/all', {
-      params: {
-        page,
-        limit
-      },
-      withCredentials: true
-    })
+  getUsers (
+    page: number = 1,
+    limit: number = 5
+  ): Observable<DataCountPagesDto<IUser>> {
+    return this.http.get<DataCountPagesDto<IUser>>(
+      environment.apiUrl + 'users/all',
+      {
+        params: {
+          page,
+          limit
+        },
+        withCredentials: true
+      }
+    )
   }
 }

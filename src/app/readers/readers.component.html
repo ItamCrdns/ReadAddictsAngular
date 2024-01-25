@@ -1,3 +1,31 @@
-@for (user of (users$ | async); track user.id) {
-<p>{{ user.userName }}</p>
+@if (items$ | async; as users) {
+<section class="users-wrapper">
+  @for (user of users.data; track user.id) {
+  <div class="user">
+    <img
+      [ngSrc]="user.profilePicture"
+      [alt]="user.userName"
+      width="150"
+      height="150"
+      priority="true"
+    />
+    <h1>
+      <a [routerLink]="['/user', user.userName]">
+        {{ user.userName }}
+      </a>
+    </h1>
+    @if (user.tierName !== null) {
+    <p>{{ user.tierName }} reader</p>
+    &middot; }
+    <p>
+      Last seen <span class="date">{{ user.lastLogin | dateAgo }}</span>
+    </p>
+  </div>
+  }
+</section>
+<div #loadMore class="end">
+  @if (page === users.count) {
+  <p>Seems like you've reached the end.</p>
+  }
+</div>
 }
