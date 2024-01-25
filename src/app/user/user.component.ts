@@ -1,6 +1,12 @@
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Component, Inject, type OnInit, type OnDestroy } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet
+} from '@angular/router'
 import { type Observable, Subject, takeUntil } from 'rxjs'
 import { AlertService } from '../../services/Alert/alert.service'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
@@ -16,7 +22,14 @@ import {
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [AsyncPipe, NgOptimizedImage, DateAgoPipe],
+  imports: [
+    AsyncPipe,
+    NgOptimizedImage,
+    DateAgoPipe,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet
+  ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })

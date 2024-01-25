@@ -41,6 +41,21 @@ export class GetEntityService {
     )
   }
 
+  getPostsByUser (
+    username: string,
+    page: number = 1,
+    limit: number = 1
+  ): Observable<DataCountPagesDto<IPost>> {
+    const url = environment.apiUrl + 'users/' + username + '/posts'
+
+    return this.http.get<DataCountPagesDto<IPost>>(url, {
+      params: {
+        page,
+        limit
+      }
+    })
+  }
+
   getPost (id: string): Observable<IPost> {
     return this.http.get<IPost>(environment.apiUrl + 'posts/' + id, {
       withCredentials: true

@@ -6,6 +6,8 @@ import { UserComponent } from './user/user.component'
 import { CommentComponent } from './comment/comment.component'
 import { ReplyComponent } from './comment/reply/reply.component'
 import { ReadersComponent } from './readers/readers.component'
+import { UserPostsComponent } from './user/user-posts/user-posts.component'
+import { UserCommentsComponent } from './user/user-comments/user-comments.component'
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,7 +28,14 @@ export const routes: Routes = [
       }
     ]
   },
-  { path: 'user/:username', component: UserComponent },
+  {
+    path: 'user/:username',
+    component: UserComponent,
+    children: [
+      { path: 'posts', component: UserPostsComponent },
+      { path: 'comments', component: UserCommentsComponent }
+    ]
+  },
   { path: 'users', component: ReadersComponent },
   { path: '**', redirectTo: '' }
 ]

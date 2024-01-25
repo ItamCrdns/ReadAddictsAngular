@@ -40,7 +40,7 @@ export abstract class PaginatedEntityFetcher<T> {
   }
 
   protected getPageFromQueryParams (): void {
-    this.route.queryParamMap.subscribe({
+    this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe({
       next: (params) => {
         const page = params.get('page')
         this.page = page !== null ? +page : 5
