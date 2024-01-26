@@ -10,7 +10,7 @@ import {
 import { PaginatedEntityFetcher } from '../../shared/base/PaginatedEntityFetcher'
 import { type IPost } from '../../posts/IPost'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { Subject, type Observable, takeUntil } from 'rxjs'
+import { type Observable, takeUntil } from 'rxjs'
 import { type DataCountPagesDto } from '../../../services/Get entity/DataCountPagesDto'
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
@@ -37,8 +37,6 @@ export class UserPostsComponent
     super(router, route)
   }
 
-  private readonly destroy2$ = new Subject<void>()
-
   @ViewChild('loadMore', { static: false }) loadMore!: ElementRef<HTMLElement>
 
   protected override getItems (
@@ -49,7 +47,7 @@ export class UserPostsComponent
   }
 
   ngOnInit (): void {
-    this.route.parent?.paramMap.pipe(takeUntil(this.destroy2$)).subscribe({
+    this.route.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe({
       next: (params) => {
         const username = params.get('username')
         if (username !== null) {
@@ -63,8 +61,8 @@ export class UserPostsComponent
   }
 
   ngOnDestroy (): void {
-    this.destroy2$.next()
-    this.destroy2$.complete()
+    this.destroy$.next()
+    this.destroy$.complete()
     super.unobserve(this.loadMore.nativeElement)
   }
 

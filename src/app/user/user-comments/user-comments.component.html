@@ -1,1 +1,35 @@
-<p>user-comments works!</p>
+@if (items$ | async; as comments) { @for(comment of comments.data; track
+comment.id) {
+<section class="posts-wrapper">
+  <article class="post">
+    <header class="title-wrapper">
+      @if (comment.user.profilePicture) {
+      <img
+        [ngSrc]="comment.user.profilePicture"
+        [alt]="comment.user.profilePicture"
+        width="35"
+        height="35"
+      />
+      }
+      <h1>
+        <a [routerLink]="['/user', comment.user.userName]">
+          {{ comment.user.userName }}
+        </a>
+      </h1>
+      <p>{{ comment.created | dateAgo }}</p>
+    </header>
+    <p>{{ comment.content }}</p>
+    <div class="button-wrapper">
+      @if (comment.replyCount > 0) {
+      <button>{{ comment.replyCount }} replies</button>
+      }
+    </div>
+  </article>
+</section>
+}
+<div #loadMore class="end">
+  @if (page >= comments.count) {
+  <p>Seems like you've reached the end.</p>
+  }
+</div>
+}

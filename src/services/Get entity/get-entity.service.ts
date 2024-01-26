@@ -56,6 +56,21 @@ export class GetEntityService {
     })
   }
 
+  getCommentsByUser (
+    username: string,
+    page: number = 1,
+    limit: number = 1
+  ): Observable<DataCountPagesDto<IComment>> {
+    const url = environment.apiUrl + 'users/' + username + '/comments'
+
+    return this.http.get<DataCountPagesDto<IComment>>(url, {
+      params: {
+        page,
+        limit
+      }
+    })
+  }
+
   getPost (id: string): Observable<IPost> {
     return this.http.get<IPost>(environment.apiUrl + 'posts/' + id, {
       withCredentials: true

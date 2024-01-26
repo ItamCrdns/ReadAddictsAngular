@@ -13,7 +13,6 @@
           {{ post.creator.userName }}
         </a>
       </h1>
-      <h2>{{ "@" }}{{ post.creator.userName }}</h2>
       <p>{{ post.created | dateAgo }}</p>
     </header>
     <a [routerLink]="['/post', post.id]">{{ post.content }}</a>
@@ -44,7 +43,7 @@
 </section>
 }
 <div #loadMore class="end">
-  @if (page === posts.count) {
+  @if (page >= posts.count) {
   <p>Seems like you've reached the end.</p>
   }
 </div>

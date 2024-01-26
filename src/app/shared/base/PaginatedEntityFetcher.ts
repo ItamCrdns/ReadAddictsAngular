@@ -11,7 +11,7 @@ export abstract class PaginatedEntityFetcher<T> {
 
   page: number = 5
 
-  private readonly destroy$ = new Subject<void>()
+  protected readonly destroy$ = new Subject<void>()
 
   constructor (
     protected readonly router: Router,
