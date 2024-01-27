@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
 import { type Observable } from 'rxjs'
-import { type IUser } from '../../app/login/IUser'
 import { environment } from '../../environment/environment'
 import { type IMessage } from '../../app/chat/IMessage'
+import { type IUser } from 'app/user/login/IUser'
 
 @Injectable({
   providedIn: 'root'

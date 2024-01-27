@@ -8,23 +8,22 @@ import {
   type ElementRef
 } from '@angular/core'
 import { PaginatedEntityFetcher } from '../shared/base/PaginatedEntityFetcher'
+import { type IGroup } from './IGroup'
+import { GetEntityService } from '../../services/Get entity/get-entity.service'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { type Observable } from 'rxjs'
 import { type DataCountPagesDto } from '../../services/Get entity/DataCountPagesDto'
-import { GetEntityService } from '../../services/Get entity/get-entity.service'
-import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
-import { type IUser } from 'app/user/login/IUser'
 
 @Component({
-  selector: 'app-readers',
+  selector: 'app-groups',
   standalone: true,
-  imports: [DateAgoPipe, NgOptimizedImage, AsyncPipe, RouterLink],
-  templateUrl: './readers.component.html',
-  styleUrl: './readers.component.scss'
+  imports: [AsyncPipe, NgOptimizedImage, RouterLink],
+  templateUrl: './groups.component.html',
+  styleUrl: '../readers/readers.component.scss' // pretty similar styles
 })
-export class ReadersComponent
-  extends PaginatedEntityFetcher<IUser>
+export class GroupsComponent
+  extends PaginatedEntityFetcher<IGroup>
   implements OnInit, OnDestroy, AfterViewInit {
   constructor (
     @Inject(GetEntityService)
@@ -35,14 +34,14 @@ export class ReadersComponent
     super(router, route)
   }
 
+  @ViewChild('loadMore', { static: false }) loadMore!: ElementRef<HTMLElement>
+
   protected getItems (
     page: number,
     limit: number
-  ): Observable<DataCountPagesDto<IUser>> {
-    return this.getEntityService.getUsers(page, limit)
+  ): Observable<DataCountPagesDto<IGroup>> {
+    return this.getEntityService.getGroups(page, limit)
   }
-
-  @ViewChild('loadMore', { static: false }) loadMore!: ElementRef<HTMLElement>
 
   ngOnInit (): void {
     super.getPageFromQueryParams()

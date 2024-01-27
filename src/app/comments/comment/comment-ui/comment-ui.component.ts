@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { type IComment } from '../../comments/IComment'
-import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { NgOptimizedImage } from '@angular/common'
+import { DateAgoPipe } from 'app/pipes/date-ago.pipe'
+import { type IComment } from 'app/comments/IComment'
 
 @Component({
   selector: 'app-comment-ui',
@@ -42,7 +42,7 @@ import { NgOptimizedImage } from '@angular/common'
       >
     </div>
   `,
-  styleUrl: '../../comments/comments.component.scss'
+  styleUrl: '../../../comments/comments.component.scss'
 })
 export class CommentUiComponent {
   @Input() comment: Partial<IComment> = {}

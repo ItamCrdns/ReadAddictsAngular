@@ -5,12 +5,12 @@ import {
   type OnDestroy,
   type OnInit
 } from '@angular/core'
-import { type IComment } from '../../comments/IComment'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
-import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { CommentUiComponent } from '../comment-ui/comment-ui.component'
 import { Subscription } from 'rxjs'
+import { DateAgoPipe } from 'app/pipes/date-ago.pipe'
+import { type IComment } from 'app/comments/IComment'
 
 @Component({
   selector: 'app-recursive-comment',

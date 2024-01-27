@@ -1,4 +1,4 @@
-@import '../../mixins';
+@import '@styles/_mixins.scss';
 
 .comments-wrapper {
     @include any-wrapper;

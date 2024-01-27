@@ -1,16 +1,16 @@
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
-import { InputComponent } from '../input/input.component'
 import { heroPhoto } from '@ng-icons/heroicons/outline'
 import { ionRemoveCircle } from '@ng-icons/ionicons'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { FormsModule, type NgForm } from '@angular/forms'
 import { type Observable, take } from 'rxjs'
 import { Router } from '@angular/router'
-import { AlertService } from '../../services/Alert/alert.service'
-import { type IUser } from '../login/IUser'
-import { AuthService } from '../../services/Authentication/auth.service'
-import { NewEntityService } from '../../services/New entity/new-entity.service'
+import { InputComponent } from 'app/input/input.component'
+import { type IUser } from 'app/user/login/IUser'
+import { AuthService } from 'services/Authentication/auth.service'
+import { NewEntityService } from 'services/New entity/new-entity.service'
+import { AlertService } from 'services/Alert/alert.service'
 
 @Component({
   selector: 'app-new-post',

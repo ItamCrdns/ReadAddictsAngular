@@ -17,8 +17,8 @@ import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { type DataCountPagesDto } from '../../services/Get entity/DataCountPagesDto'
-import { CommentUiComponent } from '../comment/comment-ui/comment-ui.component'
 import { GetEntityService } from '../../services/Get entity/get-entity.service'
+import { CommentUiComponent } from './comment/comment-ui/comment-ui.component'
 
 @Component({
   selector: 'app-comments',

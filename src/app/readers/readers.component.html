@@ -1,7 +1,7 @@
 @if (items$ | async; as users) {
-<section class="users-wrapper">
+<section class="wrapper">
   @for (user of users.data; track user.id) {
-  <div class="user">
+  <div class="entity">
     <img
       [ngSrc]="user.profilePicture"
       [alt]="user.userName"

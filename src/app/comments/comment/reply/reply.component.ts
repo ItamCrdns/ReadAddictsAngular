@@ -5,15 +5,15 @@ import {
   ViewChild,
   type OnDestroy
 } from '@angular/core'
-import { InputComponent } from '../../input/input.component'
-import { AuthService } from '../../../services/Authentication/auth.service'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Subscription, type Observable, take } from 'rxjs'
-import { type IUser } from '../../login/IUser'
 import { FormsModule, type NgForm } from '@angular/forms'
-import { AlertService } from '../../../services/Alert/alert.service'
 import { ActivatedRoute, Router } from '@angular/router'
-import { NewEntityService } from '../../../services/New entity/new-entity.service'
+import { InputComponent } from 'app/input/input.component'
+import { type IUser } from 'app/user/login/IUser'
+import { AlertService } from 'services/Alert/alert.service'
+import { AuthService } from 'services/Authentication/auth.service'
+import { NewEntityService } from 'services/New entity/new-entity.service'
 
 @Component({
   selector: 'app-reply',

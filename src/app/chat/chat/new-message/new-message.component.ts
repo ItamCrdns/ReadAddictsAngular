@@ -10,12 +10,12 @@ import {
   type OnDestroy
 } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { userInitialState, type IUser } from '../../../login/IUser'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { ionSendOutline, ionSend } from '@ng-icons/ionicons'
 import { NewEntityService } from '../../../../services/New entity/new-entity.service'
 import { Subject, takeUntil } from 'rxjs'
 import { type IMessage } from '../../IMessage'
+import { userInitialState, type IUser } from 'app/user/login/IUser'
 
 @Component({
   selector: 'app-new-message',

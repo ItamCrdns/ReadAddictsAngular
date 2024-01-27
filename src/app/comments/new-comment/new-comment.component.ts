@@ -1,20 +1,20 @@
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Component, Inject, type OnInit, ViewChild } from '@angular/core'
-import { InputComponent } from '../input/input.component'
 import { FormsModule, type NgForm } from '@angular/forms'
-import { AuthService } from '../../services/Authentication/auth.service'
-import { type IUser } from '../login/IUser'
-import { AlertService } from '../../services/Alert/alert.service'
 import { take } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
-import { NewEntityService } from '../../services/New entity/new-entity.service'
+import { InputComponent } from 'app/input/input.component'
+import { type IUser } from 'app/user/login/IUser'
+import { AuthService } from 'services/Authentication/auth.service'
+import { NewEntityService } from 'services/New entity/new-entity.service'
+import { AlertService } from 'services/Alert/alert.service'
 
 @Component({
   selector: 'app-new-comment',
   standalone: true,
   imports: [NgOptimizedImage, InputComponent, AsyncPipe, FormsModule],
   templateUrl: './new-comment.component.html',
-  styleUrl: '../new-post/new-post.component.scss' // pretty much the same styles as new-post
+  styleUrl: '../../posts/new-post/new-post.component.scss' // pretty much the same styles as new-post
 })
 export class NewCommentComponent implements OnInit {
   user: Partial<IUser> = {}

@@ -1,13 +1,14 @@
 import { type Routes } from '@angular/router'
-import { LoginComponent } from './login/login.component'
 import { HomeComponent } from './home/home.component'
-import { PostComponent } from './post/post.component'
+import { PostComponent } from './posts/post/post.component'
 import { UserComponent } from './user/user.component'
-import { CommentComponent } from './comment/comment.component'
-import { ReplyComponent } from './comment/reply/reply.component'
 import { ReadersComponent } from './readers/readers.component'
 import { UserPostsComponent } from './user/user-posts/user-posts.component'
 import { UserCommentsComponent } from './user/user-comments/user-comments.component'
+import { GroupsComponent } from './groups/groups.component'
+import { LoginComponent } from './user/login/login.component'
+import { CommentComponent } from './comments/comment/comment.component'
+import { ReplyComponent } from './comments/comment/reply/reply.component'
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -37,5 +38,6 @@ export const routes: Routes = [
     ]
   },
   { path: 'users', component: ReadersComponent },
+  { path: 'groups', component: GroupsComponent },
   { path: '**', redirectTo: '' }
 ]

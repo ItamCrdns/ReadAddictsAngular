@@ -3,16 +3,16 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { RecursiveCommentComponent } from './recursive-comment/recursive-comment.component'
-import { AlertService } from '../../services/Alert/alert.service'
-import { type IComment } from '../comments/IComment'
-import { GetEntityService } from '../../services/Get entity/get-entity.service'
+import { type IComment } from '../IComment'
+import { GetEntityService } from 'services/Get entity/get-entity.service'
+import { AlertService } from 'services/Alert/alert.service'
 
 @Component({
   selector: 'app-comment',
   standalone: true,
   imports: [AsyncPipe, NgOptimizedImage, RecursiveCommentComponent],
   templateUrl: './comment.component.html',
-  styleUrl: '../comments/comments.component.scss'
+  styleUrl: '../../comments/comments.component.scss'
 })
 export class CommentComponent implements OnInit, OnDestroy {
   commentIdSub: Subscription = new Subscription()

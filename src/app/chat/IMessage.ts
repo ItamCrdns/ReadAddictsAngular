@@ -1,4 +1,4 @@
-import { type IUser } from '../login/IUser'
+import { type IUser } from 'app/user/login/IUser'
 
 export interface IMessage {
   id: string

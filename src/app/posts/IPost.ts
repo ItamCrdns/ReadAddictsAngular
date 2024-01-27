@@ -1,5 +1,5 @@
+import { type IUser } from 'app/user/login/IUser'
 import { type IComment } from '../comments/IComment'
-import { type IUser } from '../login/IUser'
 
 interface IImage {
   id: string
@@ -9,15 +9,6 @@ interface IImage {
   cloudinaryPublicId: string
   created: string
 }
-
-// interface IGroup {
-//   id: string
-//   name: string
-//   description: string
-//   creatorId: string
-//   picture: string
-//   created: string
-// }
 
 export interface IPost {
   id: string

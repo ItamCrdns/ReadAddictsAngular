@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
-import { NewPostComponent } from '../new-post/new-post.component'
 import { PostsComponent } from '../posts/posts.component'
+import { NewPostComponent } from 'app/posts/new-post/new-post.component'
 
 @Component({
   selector: 'app-home',

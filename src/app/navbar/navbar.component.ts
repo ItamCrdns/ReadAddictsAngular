@@ -11,7 +11,7 @@ import { Router, RouterLink } from '@angular/router'
 import { AlertService } from '../../services/Alert/alert.service'
 import { AuthService } from '../../services/Authentication/auth.service'
 import { type Observable, take } from 'rxjs'
-import { type IUser } from '../login/IUser'
+import { type IUser } from 'app/user/login/IUser'
 
 @Component({
   selector: 'app-navbar',

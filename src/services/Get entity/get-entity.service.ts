@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
-import { type IUser } from '../../app/login/IUser'
 import { type Observable } from 'rxjs'
 import { environment } from '../../environment/environment'
 import { type IPost } from '../../app/posts/IPost'
 import { type DataCountPagesDto } from './DataCountPagesDto'
 import { type IComment } from '../../app/comments/IComment'
+import { type IGroup } from '../../app/groups/IGroup'
+import { type IUser } from 'app/user/login/IUser'
 
 @Injectable({
   providedIn: 'root'
@@ -115,6 +116,22 @@ export class GetEntityService {
   ): Observable<DataCountPagesDto<IUser>> {
     return this.http.get<DataCountPagesDto<IUser>>(
       environment.apiUrl + 'users/all',
+      {
+        params: {
+          page,
+          limit
+        },
+        withCredentials: true
+      }
+    )
+  }
+
+  getGroups (
+    page: number = 1,
+    limit: number = 5
+  ): Observable<DataCountPagesDto<IGroup>> {
+    return this.http.get<DataCountPagesDto<IGroup>>(
+      environment.apiUrl + 'groups/all',
       {
         params: {
           page,

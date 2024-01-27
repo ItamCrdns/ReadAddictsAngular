@@ -10,7 +10,6 @@ import {
 import { type Observable, Subject, takeUntil } from 'rxjs'
 import { AlertService } from '../../services/Alert/alert.service'
 import { DateAgoPipe } from '../pipes/date-ago.pipe'
-import { type IUser } from '../login/IUser'
 import { GetEntityService } from '../../services/Get entity/get-entity.service'
 import { type HttpErrorResponse } from '@angular/common/http'
 import { AuthService } from '../../services/Authentication/auth.service'
@@ -18,6 +17,7 @@ import {
   type ISendMessage,
   OpenChatService
 } from '../../services/Open chat/open-chat.service'
+import { type IUser } from './login/IUser'
 
 @Component({
   selector: 'app-user',

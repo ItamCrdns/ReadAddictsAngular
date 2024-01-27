@@ -2,9 +2,9 @@ import { NgOptimizedImage } from '@angular/common'
 import { Component, Input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { DateAgoPipe } from '../../../pipes/date-ago.pipe'
-import { type IUser, userInitialState } from '../../../login/IUser'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { ionEllipsisVerticalSharp } from '@ng-icons/ionicons'
+import { userInitialState, type IUser } from 'app/user/login/IUser'
 
 @Component({
   selector: 'app-selected-user',

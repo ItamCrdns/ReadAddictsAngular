@@ -21,7 +21,6 @@ import {
 } from '@ng-icons/ionicons'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { AuthService } from '../../../services/Authentication/auth.service'
-import { userInitialState, type IUser } from '../../login/IUser'
 import { takeUntil, Subject, Observable, BehaviorSubject } from 'rxjs'
 import { type IMessage } from '../IMessage'
 import { ChatService } from '../../../services/Chat/chat.service'
@@ -30,6 +29,7 @@ import { PatchEntityService } from '../../../services/Update entity/patch-entity
 import { NewMessageComponent } from './new-message/new-message.component'
 import { SelectedUserComponent } from './selected-user/selected-user.component'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
+import { userInitialState, type IUser } from 'app/user/login/IUser'
 
 @Component({
   selector: 'app-chat',

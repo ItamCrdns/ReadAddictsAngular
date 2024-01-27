@@ -9,10 +9,10 @@ import {
 } from '@angular/router'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { Subscription, filter } from 'rxjs'
-import { DateAgoPipe } from '../pipes/date-ago.pipe'
-import { CommentsComponent } from '../comments/comments.component'
-import { NewCommentComponent } from '../new-comment/new-comment.component'
-import { GetEntityService } from '../../services/Get entity/get-entity.service'
+import { DateAgoPipe } from '../../pipes/date-ago.pipe'
+import { CommentsComponent } from '../../comments/comments.component'
+import { GetEntityService } from '../../../services/Get entity/get-entity.service'
+import { NewCommentComponent } from 'app/comments/new-comment/new-comment.component'
 
 @Component({
   selector: 'app-post',

@@ -1,11 +1,11 @@
 import { Component, Inject } from '@angular/core'
-import { InputComponent } from '../input/input.component'
 import { take } from 'rxjs'
 import { type IUser } from './IUser'
 import { NgOptimizedImage } from '@angular/common'
 import { Router } from '@angular/router'
-import { AlertService } from '../../services/Alert/alert.service'
-import { AuthService } from '../../services/Authentication/auth.service'
+import { InputComponent } from 'app/input/input.component'
+import { AuthService } from 'services/Authentication/auth.service'
+import { AlertService } from 'services/Alert/alert.service'
 
 @Component({
   selector: 'app-login',
