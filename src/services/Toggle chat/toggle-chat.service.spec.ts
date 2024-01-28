@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing'
 
-import { OpenChatService } from './open-chat.service'
+import { ToggleChatService } from './toggle-chat.service'
 
-describe('OpenChatService', () => {
-  let service: OpenChatService
+describe('ToggleChatService', () => {
+  let service: ToggleChatService
 
   beforeEach(() => {
     TestBed.configureTestingModule({})
-    service = TestBed.inject(OpenChatService)
+    service = TestBed.inject(ToggleChatService)
   })
 
   it('should be created', () => {

@@ -13,11 +13,8 @@ import { DateAgoPipe } from '../pipes/date-ago.pipe'
 import { GetEntityService } from '../../services/Get entity/get-entity.service'
 import { type HttpErrorResponse } from '@angular/common/http'
 import { AuthService } from '../../services/Authentication/auth.service'
-import {
-  type ISendMessage,
-  OpenChatService
-} from '../../services/Open chat/open-chat.service'
 import { type IUser } from './login/IUser'
+import { type ISendMessage, ToggleChatService } from 'services/Toggle chat/toggle-chat.service'
 
 @Component({
   selector: 'app-user',
@@ -48,7 +45,7 @@ export class UserComponent implements OnInit, OnDestroy {
     private readonly getEntityService: GetEntityService,
     @Inject(AlertService) private readonly alertService: AlertService,
     @Inject(AuthService) private readonly authService: AuthService,
-    @Inject(OpenChatService) private readonly openChatService: OpenChatService
+    @Inject(ToggleChatService) private readonly toggleChatService: ToggleChatService
   ) {}
 
   ngOnInit (): void {
@@ -74,7 +71,7 @@ export class UserComponent implements OnInit, OnDestroy {
         })
     })
 
-    this.openChatService.toggle$
+    this.toggleChatService.toggle$
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         this.currentToggleValue = res.toggle
@@ -93,7 +90,7 @@ export class UserComponent implements OnInit, OnDestroy {
         userId
       }
 
-      this.openChatService.updateToggle(newState)
+      this.toggleChatService.updateToggle(newState)
     }
   }
 }

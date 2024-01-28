@@ -3,7 +3,6 @@ import { ChatComponent } from '../chat/chat.component'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { ionChatbubble, ionCloseCircleSharp } from '@ng-icons/ionicons'
 import { slideInOut } from '../../animations/slide'
-import { OpenChatService } from '../../../services/Open chat/open-chat.service'
 import { Subject, BehaviorSubject, takeUntil } from 'rxjs'
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
 import { AsyncPipe } from '@angular/common'
@@ -11,6 +10,7 @@ import { environment } from '../../../environment/environment'
 import { type HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import { AlertService } from '../../../services/Alert/alert.service'
 import { type IMessage } from '../IMessage'
+import { ToggleChatService } from 'services/Toggle chat/toggle-chat.service'
 
 @Component({
   selector: 'app-open-chat-button',
@@ -38,7 +38,7 @@ export class OpenChatButtonComponent implements OnInit, OnDestroy {
   private readonly hub: HubConnection
 
   constructor (
-    @Inject(OpenChatService) private readonly openChatService: OpenChatService,
+    @Inject(ToggleChatService) private readonly toggleChatService: ToggleChatService,
     @Inject(GetEntityService)
     private readonly getEntityService: GetEntityService,
     @Inject(AlertService) private readonly alertService: AlertService
@@ -70,7 +70,7 @@ export class OpenChatButtonComponent implements OnInit, OnDestroy {
         this.messagesCount$.next(initialCount)
       })
 
-    this.openChatService.toggle$.pipe(takeUntil(this.destroy$)).subscribe({
+    this.toggleChatService.toggle$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (res) => {
         this.toggle = res.toggle
         if (res.userId !== undefined) {
@@ -93,7 +93,9 @@ export class OpenChatButtonComponent implements OnInit, OnDestroy {
     this.messagesCount$.next(this.messagesCount$.value - readMessages)
   }
 
-  toggleChat (): void {
-    this.openChatService.updateToggle({ toggle: !this.toggle })
+  toggleChat (event: Event): void {
+    event.stopPropagation() // * Prevent the click event from bubbling up to the dom
+    // * Other words prevents the click event from triggering the onClickOutside function
+    this.toggleChatService.updateToggle({ toggle: !this.toggle })
   }
 }

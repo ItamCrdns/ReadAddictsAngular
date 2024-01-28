@@ -24,7 +24,7 @@
   }
 </section>
 <div #loadMore class="end">
-  @if (page === users.count) {
+  @if (page >= users.count) {
   <p>Seems like you've reached the end.</p>
   }
 </div>

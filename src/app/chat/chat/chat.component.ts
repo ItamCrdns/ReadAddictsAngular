@@ -1,6 +1,6 @@
 import {
   Component,
-  type ElementRef,
+  ElementRef,
   Inject,
   type OnInit,
   ViewChild,
@@ -9,7 +9,8 @@ import {
   ChangeDetectorRef,
   Output,
   EventEmitter,
-  type AfterViewInit
+  type AfterViewInit,
+  HostListener
 } from '@angular/core'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import {
@@ -30,6 +31,7 @@ import { NewMessageComponent } from './new-message/new-message.component'
 import { SelectedUserComponent } from './selected-user/selected-user.component'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { userInitialState, type IUser } from 'app/user/login/IUser'
+import { ToggleChatService } from 'services/Toggle chat/toggle-chat.service'
 
 @Component({
   selector: 'app-chat',
@@ -82,8 +84,24 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
     @Inject(ChangeDetectorRef)
     private readonly cdr: ChangeDetectorRef,
     @Inject(PatchEntityService)
-    private readonly patch: PatchEntityService
+    private readonly patch: PatchEntityService,
+    @Inject(ElementRef) private readonly elementRef: ElementRef,
+    @Inject(ToggleChatService)
+    private readonly toggleChatService: ToggleChatService
   ) {}
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside (event: Event): void {
+    const clickedInside: boolean = this.elementRef.nativeElement.contains(
+      event.target
+    )
+
+    if (!clickedInside) {
+      this.toggleChatService.updateToggle({
+        toggle: false
+      })
+    }
+  }
 
   ngOnInit (): void {
     // * If the chat is opened from the user page, open the chat with that user
@@ -168,8 +186,10 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   )
 
   private loadConversation (page: number, limit: number): void {
+    const userId: string = this.selectedUser.id
+
     this.chat
-      .getConversation(page, limit, this.selectedUser.id)
+      .getConversation(page, limit, userId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
@@ -186,7 +206,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   selectConversation (user: IUser): void {
-    this.markAsRead(user.id)
+    const userId: string = user.id
+    this.markAsRead(userId)
 
     if (this.selectedUser !== user) {
       this.selectedUser = user
@@ -230,15 +251,19 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   markAsRead (userId: string): void {
-    this.patch.markMessagesAsRead(userId).subscribe({
-      next: (readMessages) => {
-        this.recentChats.forEach((user) => {
-          if (user !== undefined && user.id === userId) {
-            user.unreadMessages = 0
-          }
-        })
-        this.readMessages.emit(readMessages)
-      }
-    })
+    // TODO: Clicking reads the messages. And if the messages are already read, server returns badrequest. So we need to check if the messages are already read or something like that
+    this.patch
+      .markMessagesAsRead(userId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (readMessages) => {
+          this.recentChats.forEach((user) => {
+            if (user !== undefined && user.id === userId) {
+              user.unreadMessages = 0
+            }
+          })
+          this.readMessages.emit(readMessages)
+        }
+      })
   }
 }

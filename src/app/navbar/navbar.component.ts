@@ -1,4 +1,4 @@
-import { Component, Inject, type OnInit } from '@angular/core'
+import { Component, ElementRef, HostListener, Inject, type OnInit } from '@angular/core'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { navItems } from './navItems'
 import { ionLogOutOutline } from '@ng-icons/ionicons'
@@ -12,6 +12,7 @@ import { AlertService } from '../../services/Alert/alert.service'
 import { AuthService } from '../../services/Authentication/auth.service'
 import { type Observable, take } from 'rxjs'
 import { type IUser } from 'app/user/login/IUser'
+import { fadeInOut } from 'app/animations/fade'
 
 @Component({
   selector: 'app-navbar',
@@ -22,7 +23,8 @@ import { type IUser } from 'app/user/login/IUser'
     provideNgIconsConfig({ size: '1.75rem' })
   ],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
+  animations: [fadeInOut]
 })
 export class NavbarComponent implements OnInit {
   items = navItems
@@ -33,10 +35,28 @@ export class NavbarComponent implements OnInit {
     @Inject(AuthService)
     private readonly authService: AuthService,
     @Inject(AlertService) private readonly alertService: AlertService,
-    @Inject(Router) private readonly router: Router
+    @Inject(Router) private readonly router: Router,
+    @Inject(ElementRef)
+    private readonly elementRef: ElementRef
   ) {}
 
-  toggleUserMenu (): void {
+  @HostListener('document:click', ['$event'])
+  onClickOutside (event: Event): void {
+    const clickedInside: boolean = this.elementRef.nativeElement.contains(
+      event.target
+    )
+
+    if (!clickedInside && this.toggle) {
+      this.toggle = false
+    }
+  }
+
+  onNavClick (): void {
+    this.toggle = false
+  }
+
+  onImgClick (event: Event): void {
+    event.stopPropagation() // * Prevent the onNavClick from firing
     this.toggle = !this.toggle
   }
 

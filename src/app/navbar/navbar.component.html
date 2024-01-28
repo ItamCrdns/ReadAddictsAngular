@@ -1,4 +1,4 @@
-<nav>
+<nav (click)="toggle && onNavClick()">
   <div class="nav-links">
     <h1>Readaddicts</h1>
     @for(item of items; track item.name) {
@@ -13,10 +13,10 @@
       alt="{{ currentUser.userName }}"
       width="50"
       height="50"
-      (click)="toggle = !toggle"
+      (click)="onImgClick($event)"
     />
     } @if (toggle && currentUser.id !== undefined) {
-    <div class="user-menu">
+    <div class="user-menu" [@fadeInOut]="'fadeInOut'">
       <div class="user-menu-wrapper">
         <img
           ngSrc="{{ currentUser.profilePicture }}"

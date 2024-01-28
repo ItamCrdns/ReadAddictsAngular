@@ -9,7 +9,7 @@ export interface ISendMessage {
 @Injectable({
   providedIn: 'root'
 })
-export class OpenChatService {
+export class ToggleChatService {
   private readonly toggleSubject = new BehaviorSubject<ISendMessage>({
     toggle: false
   })
