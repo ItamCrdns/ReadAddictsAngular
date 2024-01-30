@@ -11,4 +11,5 @@ export interface IGroup {
   users: IUser[]
   creator: IUser
   posts: IPost[]
+  membersCount: number
 }

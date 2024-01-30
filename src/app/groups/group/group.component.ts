@@ -1,29 +1,36 @@
+import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import {
   type AfterViewInit,
   Component,
   Inject,
   type OnDestroy,
+  type OnInit,
   ViewChild,
-  type ElementRef,
-  type OnInit
+  type ElementRef
 } from '@angular/core'
-import { type IPost } from './IPost'
-import { type Observable } from 'rxjs'
-import { AsyncPipe } from '@angular/common'
-import { ActivatedRoute, Router } from '@angular/router'
-import { GetEntityService } from '../../services/Get entity/get-entity.service'
-import { type DataCountPagesDto } from '../../services/Get entity/DataCountPagesDto'
-import { PaginatedEntityFetcher } from '../shared/base/PaginatedEntityFetcher'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
+import { DateAgoPipe } from 'app/pipes/date-ago.pipe'
 import { PostShowcaseComponent } from 'app/post-showcase/post-showcase.component'
+import { type IPost } from 'app/posts/IPost'
+import { PaginatedEntityFetcher } from 'app/shared/base/PaginatedEntityFetcher'
+import { type Observable } from 'rxjs'
+import { type DataCountPagesDto } from 'services/Get entity/DataCountPagesDto'
+import { GetEntityService } from 'services/Get entity/get-entity.service'
 
 @Component({
-  selector: 'app-posts',
+  selector: 'app-group',
   standalone: true,
-  imports: [AsyncPipe, PostShowcaseComponent],
-  templateUrl: './posts.component.html',
-  styleUrl: './posts.component.scss'
+  imports: [
+    AsyncPipe,
+    NgOptimizedImage,
+    RouterLink,
+    DateAgoPipe,
+    PostShowcaseComponent
+  ],
+  templateUrl: './group.component.html',
+  styleUrls: ['./group.component.scss', '../../posts/posts.component.scss']
 })
-export class PostsComponent
+export class GroupComponent
   extends PaginatedEntityFetcher<IPost>
   implements OnInit, OnDestroy, AfterViewInit {
   constructor (
@@ -35,13 +42,17 @@ export class PostsComponent
     super(router, route)
   }
 
+  groupId: string = this.route.snapshot.params['groupId'] as string
+
+  group$ = this.getEntityService.getGroup(this.groupId)
+
   @ViewChild('loadMore', { static: false }) loadMore!: ElementRef<HTMLElement>
 
   protected getItems (
     page: number,
     limit: number
   ): Observable<DataCountPagesDto<IPost>> {
-    return this.getEntityService.getPosts(page, limit)
+    return this.getEntityService.getPostsByGroup(this.groupId, page, limit)
   }
 
   ngOnInit (): void {

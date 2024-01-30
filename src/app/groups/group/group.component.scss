@@ -1,0 +1,80 @@
+.group-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem;
+}
+
+.banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .1);
+
+    img {
+        border-radius: 50%;
+    }
+
+    h1 {
+        margin: 0;
+        padding: 0;
+    }
+
+    p {
+        color: rgba(0, 0, 0, .5);
+        margin-top: 0;
+    }
+}
+
+.users {
+    @extend .banner;
+    justify-content: flex-start;
+
+    .user-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+
+        h2 {
+            font-size: 18px;
+            margin: 0;
+            text-transform: capitalize
+        }
+
+        p {
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .user {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .date {
+            width: 100px;
+        }
+    }
+}
+
+.posts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.end {
+    margin-top: -2rem;
+    
+    p {
+        padding: .75rem;
+        text-align: center;
+    }
+}

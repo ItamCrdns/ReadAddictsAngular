@@ -1,0 +1,38 @@
+@if (group$ | async; as group) {
+<section class="group-wrapper">
+  <div class="banner">
+    <img [ngSrc]="group.picture" [alt]="group.name" width="250" height="250" />
+    <h1>{{ group.name }}</h1>
+    <p>{{ group.membersCount }} members</p>
+  </div>
+  <div class="posts">
+    @if (items$ | async; as posts) { @for (post of posts.data; track post.id) {
+    <app-post-showcase [post]="post" />
+    } @if (page >= posts.count) {
+    <p>Seems like you've reached the end.</p>
+    }}
+  </div>
+  <div class="users">
+    @for (user of group.users; track user.id) {
+    <div class="user-wrapper">
+      <h1>Members</h1>
+      <div class="user">
+        <img
+          [ngSrc]="user.profilePicture"
+          [alt]="user.userName"
+          width="50"
+          height="50"
+        />
+        <div>
+          <h2>
+            <a [routerLink]="['/user', user.userName]">{{ user.userName }}</a>
+          </h2>
+          <p class="date">{{ user.lastLogin | dateAgo }}</p>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</section>
+}
+<div #loadMore class="end"></div>

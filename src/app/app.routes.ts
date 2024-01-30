@@ -9,6 +9,7 @@ import { GroupsComponent } from './groups/groups.component'
 import { LoginComponent } from './user/login/login.component'
 import { CommentComponent } from './comments/comment/comment.component'
 import { ReplyComponent } from './comments/comment/reply/reply.component'
+import { GroupComponent } from './groups/group/group.component'
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -39,5 +40,6 @@ export const routes: Routes = [
   },
   { path: 'users', component: ReadersComponent },
   { path: 'groups', component: GroupsComponent },
+  { path: 'group/:groupId', component: GroupComponent },
   { path: '**', redirectTo: '' }
 ]

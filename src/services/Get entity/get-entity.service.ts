@@ -141,4 +141,25 @@ export class GetEntityService {
       }
     )
   }
+
+  getGroup (id: string): Observable<IGroup> {
+    return this.http.get<IGroup>(environment.apiUrl + 'groups/' + id)
+  }
+
+  getPostsByGroup (
+    id: string,
+    page: number = 1,
+    limit: number = 5
+  ): Observable<DataCountPagesDto<IPost>> {
+    return this.http.get<DataCountPagesDto<IPost>>(
+      environment.apiUrl + 'groups/' + id + '/posts',
+      {
+        params: {
+          page,
+          limit
+        },
+        withCredentials: true
+      }
+    )
+  }
 }

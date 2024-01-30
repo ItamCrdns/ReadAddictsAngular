@@ -15,11 +15,18 @@ import { type DataCountPagesDto } from '../../../services/Get entity/DataCountPa
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
+import { PostShowcaseComponent } from 'app/post-showcase/post-showcase.component'
 
 @Component({
   selector: 'app-user-posts',
   standalone: true,
-  imports: [AsyncPipe, DateAgoPipe, NgOptimizedImage, RouterLink],
+  imports: [
+    AsyncPipe,
+    DateAgoPipe,
+    NgOptimizedImage,
+    RouterLink,
+    PostShowcaseComponent
+  ],
   templateUrl: '../../posts/posts.component.html', // ? Reuse the same template and styles. The only difference is the data source (getEntityService.getPosts vs getEntityService.getPostsByUser)
   styleUrl: '../../posts/posts.component.scss'
 })
