@@ -6,10 +6,14 @@
     <p>{{ group.membersCount }} members</p>
   </div>
   <div class="posts">
-    @if (items$ | async; as posts) { @for (post of posts.data; track post.id) {
+    @if (items$ | async; as posts) {
+    <app-new-post [groupId]="groupId" />
+    @for (post of posts.data; track post.id) {
     <app-post-showcase [post]="post" />
     } @if (page >= posts.count) {
-    <p>Seems like you've reached the end.</p>
+    <div class="end">
+      <p>Seems like you've reached the end.</p>
+    </div>
     }}
   </div>
   <div class="users">
@@ -35,4 +39,4 @@
   </div>
 </section>
 }
-<div #loadMore class="end"></div>
+<div #loadMore></div>

@@ -14,9 +14,6 @@ import { NewPostComponent } from 'app/posts/new-post/new-post.component'
   `,
   styles: `
   .new-post-posts-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
     margin-top: 2rem
   }
   `

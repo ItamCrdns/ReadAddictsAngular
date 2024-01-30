@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core'
+import { Component, ElementRef, Inject, Input, ViewChild } from '@angular/core'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { heroPhoto } from '@ng-icons/heroicons/outline'
 import { ionRemoveCircle } from '@ng-icons/ionicons'
@@ -31,6 +31,8 @@ export class NewPostComponent {
   user$: Observable<Partial<IUser>> = this.authService.currentUser$
   content: string = ''
   images: File[] = []
+
+  @Input() groupId?: string
 
   @ViewChild('imagesInput') imagesInput: ElementRef = new ElementRef('')
   @ViewChild(InputComponent) inputComponent!: InputComponent
@@ -99,6 +101,10 @@ export class NewPostComponent {
       const fd = new FormData()
 
       fd.append('content', content)
+
+      if (this.groupId !== undefined) {
+        fd.append('groupId', this.groupId)
+      }
 
       this.images.forEach((img) => {
         fd.append('images', img)

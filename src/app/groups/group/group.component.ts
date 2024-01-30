@@ -12,6 +12,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { DateAgoPipe } from 'app/pipes/date-ago.pipe'
 import { PostShowcaseComponent } from 'app/post-showcase/post-showcase.component'
 import { type IPost } from 'app/posts/IPost'
+import { NewPostComponent } from 'app/posts/new-post/new-post.component'
 import { PaginatedEntityFetcher } from 'app/shared/base/PaginatedEntityFetcher'
 import { type Observable } from 'rxjs'
 import { type DataCountPagesDto } from 'services/Get entity/DataCountPagesDto'
@@ -25,7 +26,8 @@ import { GetEntityService } from 'services/Get entity/get-entity.service'
     NgOptimizedImage,
     RouterLink,
     DateAgoPipe,
-    PostShowcaseComponent
+    PostShowcaseComponent,
+    NewPostComponent
   ],
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.scss', '../../posts/posts.component.scss']
