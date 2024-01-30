@@ -1,5 +1,6 @@
 import { type IUser } from 'app/user/login/IUser'
 import { type IComment } from '../comments/IComment'
+import { type IGroup } from 'app/groups/IGroup'
 
 interface IImage {
   id: string
@@ -22,4 +23,5 @@ export interface IPost {
   comments: IComment[]
   commentCount: number
   imageCount: number
+  group: IGroup
 }

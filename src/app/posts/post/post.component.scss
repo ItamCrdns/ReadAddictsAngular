@@ -36,3 +36,8 @@
 .image-wrapper {
     @include post-images-wrapper;
 }
+
+.headers-wrapper {
+    display: flex;
+    gap: 1rem;
+}

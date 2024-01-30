@@ -1,21 +1,36 @@
 <section class="post-and-comments-wrapper">
   @if (post$ | async; as post) {
   <article class="post">
-    <header>
-      <img
-        ngSrc="{{ post.creator.profilePicture }}"
-        alt="{{ post.creator.userName }}"
-        width="50"
-        height="50"
-      />
-      <h1>
-        <a [routerLink]="['/user', post.creator.userName]">{{
-          post.creator.userName
-        }}</a>
-      </h1>
-      <h2>{{ "@" }}{{ post.creator.userName }}</h2>
-      <p>{{ post.created || "" | dateAgo }}</p>
-    </header>
+    <div class="headers-wrapper">
+      <header>
+        <img
+          ngSrc="{{ post.creator.profilePicture }}"
+          alt="{{ post.creator.userName }}"
+          width="50"
+          height="50"
+        />
+        <h1>
+          <a [routerLink]="['/user', post.creator.userName]">{{
+            post.creator.userName
+          }}</a>
+        </h1>
+        <h2>{{ "@" }}{{ post.creator.userName }}</h2>
+        <p>{{ post.created || "" | dateAgo }}</p>
+      </header>
+      @if (post.group.id !== null) {
+      <header>
+        <img
+          [ngSrc]="post.group.picture"
+          [alt]="post.group.name"
+          width="75"
+          height="75"
+        />
+        <h1 style="font-weight: 600">
+          <a [routerLink]="['/group', post.group.id]">{{ post.group.name }}</a>
+        </h1>
+      </header>
+      }
+    </div>
     <p>{{ post.content }}</p>
     @if (post.images.length > 0) {
     <div class="image-wrapper">
