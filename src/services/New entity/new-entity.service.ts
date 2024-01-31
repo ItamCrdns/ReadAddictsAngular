@@ -8,6 +8,8 @@ import { type Observable } from 'rxjs'
 import { environment } from '../../environment/environment'
 import { type IComment } from '../../app/comments/IComment'
 import { type IMessage } from '../../app/chat/IMessage'
+import { type OperationResult } from './OperationResult'
+import { type IUser } from 'app/user/login/IUser'
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +53,22 @@ export class NewEntityService {
 
     return this.http.post<IMessage>(url, null, {
       params,
+      withCredentials: true
+    })
+  }
+
+  joinGroup (groupId: string): Observable<OperationResult<IUser>> {
+    const url = environment.apiUrl + 'groups/' + groupId + '/join'
+
+    return this.http.post<OperationResult<IUser>>(url, null, {
+      withCredentials: true
+    })
+  }
+
+  leaveGroup (groupId: string): Observable<OperationResult<IUser>> {
+    const url = environment.apiUrl + 'groups/' + groupId + '/leave'
+
+    return this.http.post<OperationResult<IUser>>(url, null, {
       withCredentials: true
     })
   }

@@ -85,4 +85,10 @@ export abstract class PaginatedEntityFetcher<T> {
   protected observe (target: Element): void {
     this.observer.observe(target)
   }
+
+  protected clear (): void {
+    this.observer.disconnect()
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
 }

@@ -48,7 +48,6 @@ export class CommentComponent implements OnInit, OnDestroy {
 
       this.commentSub = this.getEntityService.getComment(id).subscribe({
         next: (res) => {
-          console.log(res)
           this.comment = res
         },
         error: (err) => {

@@ -1,3 +1,5 @@
+@import '@styles/_mixins.scss';
+
 .group-wrapper {
     display: flex;
     justify-content: space-between;
@@ -21,8 +23,7 @@
     }
 
     h1 {
-        margin: 0;
-        padding: 0;
+        margin-top: 0;
     }
 
     p {
@@ -39,7 +40,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 2rem;
+        gap: 1rem;
 
         h2 {
             font-size: 18px;
@@ -55,7 +56,7 @@
         .user {
             display: flex;
             align-items: center;
-            gap: .5rem;
+            gap: 1rem;
         }
 
         .date {
@@ -76,4 +77,25 @@
         padding: .75rem;
         text-align: center;
     }
+}
+
+button {
+    @include button-styles;
+}
+
+.join {
+    background-color: #1a73e8;
+    color: white;
+}
+
+.leave {
+    background-color: white;
+    color: #1a73e8;
+    border: 1px solid #1a73e8;
+}
+
+.button-wrapper {
+    align-self: center !important;
+    display: flex;
+    gap: 1rem;
 }

@@ -4,6 +4,13 @@
     <img [ngSrc]="group.picture" [alt]="group.name" width="250" height="250" />
     <h1>{{ group.name }}</h1>
     <p>{{ group.membersCount }} members</p>
+    <div class="button-wrapper">
+      @if (!isMember) {
+      <button class="join" (click)="joinGroup()">Join</button>
+      } @else {
+      <button class="leave" (click)="leaveGroup()">Leave</button>
+      }
+    </div>
   </div>
   <div class="posts">
     @if (items$ | async; as posts) {
@@ -17,9 +24,9 @@
     }}
   </div>
   <div class="users">
-    @for (user of group.users; track user.id) {
+    <h1>Members</h1>
     <div class="user-wrapper">
-      <h1>Members</h1>
+      @for (user of group.users; track user.id) {
       <div class="user">
         <img
           [ngSrc]="user.profilePicture"
@@ -34,8 +41,8 @@
           <p class="date">{{ user.lastLogin | dateAgo }}</p>
         </div>
       </div>
+      }
     </div>
-    }
   </div>
 </section>
 }

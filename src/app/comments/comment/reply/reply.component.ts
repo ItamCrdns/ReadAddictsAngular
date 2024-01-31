@@ -46,12 +46,10 @@ export class ReplyComponent implements OnInit, OnDestroy {
     // Can also use paramMap
     this.postIdSub = this.route.parent?.parent?.params.subscribe((params) => {
       this.postId = params['postId']
-      console.log(this.postId)
     })
 
     this.commentIdSub = this.route.parent?.params.subscribe((params) => {
       this.commentId = params['commentId']
-      console.log(this.commentId)
     })
   }
 

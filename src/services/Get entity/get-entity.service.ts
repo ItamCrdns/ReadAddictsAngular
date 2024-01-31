@@ -143,7 +143,9 @@ export class GetEntityService {
   }
 
   getGroup (id: string): Observable<IGroup> {
-    return this.http.get<IGroup>(environment.apiUrl + 'groups/' + id)
+    return this.http.get<IGroup>(environment.apiUrl + 'groups/' + id, {
+      withCredentials: true
+    })
   }
 
   getPostsByGroup (

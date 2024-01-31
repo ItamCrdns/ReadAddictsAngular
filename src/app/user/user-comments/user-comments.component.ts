@@ -61,8 +61,7 @@ export class UserCommentsComponent
   }
 
   ngOnDestroy (): void {
-    this.destroy$.next()
-    this.destroy$.complete()
+    super.clear()
     super.unobserve(this.loadMore.nativeElement)
   }
 

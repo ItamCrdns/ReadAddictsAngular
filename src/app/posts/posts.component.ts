@@ -51,6 +51,7 @@ export class PostsComponent
 
   ngOnDestroy (): void {
     super.unobserve(this.loadMore.nativeElement)
+    super.clear()
   }
 
   ngAfterViewInit (): void {

@@ -51,6 +51,7 @@ export class ReadersComponent
 
   ngOnDestroy (): void {
     super.unobserve(this.loadMore.nativeElement)
+    super.clear()
   }
 
   ngAfterViewInit (): void {
