@@ -3,7 +3,7 @@
   <div class="banner">
     <img [ngSrc]="group.picture" [alt]="group.name" width="250" height="250" />
     <h1>{{ group.name }}</h1>
-    <p>{{ group.membersCount }} members</p>
+    <p>{{ membersCount }} members</p>
     <div class="button-wrapper">
       @if (!isMember) {
       <button class="join" (click)="joinGroup()">Join</button>

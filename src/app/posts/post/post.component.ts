@@ -8,11 +8,14 @@ import {
   RouterOutlet
 } from '@angular/router'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
-import { Subscription, filter } from 'rxjs'
+import { Subject, filter, takeUntil } from 'rxjs'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { CommentsComponent } from '../../comments/comments.component'
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
 import { NewCommentComponent } from 'app/comments/new-comment/new-comment.component'
+import { ImageComponent } from 'app/image/image.component'
+import { imageInitialState, type IImage } from '../IPost'
+import { fadeInOut } from 'app/animations/fade'
 
 @Component({
   selector: 'app-post',
@@ -25,10 +28,12 @@ import { NewCommentComponent } from 'app/comments/new-comment/new-comment.compon
     RouterLink,
     CommentsComponent,
     NewCommentComponent,
-    RouterModule
+    RouterModule,
+    ImageComponent
   ],
   templateUrl: './post.component.html',
-  styleUrl: './post.component.scss'
+  styleUrl: './post.component.scss',
+  animations: [fadeInOut]
 })
 export class PostComponent implements OnDestroy {
   post$ = this.getEntityService.getPost(
@@ -36,8 +41,9 @@ export class PostComponent implements OnDestroy {
   )
 
   showComments: boolean = false
-  // sub: Subscription = new Subscription()
-  routerSub: Subscription = new Subscription()
+  selectedImage: IImage = imageInitialState
+
+  private readonly destroy$ = new Subject<void>()
 
   constructor (
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
@@ -45,8 +51,11 @@ export class PostComponent implements OnDestroy {
     @Inject(GetEntityService)
     private readonly getEntityService: GetEntityService
   ) {
-    this.routerSub = this.router.events
-      .pipe(filter((event: any) => event instanceof NavigationEnd))
+    this.router.events
+      .pipe(
+        filter((event: any) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
       .subscribe({
         next: (event: NavigationEnd) => {
           this.showComments = !event.url.includes('comment')
@@ -54,22 +63,16 @@ export class PostComponent implements OnDestroy {
       })
   }
 
-  // ngOnInit (): void {
-  //   this.sub = this.post$.subscribe({
-  //     error: (_) => {
-  //       this.alertService.setAlertValues(
-  //         true,
-  //         'Sorry, we could not find the post you were looking for.'
-  //       )
-  //       this.router.navigateByUrl('/').catch((err) => {
-  //         console.error('Error while redirecting', err)
-  //       })
-  //     }
-  //   })
-  // }
-
   ngOnDestroy (): void {
-    // this.sub.unsubscribe()
-    this.routerSub.unsubscribe()
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
+
+  selectImage (img: IImage): void {
+    this.selectedImage = img
+  }
+
+  closeImageModal (): void {
+    this.selectedImage = imageInitialState
   }
 }

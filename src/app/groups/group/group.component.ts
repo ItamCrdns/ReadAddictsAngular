@@ -41,6 +41,7 @@ export class GroupComponent
   implements OnInit, OnDestroy, AfterViewInit {
   groupId: string = this.route.snapshot.params['groupId'] as string
   isMember: boolean = false
+  membersCount: number = 0
   group$ = new BehaviorSubject<IGroup>(groupInitialState)
 
   constructor (
@@ -71,6 +72,7 @@ export class GroupComponent
       .pipe(takeUntil(this.destroy$))
       .subscribe((group: IGroup) => {
         this.isMember = group.isMember ?? false
+        this.membersCount = group.membersCount
         this.group$.next(group)
       })
 
@@ -99,6 +101,7 @@ export class GroupComponent
 
           if (res.data !== undefined) {
             this.isMember = true
+            this.membersCount += 1
             this.group$.next({
               ...currentGroup,
               users: [...currentGroup.users, res.data]
@@ -124,6 +127,7 @@ export class GroupComponent
 
           if (res.data !== undefined) {
             this.isMember = false
+            this.membersCount -= 1
             this.group$.next({
               ...currentGroup,
               users: currentGroup.users.filter(

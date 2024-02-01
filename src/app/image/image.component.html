@@ -1,0 +1,21 @@
+<div class="image-wrapper" (click)="closeImage()">
+  <img
+    [ngSrc]="currentImage.url"
+    [alt]="currentImage.cloudinaryPublicId"
+    (click)="$event.stopPropagation()"
+    width="500"
+    height="500"
+  />
+</div>
+<div class='thumbnails'>
+  @for (img of imageCollection; track img.id) {
+  <img
+    [ngSrc]="img.url"
+    [alt]="img.cloudinaryPublicId"
+    width="100"
+    height="100"
+    priority="true"
+    (click)="changeImage(img)"
+  />
+  }
+</div>

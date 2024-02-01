@@ -2,13 +2,22 @@ import { type IUser } from 'app/user/login/IUser'
 import { type IComment } from '../comments/IComment'
 import { type IGroup } from 'app/groups/IGroup'
 
-interface IImage {
+export interface IImage {
   id: string
   postId: string
   userId: string
   url: string
   cloudinaryPublicId: string
   created: string
+}
+
+export const imageInitialState: IImage = {
+  id: '',
+  postId: '',
+  userId: '',
+  url: '',
+  cloudinaryPublicId: '',
+  created: ''
 }
 
 export interface IPost {
