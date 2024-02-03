@@ -4,8 +4,8 @@
     <div class="headers-wrapper">
       <header>
         <img
-          ngSrc="{{ post.creator.profilePicture }}"
-          alt="{{ post.creator.userName }}"
+          [ngSrc]="post.creator.profilePicture"
+          [alt]="post.creator.userName"
           width="50"
           height="50"
         />
@@ -14,8 +14,7 @@
             post.creator.userName
           }}</a>
         </h1>
-        <h2>{{ "@" }}{{ post.creator.userName }}</h2>
-        <p>{{ post.created || "" | dateAgo }}</p>
+        <p>{{ post.created | dateAgo }}</p>
       </header>
       @if (post.group.id !== null) {
       <header>
@@ -30,8 +29,12 @@
         </h1>
       </header>
       }
+      <ng-icon name="ionPencil" class="pencil" (click)="toggleEditMode()" />
     </div>
-    <p>{{ post.content }}</p>
+    <!-- Post content -->
+    <!-- Show content if edit mode is off -->
+    @if (!editMode) {
+    <p style='padding: 1rem'>{{ post.content }}</p>
     @if (post.images.length > 0) {
     <div class="image-wrapper">
       @for (image of post.images; track image.id) {
@@ -45,7 +48,15 @@
       />
       }
     </div>
+    } } @else if(editMode) {
+    <!-- Show edit mode -->
+    <app-edit-post
+      [content]="post.content"
+      [postId]="post.id"
+      [imageCollection]="post.images"
+    />
     }
+    <!-- Post content -->
   </article>
   <section class="comments-section-wrapper">
     <app-new-comment />

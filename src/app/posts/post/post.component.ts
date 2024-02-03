@@ -16,6 +16,13 @@ import { NewCommentComponent } from 'app/comments/new-comment/new-comment.compon
 import { ImageComponent } from 'app/image/image.component'
 import { imageInitialState, type IImage } from '../IPost'
 import { fadeInOut } from 'app/animations/fade'
+import {
+  NgIconComponent,
+  provideIcons,
+  provideNgIconsConfig
+} from '@ng-icons/core'
+import { ionPencil } from '@ng-icons/ionicons'
+import { EditPostComponent } from './edit-post/edit-post.component'
 
 @Component({
   selector: 'app-post',
@@ -29,7 +36,15 @@ import { fadeInOut } from 'app/animations/fade'
     CommentsComponent,
     NewCommentComponent,
     RouterModule,
-    ImageComponent
+    ImageComponent,
+    NgIconComponent,
+    EditPostComponent
+  ],
+  providers: [
+    provideIcons({ ionPencil }),
+    provideNgIconsConfig({
+      size: '30px'
+    })
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
@@ -42,6 +57,7 @@ export class PostComponent implements OnDestroy {
 
   showComments: boolean = false
   selectedImage: IImage = imageInitialState
+  editMode: boolean = true
 
   private readonly destroy$ = new Subject<void>()
 
@@ -74,5 +90,9 @@ export class PostComponent implements OnDestroy {
 
   closeImageModal (): void {
     this.selectedImage = imageInitialState
+  }
+
+  toggleEditMode (): void {
+    this.editMode = !this.editMode
   }
 }

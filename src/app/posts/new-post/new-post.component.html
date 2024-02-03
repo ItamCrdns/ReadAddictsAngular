@@ -3,12 +3,14 @@
   <div class="newpost">
     <div class="newpost-form">
       <!-- Todo: `ngSrc` has an invalid value (``). To fix this, change the value to a non-empty string -->
+      @if (user.profilePicture) {
       <img
-        ngSrc="{{ user.profilePicture || null }}"
-        alt="{{ user.userName }}"
+        [ngSrc]="user.profilePicture"
+        [alt]="user.userName"
         width="75"
         height="75"
       />
+      }
       <form #postForm="ngForm" (ngSubmit)="createNewPost(postForm)">
         <app-input
           [(ngModel)]="content"
@@ -37,8 +39,8 @@
       @for (image of images; track trackByFn) {
       <div>
         <img
-          src="{{ getImgUrl(image) }}"
-          alt="{{ user.userName }}"
+          [src]="getImgUrl(image)"
+          [alt]="user.userName"
           width="75"
           height="75"
         />

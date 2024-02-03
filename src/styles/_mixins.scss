@@ -27,8 +27,11 @@ $blue-background: #00bfff;
 }
 
 @mixin post-images-wrapper {
-    display: flex;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-gap: 10px;
+    max-width: 800px;
+    margin: 0 auto;
 
     img {
         object-fit: cover;

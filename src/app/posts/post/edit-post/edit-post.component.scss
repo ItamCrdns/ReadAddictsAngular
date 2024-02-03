@@ -1,0 +1,71 @@
+@import '@styles/_mixins.scss';
+
+.edit-area-wrapper {
+  background-color: whitesmoke;
+  margin: 1em 0;
+  border-radius: 7px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+
+  input[type="file"] {
+    display: none;
+  }
+}
+
+textarea {
+  all: unset;
+  background-color: white;
+  padding: .75rem;
+  margin: .5rem;
+  padding-bottom: 0;
+  box-sizing: border-box;
+  border-radius: 5px;
+  overflow: hidden;
+  align-self: stretch;
+}
+
+button {
+  @include button-styles;
+  align-self: center;
+  margin-bottom: .5rem;
+}
+
+.image-wrapper {
+    div {
+        position: relative;
+        width: 100px;
+        overflow: hidden;
+    }
+
+    img {
+      cursor: default;
+    }
+
+    .remove-image {
+        color: red;
+        background-color: white;
+        border-radius: 50%;
+        position: absolute;
+        right: 0;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .new-image {
+      border: 5px solid #00bfff;
+      box-sizing: border-box;
+    }
+}
+
+.plus {
+  color: rgba(0, 0, 0, 0.1);
+  align-self: center;
+  cursor: pointer;
+}

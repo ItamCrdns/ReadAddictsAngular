@@ -42,7 +42,18 @@
 
 .headers-wrapper {
     display: flex;
+    justify-content: space-between;
     gap: 1rem;
+    width: 100%;
+}
+
+.pencil {
+    align-self: center;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+    }
 }
 
 .selected-image {

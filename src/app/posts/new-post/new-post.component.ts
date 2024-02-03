@@ -11,6 +11,7 @@ import { type IUser } from 'app/user/login/IUser'
 import { AuthService } from 'services/Authentication/auth.service'
 import { NewEntityService } from 'services/New entity/new-entity.service'
 import { AlertService } from 'services/Alert/alert.service'
+import { ImageBlob } from 'app/shared/base/ImageBlob'
 
 @Component({
   selector: 'app-new-post',
@@ -26,11 +27,10 @@ import { AlertService } from 'services/Alert/alert.service'
   templateUrl: './new-post.component.html',
   styleUrl: './new-post.component.scss'
 })
-export class NewPostComponent {
+export class NewPostComponent extends ImageBlob {
   newPostText: string = ''
   user$: Observable<Partial<IUser>> = this.authService.currentUser$
   content: string = ''
-  images: File[] = []
 
   @Input() groupId?: string
 
@@ -44,7 +44,9 @@ export class NewPostComponent {
     @Inject(NewEntityService)
     private readonly newEntityService: NewEntityService,
     @Inject(AlertService) private readonly alertService: AlertService
-  ) {}
+  ) {
+    super()
+  }
 
   getNewPostText (newPostText: string): void {
     this.newPostText = newPostText
@@ -52,30 +54,6 @@ export class NewPostComponent {
 
   triggerImagesInput (): void {
     this.imagesInput.nativeElement.click()
-  }
-
-  setImages (event: Event): void {
-    if (!(event.target instanceof HTMLInputElement)) {
-      return
-    }
-
-    if (event.target.files === null) {
-      return
-    }
-
-    this.images = Array.from(event.target.files)
-  }
-
-  trackByFn (index: number, item: File): string {
-    return item.name + index
-  }
-
-  getImgUrl (img: File): string {
-    return URL.createObjectURL(img)
-  }
-
-  removeImage (image: File): void {
-    this.images = this.images.filter((img) => img !== image)
   }
 
   createNewPost (newPostForm: NgForm): void {
