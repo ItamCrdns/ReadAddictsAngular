@@ -13,7 +13,7 @@
         </header>
         @if (currentUser$ | async; as currentUser) { @if (user.id !==
         currentUser.id) {
-        <button (click)="openChat(user.id)">Message</button>
+        <button (click)="openChat(user.id, $event)">Message</button>
         } @else {
         <button>Settings</button>
         } }

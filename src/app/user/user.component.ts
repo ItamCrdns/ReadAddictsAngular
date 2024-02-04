@@ -86,12 +86,16 @@ export class UserComponent implements OnInit, OnDestroy {
     this.destroy$.complete()
   }
 
-  openChat (userId: string | undefined): void {
+  openChat (userId: string | undefined, event: Event): void {
+    event.stopPropagation()
+
     if (userId !== undefined) {
       const newState: ISendMessage = {
         toggle: !this.currentToggleValue,
         userId
       }
+
+      console.log(newState)
 
       this.toggleChatService.updateToggle(newState)
     }
