@@ -84,8 +84,8 @@ export class NewPostComponent extends ImageBlob {
         fd.append('groupId', this.groupId)
       }
 
-      this.images.forEach((img) => {
-        fd.append('images', img)
+      this.images.forEach((_, key) => {
+        fd.append('images', key)
       })
 
       this.newEntityService

@@ -54,6 +54,7 @@
       [content]="post.content"
       [postId]="post.id"
       [imageCollection]="post.images"
+      (updatedPost)='updatePostContent($event)'
     />
     }
     <!-- Post content -->

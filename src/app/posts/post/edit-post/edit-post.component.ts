@@ -5,7 +5,9 @@ import {
   Input,
   ViewChild,
   type ElementRef,
-  type OnInit
+  type OnInit,
+  EventEmitter,
+  Output
 } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
@@ -13,6 +15,7 @@ import { type IImage } from 'app/posts/IPost'
 import { PatchEntityService } from 'services/Update entity/patch-entity.service'
 import { ionRemoveCircle, ionAddCircle } from '@ng-icons/ionicons'
 import { ImageBlob } from 'app/shared/base/ImageBlob'
+import { AlertService } from 'services/Alert/alert.service'
 
 @Component({
   selector: 'app-edit-post',
@@ -46,7 +49,7 @@ import { ImageBlob } from 'app/shared/base/ImageBlob'
               (click)="removeFromImageCollection(image)"
             />
           </div>
-          } @if (images.length > 0) { @for (image of images; track trackByFn) {
+          } @if (images.size > 0) { @for (image of images.keys(); track image.name) {
           <div>
             <img
               [src]="getImgUrl(image)"
@@ -81,11 +84,13 @@ export class EditPostComponent extends ImageBlob implements OnInit {
   @Input() imageCollection!: IImage[]
   removedImages: string[] = []
   oldContent: string = ''
+  @Output() updatedPost = new EventEmitter<string>()
 
   @ViewChild('imgInput') imgInput!: ElementRef
 
   constructor (
-    @Inject(PatchEntityService) private readonly update: PatchEntityService
+    @Inject(PatchEntityService) private readonly update: PatchEntityService,
+    @Inject(AlertService) private readonly alert: AlertService
   ) {
     super()
   }
@@ -100,7 +105,9 @@ export class EditPostComponent extends ImageBlob implements OnInit {
     if (this.oldContent !== this.content) {
       this.update.updatePostContent(this.postId, this.content).subscribe({
         next: (res) => {
-          // Handle response
+          // Emit response to parent so it updates the UI with the new stuff
+          this.updatedPost.emit(res.content)
+          this.alert.setAlertValues(true, 'Your post has been updated')
         }
       })
     }

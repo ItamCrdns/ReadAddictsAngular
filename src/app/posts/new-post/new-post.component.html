@@ -34,9 +34,9 @@
         <button type="submit">Create post</button>
       </form>
     </div>
-    @if (images.length >= 0) {
+    @if (images.size >= 0) {
     <div class="image-preview">
-      @for (image of images; track trackByFn) {
+      @for (image of images.keys(); track image.name) {
       <div>
         <img
           [src]="getImgUrl(image)"

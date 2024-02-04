@@ -1,5 +1,5 @@
 export abstract class ImageBlob {
-  images: File[] = []
+  images = new Map<File, string>()
 
   protected setImages (event: Event): void {
     if (!(event.target instanceof HTMLInputElement)) {
@@ -10,18 +10,18 @@ export abstract class ImageBlob {
       return
     }
 
-    this.images = Array.from(event.target.files)
-  }
-
-  protected trackByFn (index: number, item: File): string {
-    return item.name + index
+    Array.from(event.target.files).forEach((file) => {
+      this.images.set(file, URL.createObjectURL(file))
+    })
   }
 
   protected getImgUrl (img: File): string {
-    return URL.createObjectURL(img)
+    return this.images.get(img) ?? ''
   }
 
   protected removeImage (image: File): void {
-    this.images = this.images.filter((img) => img !== image)
+    const imageUrl = this.images.get(image) ?? ''
+    URL.revokeObjectURL(imageUrl)
+    this.images.delete(image)
   }
 }

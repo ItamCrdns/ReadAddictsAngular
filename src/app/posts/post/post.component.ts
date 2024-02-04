@@ -1,4 +1,4 @@
-import { Component, Inject, type OnDestroy } from '@angular/core'
+import { Component, Inject, type OnInit, type OnDestroy } from '@angular/core'
 import {
   ActivatedRoute,
   NavigationEnd,
@@ -8,13 +8,13 @@ import {
   RouterOutlet
 } from '@angular/router'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
-import { Subject, filter, takeUntil } from 'rxjs'
+import { BehaviorSubject, Subject, filter, takeUntil } from 'rxjs'
 import { DateAgoPipe } from '../../pipes/date-ago.pipe'
 import { CommentsComponent } from '../../comments/comments.component'
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
 import { NewCommentComponent } from 'app/comments/new-comment/new-comment.component'
 import { ImageComponent } from 'app/image/image.component'
-import { imageInitialState, type IImage } from '../IPost'
+import { imageInitialState, type IImage, type IPost } from '../IPost'
 import { fadeInOut } from 'app/animations/fade'
 import {
   NgIconComponent,
@@ -50,10 +50,9 @@ import { EditPostComponent } from './edit-post/edit-post.component'
   styleUrl: './post.component.scss',
   animations: [fadeInOut]
 })
-export class PostComponent implements OnDestroy {
-  post$ = this.getEntityService.getPost(
-    this.route.snapshot.params['postId'] as string
-  )
+export class PostComponent implements OnInit, OnDestroy {
+  private readonly postSubject = new BehaviorSubject<IPost | null>(null)
+  post$ = this.postSubject.asObservable()
 
   showComments: boolean = false
   selectedImage: IImage = imageInitialState
@@ -79,6 +78,16 @@ export class PostComponent implements OnDestroy {
       })
   }
 
+  ngOnInit (): void {
+    this.getEntityService
+      .getPost(this.route.snapshot.params['postId'] as string)
+      .subscribe({
+        next: (post) => {
+          this.postSubject.next(post)
+        }
+      })
+  }
+
   ngOnDestroy (): void {
     this.destroy$.next()
     this.destroy$.complete()
@@ -94,5 +103,10 @@ export class PostComponent implements OnDestroy {
 
   toggleEditMode (): void {
     this.editMode = !this.editMode
+  }
+
+  updatePostContent (newContent: string): void {
+    this.editMode = false
+    console.log(newContent)
   }
 }
