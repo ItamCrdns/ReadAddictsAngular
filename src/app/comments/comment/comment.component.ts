@@ -51,8 +51,7 @@ export class CommentComponent implements OnInit, OnDestroy {
           this.comment = res
         },
         error: (err) => {
-          this.alertService.setAlertValues(
-            true,
+          this.alertService.popAlert(
             'Sorry, we could not find the comment you were looking for.'
           )
           this.router

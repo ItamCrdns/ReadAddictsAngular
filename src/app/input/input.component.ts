@@ -65,8 +65,7 @@ export class InputComponent implements ControlValueAccessor, Validator {
     this.modelChange.emit(this.inputValue)
 
     if (inputText.length >= this.maxLength) {
-      this.alertService.setAlertValues(
-        true,
+      this.alertService.popAlert(
         'Maximum character count of ' + this.maxLength + ' exceeded'
       )
     }

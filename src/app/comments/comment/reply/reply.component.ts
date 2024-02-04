@@ -62,18 +62,17 @@ export class ReplyComponent implements OnInit, OnDestroy {
     const comment: string = reply.value.content
 
     if (comment.length === 0) {
-      this.alertService.setAlertValues(true, 'Your reply cannot be empty')
+      this.alertService.popAlert('Your reply cannot be empty')
     }
 
     if (comment.length > 0 && comment.length < 8) {
-      this.alertService.setAlertValues(
-        true,
+      this.alertService.popAlert(
         'Your reply must be at least 8 characters long'
       )
     }
 
     if (reply.valid === true) {
-      this.alertService.setAlertValues(true, 'Creating your reply...')
+      this.alertService.popAlert('Creating your reply...')
 
       this.newEntityService
         .newComment(comment, this.postId, this.commentId)
@@ -83,10 +82,7 @@ export class ReplyComponent implements OnInit, OnDestroy {
             if (res.status === 200) {
               reply.resetForm()
               this.inputComponent.clear()
-              this.alertService.setAlertValues(
-                true,
-                'Your reply was successfully sent'
-              )
+              this.alertService.popAlert('Your reply was successfully sent')
               this.router
                 .navigate(['/post', this.postId, 'comment', res.body?.id])
                 .catch((err) => {
@@ -95,10 +91,7 @@ export class ReplyComponent implements OnInit, OnDestroy {
             }
           },
           error: (_) => {
-            this.alertService.setAlertValues(
-              true,
-              'Your reply could not be created'
-            )
+            this.alertService.popAlert('Your reply could not be created')
           }
         })
     }

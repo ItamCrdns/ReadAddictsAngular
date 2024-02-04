@@ -45,18 +45,17 @@ export class NewCommentComponent implements OnInit {
     const comment: string = newCommentForm.value.content
 
     if (comment.length === 0) {
-      this.alertService.setAlertValues(true, 'Your comment cannot be empty')
+      this.alertService.popAlert('Your comment cannot be empty')
     }
 
     if (comment.length > 0 && comment.length < 8) {
-      this.alertService.setAlertValues(
-        true,
+      this.alertService.popAlert(
         'Your comment must be at least 8 characters long'
       )
     }
 
     if (newCommentForm.valid === true) {
-      this.alertService.setAlertValues(true, 'Creating your comment...')
+      this.alertService.popAlert('Creating your comment...')
 
       this.newEntityService
         .newComment(comment, this.postId)
@@ -66,10 +65,7 @@ export class NewCommentComponent implements OnInit {
             if (res.status === 200) {
               newCommentForm.resetForm()
               this.inputComponent.clear()
-              this.alertService.setAlertValues(
-                true,
-                'Your comment was created'
-              )
+              this.alertService.popAlert('Your comment was created')
               this.router
                 .navigate(['/post', this.postId, 'comment', res.body?.id])
                 .catch((err) => {
@@ -78,10 +74,7 @@ export class NewCommentComponent implements OnInit {
             }
           },
           error: (_) => {
-            this.alertService.setAlertValues(
-              true,
-              'Your comment could not be created'
-            )
+            this.alertService.popAlert('Your comment could not be created')
           }
         })
     }

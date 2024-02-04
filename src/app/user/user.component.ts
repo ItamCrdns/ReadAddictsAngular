@@ -14,7 +14,10 @@ import { GetEntityService } from '../../services/Get entity/get-entity.service'
 import { type HttpErrorResponse } from '@angular/common/http'
 import { AuthService } from '../../services/Authentication/auth.service'
 import { type IUser } from './login/IUser'
-import { type ISendMessage, ToggleChatService } from 'services/Toggle chat/toggle-chat.service'
+import {
+  type ISendMessage,
+  ToggleChatService
+} from 'services/Toggle chat/toggle-chat.service'
 
 @Component({
   selector: 'app-user',
@@ -45,7 +48,8 @@ export class UserComponent implements OnInit, OnDestroy {
     private readonly getEntityService: GetEntityService,
     @Inject(AlertService) private readonly alertService: AlertService,
     @Inject(AuthService) private readonly authService: AuthService,
-    @Inject(ToggleChatService) private readonly toggleChatService: ToggleChatService
+    @Inject(ToggleChatService)
+    private readonly toggleChatService: ToggleChatService
   ) {}
 
   ngOnInit (): void {
@@ -59,8 +63,7 @@ export class UserComponent implements OnInit, OnDestroy {
           },
           error: (err: HttpErrorResponse) => {
             if (err.status === 404) {
-              this.alertService.setAlertValues(
-                true,
+              this.alertService.popAlert(
                 'Sorry, we could not find the user you were looking for.'
               )
             }

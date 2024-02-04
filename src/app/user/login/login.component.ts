@@ -47,10 +47,7 @@ export class LoginComponent {
         },
         error: (err) => {
           if (err.status === 404) {
-            this.alertService.setAlertValues(
-              true,
-              `User ${this.username} not found`
-            )
+            this.alertService.popAlert(`User ${this.username} not found`)
           }
         }
       })
@@ -63,8 +60,7 @@ export class LoginComponent {
       .subscribe({
         next: (res) => {
           this.authService.setCurrentUser(res)
-          this.alertService.setAlertValues(
-            true,
+          this.alertService.popAlert(
             `Welcome back, ${this.username
               .slice(0, 1)
               .toUpperCase()}${this.username.slice(1).toLowerCase()}`
@@ -75,7 +71,7 @@ export class LoginComponent {
         },
         error: (err) => {
           if (err.status === 401) {
-            this.alertService.setAlertValues(true, 'Incorrect password')
+            this.alertService.popAlert('Incorrect password')
           }
         }
       })

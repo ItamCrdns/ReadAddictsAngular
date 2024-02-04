@@ -95,7 +95,7 @@ export class GroupComponent
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this.alertService.setAlertValues(true, res.message ?? '')
+          this.alertService.popAlert(res.message ?? '')
 
           const currentGroup = this.group$.value
 
@@ -110,7 +110,7 @@ export class GroupComponent
         },
         error: (err) => {
           const error: OperationResult = err.error
-          this.alertService.setAlertValues(true, error.message ?? '')
+          this.alertService.popAlert(error.message ?? '')
         }
       })
   }
@@ -121,7 +121,7 @@ export class GroupComponent
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this.alertService.setAlertValues(true, res.message ?? '')
+          this.alertService.popAlert(res.message ?? '')
 
           const currentGroup = this.group$.value
 
@@ -138,7 +138,7 @@ export class GroupComponent
         },
         error: (err) => {
           const error: OperationResult = err.error
-          this.alertService.setAlertValues(true, error.message ?? '')
+          this.alertService.popAlert(error.message ?? '')
         }
       })
   }

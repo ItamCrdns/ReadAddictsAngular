@@ -70,7 +70,7 @@ export class AuthService {
         this.currentUserSubject.next(res)
       },
       error: (_) => {
-        this.alertService.setAlertValues(true, 'Please log in to continue')
+        this.alertService.popAlert('Please log in to continue')
         this.router.navigateByUrl('/login').catch((err) => {
           console.error('Error while redirecting to login', err)
         })

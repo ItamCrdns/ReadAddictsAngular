@@ -38,7 +38,8 @@ export class OpenChatButtonComponent implements OnInit, OnDestroy {
   private readonly hub: HubConnection
 
   constructor (
-    @Inject(ToggleChatService) private readonly toggleChatService: ToggleChatService,
+    @Inject(ToggleChatService)
+    private readonly toggleChatService: ToggleChatService,
     @Inject(GetEntityService)
     private readonly getEntityService: GetEntityService,
     @Inject(AlertService) private readonly alertService: AlertService
@@ -49,8 +50,7 @@ export class OpenChatButtonComponent implements OnInit, OnDestroy {
       .build()
 
     this.hub.start().catch(() => {
-      this.alertService.setAlertValues(
-        true,
+      this.alertService.popAlert(
         'Something went wrong while connecting to the server. Try again.'
       )
     })

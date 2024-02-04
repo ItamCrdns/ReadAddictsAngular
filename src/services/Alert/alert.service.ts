@@ -10,18 +10,21 @@ interface IAlert {
   providedIn: 'root'
 })
 export class AlertService {
-  showAlert: boolean = false
-  alertMessage: string = ''
+  show: boolean = false
+  message: string = ''
   timeoutId: number = 0
 
-  private readonly alertValuesSubject = new Subject<IAlert>()
+  private readonly alertSubject = new Subject<IAlert>()
 
-  setAlertValues (showAlert: boolean, alertMessage: string, duration: number = 5000): void {
-    this.showAlert = showAlert
-    this.alertMessage = alertMessage
+  popAlert (msg: string, duration: number = 5000): void {
+    this.show = true
+    this.message = msg
 
     // ? emit the new values
-    this.alertValuesSubject.next({ showAlert, alertMessage })
+    this.alertSubject.next({
+      showAlert: this.show,
+      alertMessage: this.message
+    })
 
     if (this.timeoutId !== 0) {
       // ? debounce the timeout (useful when user performs multiple alert triggers in a short amount of time)
@@ -29,17 +32,25 @@ export class AlertService {
     }
 
     this.timeoutId = setTimeout(() => {
-      this.showAlert = false
+      this.show = false
 
       // ? emit the hidding
-      this.alertValuesSubject.next({
+      this.alertSubject.next({
         showAlert: false,
-        alertMessage: this.alertMessage
+        alertMessage: this.message
       })
     }, duration)
   }
 
+  closeAlert (): void {
+    this.show = false
+    this.alertSubject.next({
+      showAlert: false,
+      alertMessage: this.message
+    })
+  }
+
   getAlertValues (): Observable<IAlert> {
-    return this.alertValuesSubject.asObservable()
+    return this.alertSubject.asObservable()
   }
 }

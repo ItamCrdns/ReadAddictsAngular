@@ -107,7 +107,7 @@ export class EditPostComponent extends ImageBlob implements OnInit {
         next: (res) => {
           // Emit response to parent so it updates the UI with the new stuff
           this.updatedPost.emit(res.content)
-          this.alert.setAlertValues(true, 'Your post has been updated')
+          this.alert.popAlert('Your post has been updated')
         }
       })
     }

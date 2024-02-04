@@ -1,4 +1,10 @@
-import { Component, ElementRef, HostListener, Inject, type OnInit } from '@angular/core'
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Inject,
+  type OnInit
+} from '@angular/core'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { navItems } from './navItems'
 import { ionLogOutOutline } from '@ng-icons/ionicons'
@@ -74,7 +80,7 @@ export class NavbarComponent implements OnInit {
         if (res.status === 200) {
           this.toggle = false
           this.authService.removeCurrentUser()
-          this.alertService.setAlertValues(true, 'Successfully logged out')
+          this.alertService.popAlert('Successfully logged out')
           this.router.navigateByUrl('/login').catch((err) => {
             console.error('Error while redirecting to login', err)
           })

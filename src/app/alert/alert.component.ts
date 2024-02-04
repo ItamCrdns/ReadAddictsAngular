@@ -17,11 +17,11 @@ export class AlertComponent {
   @Input() message: string = 'Set a default message...'
   @Input() show: boolean = false
 
-  constructor (@Inject(AlertService) private readonly alertService: AlertService) {
-
-  }
+  constructor (
+    @Inject(AlertService) private readonly alertService: AlertService
+  ) {}
 
   closeAlert (): void {
-    this.alertService.setAlertValues(false, this.message)
+    this.alertService.closeAlert()
   }
 }

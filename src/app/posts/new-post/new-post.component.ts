@@ -60,13 +60,12 @@ export class NewPostComponent extends ImageBlob {
     const content: string = newPostForm.value.content
 
     if (content.length === 0) {
-      this.alertService.setAlertValues(true, 'Your post cannot be empty')
+      this.alertService.popAlert('Your post cannot be empty')
       return
     }
 
     if (content.length > 0 && content.length < 8) {
-      this.alertService.setAlertValues(
-        true,
+      this.alertService.popAlert(
         'Your post must be at least 8 characters long'
       )
       return
@@ -74,7 +73,7 @@ export class NewPostComponent extends ImageBlob {
 
     // TODO: Add images to post
     if (newPostForm.valid === true) {
-      this.alertService.setAlertValues(true, 'Creating new post...')
+      this.alertService.popAlert('Creating new post...')
       // * Currently: if post content is provided
       const fd = new FormData()
 
@@ -96,10 +95,7 @@ export class NewPostComponent extends ImageBlob {
             if (res.status === 200) {
               newPostForm.resetForm()
               this.inputComponent.clear()
-              this.alertService.setAlertValues(
-                true,
-                'Your post has been created'
-              )
+              this.alertService.popAlert('Your post has been created')
               this.router.navigate(['/post', res.body]).catch((err) => {
                 console.error('Error while redirecting to post', err)
               })
@@ -111,10 +107,7 @@ export class NewPostComponent extends ImageBlob {
               err.status === 500 ||
               err.status === 401
             ) {
-              this.alertService.setAlertValues(
-                true,
-                'Your post could not be created'
-              )
+              this.alertService.popAlert('Your post could not be created')
             }
           }
         })
