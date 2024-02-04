@@ -16,6 +16,8 @@ import { PatchEntityService } from 'services/Update entity/patch-entity.service'
 import { ionRemoveCircle, ionAddCircle } from '@ng-icons/ionicons'
 import { ImageBlob } from 'app/shared/base/ImageBlob'
 import { AlertService } from 'services/Alert/alert.service'
+import { type IEditPostResponse } from './IEditPostResponse'
+import { concat, of, toArray } from 'rxjs'
 
 @Component({
   selector: 'app-edit-post',
@@ -49,7 +51,8 @@ import { AlertService } from 'services/Alert/alert.service'
               (click)="removeFromImageCollection(image)"
             />
           </div>
-          } @if (images.size > 0) { @for (image of images.keys(); track image.name) {
+          } @if (images.size > 0) { @for (image of images.keys(); track
+          image.name) {
           <div>
             <img
               [src]="getImgUrl(image)"
@@ -82,9 +85,12 @@ export class EditPostComponent extends ImageBlob implements OnInit {
   @Input() content!: string
   @Input() postId!: string
   @Input() imageCollection!: IImage[]
+
   removedImages: string[] = []
   oldContent: string = ''
-  @Output() updatedPost = new EventEmitter<string>()
+
+  // * Emit changes to parent component
+  @Output() updatedPost = new EventEmitter<IEditPostResponse>()
 
   @ViewChild('imgInput') imgInput!: ElementRef
 
@@ -99,18 +105,57 @@ export class EditPostComponent extends ImageBlob implements OnInit {
     this.oldContent = this.content
   }
 
-  submit (): void {
-    // * Handle both content only updates and contet + image updates (or image only updates)
+  private updating (): void {
+    this.alert.popAlert('Applying changes...')
+  }
 
-    if (this.oldContent !== this.content) {
-      this.update.updatePostContent(this.postId, this.content).subscribe({
-        next: (res) => {
-          // Emit response to parent so it updates the UI with the new stuff
-          this.updatedPost.emit(res.content)
-          this.alert.popAlert('Your post has been updated')
-        }
+  private postUpdated (): void {
+    this.alert.popAlert('Your post has been updated')
+  }
+
+  private postNotUpdated (): void {
+    this.alert.popAlert('Your post could not be updated')
+  }
+
+  submit (): void {
+    this.updating()
+
+    const updateContent$ =
+      this.oldContent !== this.content
+        ? this.update.updatePostContent(this.postId, this.content)
+        : of(null)
+
+    const imagesFd = new FormData()
+    if (this.images.size > 0) {
+      this.images.forEach((_, key) => {
+        imagesFd.append('files', key)
       })
     }
+    const addImages$ =
+      this.images.size > 0
+        ? this.update.addImagesToPost(this.postId, imagesFd)
+        : of(null)
+
+    const removeImages$ =
+      this.removedImages.length > 0
+        ? this.update.removeImagesFromPost(this.postId, this.removedImages)
+        : of(null)
+
+    concat(updateContent$, addImages$, removeImages$)
+      .pipe(toArray())
+      .subscribe({
+        next: (res: Array<string | string[] | IImage[] | null>) => {
+          this.updatedPost.emit({
+            newContent: res[0] as string,
+            newImages: res[1] as IImage[],
+            removedImages: res[2] as string[]
+          })
+          this.postUpdated()
+        },
+        error: () => {
+          this.postNotUpdated()
+        }
+      })
   }
 
   triggerImgInput (): void {

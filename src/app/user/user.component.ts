@@ -95,8 +95,6 @@ export class UserComponent implements OnInit, OnDestroy {
         userId
       }
 
-      console.log(newState)
-
       this.toggleChatService.updateToggle(newState)
     }
   }

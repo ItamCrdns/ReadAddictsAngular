@@ -23,6 +23,7 @@ import {
 } from '@ng-icons/core'
 import { ionPencil } from '@ng-icons/ionicons'
 import { EditPostComponent } from './edit-post/edit-post.component'
+import { type IEditPostResponse } from './edit-post/IEditPostResponse'
 
 @Component({
   selector: 'app-post',
@@ -51,12 +52,11 @@ import { EditPostComponent } from './edit-post/edit-post.component'
   animations: [fadeInOut]
 })
 export class PostComponent implements OnInit, OnDestroy {
-  private readonly postSubject = new BehaviorSubject<IPost | null>(null)
-  post$ = this.postSubject.asObservable()
+  post$ = new BehaviorSubject<IPost | null>(null)
 
   showComments: boolean = false
   selectedImage: IImage = imageInitialState
-  editMode: boolean = true
+  editMode: boolean = false
 
   private readonly destroy$ = new Subject<void>()
 
@@ -83,7 +83,7 @@ export class PostComponent implements OnInit, OnDestroy {
       .getPost(this.route.snapshot.params['postId'] as string)
       .subscribe({
         next: (post) => {
-          this.postSubject.next(post)
+          this.post$.next(post)
         }
       })
   }
@@ -105,8 +105,27 @@ export class PostComponent implements OnInit, OnDestroy {
     this.editMode = !this.editMode
   }
 
-  updatePostContent (newContent: string): void {
+  reflectPostChanges (updatedPost: IEditPostResponse): void {
+    const currentPost = this.post$.value
+
+    if (currentPost !== null) {
+      const existingImages = currentPost.images
+      const newImages = updatedPost.newImages
+      const removedImages = updatedPost.removedImages
+
+      const updatedImages = removedImages !== null && removedImages !== undefined
+        ? existingImages.filter(
+          (img) => !removedImages.includes(img.id)
+        )
+        : existingImages
+
+      this.post$.next({
+        ...currentPost,
+        content: updatedPost.newContent ?? currentPost.content,
+        images: [...updatedImages, ...newImages ?? []]
+      })
+    }
+
     this.editMode = false
-    console.log(newContent)
   }
 }
