@@ -1,15 +1,44 @@
 @if (group$ | async; as group) {
 <section class="group-wrapper">
-  <div class="banner">
-    <img [ngSrc]="group.picture" [alt]="group.name" width="250" height="250" />
-    <h1>{{ group.name }}</h1>
-    <p>{{ membersCount }} members</p>
-    <div class="button-wrapper">
-      @if (!isMember) {
-      <button class="join" (click)="joinGroup()">Join</button>
-      } @else {
-      <button class="leave" (click)="leaveGroup()">Leave</button>
-      }
+  <div class="group-and-creator">
+    <div class="banner">
+      <img
+        [ngSrc]="group.picture"
+        [alt]="group.name"
+        width="250"
+        height="250"
+      />
+      <h1>{{ group.name }}</h1>
+      <p>{{ membersCount }} members</p>
+      <div class="button-wrapper">
+        @if (currentuser$ |async; as user) { @if (user.id === group.creator.id)
+        {
+        <p>This is your group</p>
+        } @else { @if (!isMember) {
+        <button class="join" (click)="joinGroup()">Join</button>
+        } @else {
+        <button class="leave" (click)="leaveGroup()">Leave</button>
+        }} }
+      </div>
+    </div>
+    <div class="creator">
+      <h1>Creator</h1>
+      <div class="creator-info">
+        <img
+          [ngSrc]="group.creator.profilePicture"
+          [alt]="group.creator.userName"
+          width="50"
+          height="50"
+        />
+        <div>
+          <h2>
+            <a [routerLink]="['/user', group.creator.userName]">{{
+              group.creator.userName
+            }}</a>
+          </h2>
+          <p>{{ group.creator.lastLogin | dateAgo }}</p>
+        </div>
+      </div>
     </div>
   </div>
   <div class="posts">

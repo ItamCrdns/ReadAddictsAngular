@@ -40,7 +40,7 @@ export class UserComponent implements OnInit, OnDestroy {
   currentUser$: Observable<Partial<IUser>> = this.authService.currentUser$
 
   currentToggleValue: boolean = false
-  editMode: boolean = true
+  editMode: boolean = false
 
   private readonly destroy$ = new Subject<void>()
 

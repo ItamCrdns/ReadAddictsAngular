@@ -21,6 +21,7 @@ import { GetEntityService } from 'services/Get entity/get-entity.service'
 import { type OperationResult } from 'services/New entity/OperationResult'
 import { NewEntityService } from 'services/New entity/new-entity.service'
 import { groupInitialState, type IGroup } from '../IGroup'
+import { AuthService } from 'services/Authentication/auth.service'
 
 @Component({
   selector: 'app-group',
@@ -44,6 +45,8 @@ export class GroupComponent
   membersCount: number = 0
   group$ = new BehaviorSubject<IGroup>(groupInitialState)
 
+  currentuser$ = this.authService.currentUser$
+
   constructor (
     @Inject(GetEntityService)
     private readonly getEntityService: GetEntityService,
@@ -52,7 +55,9 @@ export class GroupComponent
     @Inject(ActivatedRoute) override readonly route: ActivatedRoute,
     @Inject(Router) override readonly router: Router,
     @Inject(AlertService)
-    private readonly alertService: AlertService
+    private readonly alertService: AlertService,
+    @Inject(AuthService)
+    private readonly authService: AuthService
   ) {
     super(router, route)
   }
