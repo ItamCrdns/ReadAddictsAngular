@@ -4,6 +4,7 @@ import { environment } from '../../environment/environment'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { type IImage } from 'app/posts/IPost'
 import { type IEditPostResponse } from 'app/posts/post/edit-post/IEditPostResponse'
+import { type IUser } from 'app/user/login/IUser'
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,14 @@ export class PatchEntityService {
     const url = environment.apiUrl + 'posts/' + id + '/update'
 
     return this.http.patch<IEditPostResponse>(url, fd, {
+      withCredentials: true
+    })
+  }
+
+  updateUser (fd: FormData): Observable<IUser> {
+    const url = environment.apiUrl + 'users/update'
+
+    return this.http.patch<IUser>(url, fd, {
       withCredentials: true
     })
   }

@@ -18,6 +18,7 @@ import {
   type ISendMessage,
   ToggleChatService
 } from 'services/Toggle chat/toggle-chat.service'
+import { EditUserComponent } from './edit-user/edit-user.component'
 
 @Component({
   selector: 'app-user',
@@ -28,7 +29,8 @@ import {
     DateAgoPipe,
     RouterLink,
     RouterLinkActive,
-    RouterOutlet
+    RouterOutlet,
+    EditUserComponent
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
@@ -38,6 +40,7 @@ export class UserComponent implements OnInit, OnDestroy {
   currentUser$: Observable<Partial<IUser>> = this.authService.currentUser$
 
   currentToggleValue: boolean = false
+  editMode: boolean = true
 
   private readonly destroy$ = new Subject<void>()
 
@@ -86,6 +89,14 @@ export class UserComponent implements OnInit, OnDestroy {
     this.destroy$.complete()
   }
 
+  toggleEditMode (): void {
+    this.editMode = !this.editMode
+  }
+
+  closeEditMode (): void {
+    this.editMode = false
+  }
+
   openChat (userId: string | undefined, event: Event): void {
     event.stopPropagation()
 
@@ -97,5 +108,9 @@ export class UserComponent implements OnInit, OnDestroy {
 
       this.toggleChatService.updateToggle(newState)
     }
+  }
+
+  reflectUserChanges (user: Partial<IUser>): void {
+    this.user = user
   }
 }

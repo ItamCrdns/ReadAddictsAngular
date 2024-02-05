@@ -59,8 +59,8 @@ export class DateAgoPipe implements PipeTransform, OnDestroy {
       return minutes === 1 ? '1 minute ago' : minutes + ' minutes ago'
     }
 
-    if (seconds > 0) {
-      return seconds === 1 ? '1 second ago' : seconds + ' seconds ago'
+    if (seconds > 30) {
+      return seconds === 31 ? '31 seconds ago' : seconds + ' seconds ago'
     }
 
     return 'Just now'
