@@ -24,6 +24,7 @@ import {
 import { ionPencil } from '@ng-icons/ionicons'
 import { EditPostComponent } from './edit-post/edit-post.component'
 import { type IEditPostResponse } from './edit-post/IEditPostResponse'
+import { AuthService } from 'services/Authentication/auth.service'
 
 @Component({
   selector: 'app-post',
@@ -53,6 +54,7 @@ import { type IEditPostResponse } from './edit-post/IEditPostResponse'
 })
 export class PostComponent implements OnInit, OnDestroy {
   post$ = new BehaviorSubject<IPost | null>(null)
+  currentuser$ = this.authService.currentUser$
 
   showComments: boolean = false
   selectedImage: IImage = imageInitialState
@@ -64,7 +66,9 @@ export class PostComponent implements OnInit, OnDestroy {
     @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
     @Inject(Router) private readonly router: Router,
     @Inject(GetEntityService)
-    private readonly getEntityService: GetEntityService
+    private readonly getEntityService: GetEntityService,
+    @Inject(AuthService)
+    private readonly authService: AuthService
   ) {
     this.router.events
       .pipe(
@@ -113,16 +117,15 @@ export class PostComponent implements OnInit, OnDestroy {
       const newImages = updatedPost.newImages
       const removedImages = updatedPost.removedImages
 
-      const updatedImages = removedImages !== null && removedImages !== undefined
-        ? existingImages.filter(
-          (img) => !removedImages.includes(img.id)
-        )
-        : existingImages
+      const updatedImages =
+        removedImages !== null && removedImages !== undefined
+          ? existingImages.filter((img) => !removedImages.includes(img.id))
+          : existingImages
 
       this.post$.next({
         ...currentPost,
         content: updatedPost.newContent ?? currentPost.content,
-        images: [...updatedImages, ...newImages ?? []]
+        images: [...updatedImages, ...(newImages ?? [])]
       })
     }
 

@@ -28,13 +28,15 @@
           <a [routerLink]="['/group', post.group.id]">{{ post.group.name }}</a>
         </h1>
       </header>
-      }
+      } @if (currentuser$ | async; as user) { @if (user.id === post.creator.id)
+      {
       <ng-icon name="ionPencil" class="pencil" (click)="toggleEditMode()" />
+      } }
     </div>
     <!-- Post content -->
     <!-- Show content if edit mode is off -->
     @if (!editMode) {
-    <p style='padding: 1rem'>{{ post.content }}</p>
+    <p style="padding: 1rem">{{ post.content }}</p>
     @if (post.images.length > 0) {
     <div class="image-wrapper">
       @for (image of post.images; track image.id) {
