@@ -57,6 +57,14 @@ export class NewEntityService {
     })
   }
 
+  newGroup (group: FormData): Observable<string> {
+    const url = environment.apiUrl + 'groups/create'
+
+    return this.http.post<string>(url, group, {
+      withCredentials: true
+    })
+  }
+
   joinGroup (groupId: string): Observable<OperationResult<IUser>> {
     const url = environment.apiUrl + 'groups/' + groupId + '/join'
 

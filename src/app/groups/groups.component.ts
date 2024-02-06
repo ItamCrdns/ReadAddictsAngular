@@ -10,7 +10,12 @@ import {
 import { PaginatedEntityFetcher } from '../shared/base/PaginatedEntityFetcher'
 import { type IGroup } from './IGroup'
 import { GetEntityService } from '../../services/Get entity/get-entity.service'
-import { ActivatedRoute, Router, RouterLink } from '@angular/router'
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterOutlet
+} from '@angular/router'
 import { type Observable } from 'rxjs'
 import { type DataCountPagesDto } from '../../services/Get entity/DataCountPagesDto'
 import { AsyncPipe, NgOptimizedImage } from '@angular/common'
@@ -18,7 +23,7 @@ import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 @Component({
   selector: 'app-groups',
   standalone: true,
-  imports: [AsyncPipe, NgOptimizedImage, RouterLink],
+  imports: [AsyncPipe, NgOptimizedImage, RouterLink, RouterOutlet],
   templateUrl: './groups.component.html',
   styleUrl: '../readers/readers.component.scss' // pretty similar styles
 })

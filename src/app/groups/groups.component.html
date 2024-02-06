@@ -1,4 +1,9 @@
+<header>
+  <h1>Explore groups</h1>
+  <a routerLink="/groups/new">Create</a>
+</header>
 @if (items$ | async; as groups) { @for (group of groups.data; track group.id) {
+<router-outlet></router-outlet>
 <section class="wrapper">
   <div class="entity">
     <img

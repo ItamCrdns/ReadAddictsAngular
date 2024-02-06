@@ -1,0 +1,51 @@
+<div class="popup-wrapper">
+  <div class="popup">
+    <section class="new-group">
+      <a routerLink="/groups">
+        <ng-icon name="ionCloseCircleSharp" class="close-icon" />
+      </a>
+      <header>
+        <h1>Create a new group</h1>
+        <form
+          [formGroup]="groupForm"
+          (ngSubmit)="submit()"
+          class="new-group-form"
+        >
+          <input
+            #imgInput
+            type="file"
+            formControlName="picture"
+            accept="image/*"
+            (change)="setImage($event)"
+          />
+          <div class="image-container" (click)="triggerImgInput()">
+            @if (image.size > 0) {
+            <img
+              [src]="getSingleImgUrl()"
+              [alt]="groupForm.value.name"
+              width="150"
+              height="150"
+            />
+            } @else {
+            <div class="add-picture"></div>
+            }
+            <ng-icon name="ionPencil" class="picture-pencil" />
+          </div>
+          <input
+            type="text"
+            placeholder="Name"
+            formControlName="name"
+            maxlength="16"
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            formControlName="description"
+            maxlength="255"
+          />
+          <button>Create</button>
+        </form>
+      </header>
+    </section>
+  </div>
+</div>

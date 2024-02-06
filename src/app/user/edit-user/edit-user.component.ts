@@ -6,7 +6,8 @@ import {
   Input,
   Output,
   ViewChild,
-  type OnChanges
+  type OnChanges,
+  type OnDestroy
 } from '@angular/core'
 import { type IUser } from '../login/IUser'
 import { NgOptimizedImage } from '@angular/common'
@@ -23,6 +24,7 @@ import {
 import { ImageBlob } from 'app/shared/base/ImageBlob'
 import { type HttpErrorResponse } from '@angular/common/http'
 import { AlertService } from 'services/Alert/alert.service'
+import { Subject, takeUntil } from 'rxjs'
 
 @Component({
   selector: 'app-edit-user',
@@ -121,7 +123,9 @@ import { AlertService } from 'services/Alert/alert.service'
   `,
   styleUrl: '../user.component.scss'
 })
-export class EditUserComponent extends ImageBlob implements OnChanges {
+export class EditUserComponent
+  extends ImageBlob
+  implements OnChanges, OnDestroy {
   @Input() user!: Partial<IUser>
   @Output() close = new EventEmitter<void>()
   @Output() newUser = new EventEmitter<Partial<IUser>>()
@@ -132,6 +136,8 @@ export class EditUserComponent extends ImageBlob implements OnChanges {
   @ViewChild('imgInput') imgInput!: ElementRef
   @ViewChild('textarea') textarea!: ElementRef<HTMLElement>
 
+  private readonly destroy$ = new Subject<void>()
+
   constructor (
     @Inject(PatchEntityService) private readonly update: PatchEntityService,
     @Inject(AlertService) private readonly alert: AlertService
@@ -141,13 +147,17 @@ export class EditUserComponent extends ImageBlob implements OnChanges {
 
   userForm = new FormGroup({
     biography: new FormControl(''),
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     password: new FormControl('', Validators.required),
     profilePicture: new FormControl('')
   })
 
   ngOnChanges (): void {
     this.userForm.get('biography')?.setValue(this.user.biography ?? '')
+  }
+
+  ngOnDestroy (): void {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
   closeEditMode (): void {
@@ -196,23 +206,26 @@ export class EditUserComponent extends ImageBlob implements OnChanges {
     if (this.userForm.valid) {
       this.alert.popAlert('Updating your profile...')
 
-      this.update.updateUser(fd).subscribe({
-        next: (res: IUser) => {
-          this.alert.popAlert('Your profile has been updated')
-          this.newUser.emit(res)
-          this.close.emit()
-        },
-        error: (err: HttpErrorResponse) => {
-          if (err.status === 401) {
-            this.userForm.markAsTouched()
-            this.userForm.get('password')?.reset()
-            this.alert.popAlert('Your password is incorrect')
-            this.userForm.get('password')?.setErrors({ incorrect: true })
-          } else {
-            this.alert.popAlert('Something went wrong')
+      this.update
+        .updateUser(fd)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res: IUser) => {
+            this.alert.popAlert('Your profile has been updated')
+            this.newUser.emit(res)
+            this.close.emit()
+          },
+          error: (err: HttpErrorResponse) => {
+            if (err.status === 401) {
+              this.userForm.markAsTouched()
+              this.userForm.get('password')?.reset()
+              this.alert.popAlert('Your password is incorrect')
+              this.userForm.get('password')?.setErrors({ incorrect: true })
+            } else {
+              this.alert.popAlert('Something went wrong')
+            }
           }
-        }
-      })
+        })
     } else {
       this.userForm.markAsTouched()
       this.alert.popAlert('Please provide your password')
