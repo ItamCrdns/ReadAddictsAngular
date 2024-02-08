@@ -1,27 +1,37 @@
-# ReadaddictsAngular
+# Readaddicts 
+*Application for book readers. Built with Angular 17 & .NET Minimal API using clean architecture*
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.6.
+# Introduction
+Readaddicts creates a community where readers can share posts about what they read, create and join groups, chat with friends, etc.
 
-## Development server
+# Pictures
+![Main page](https://res.cloudinary.com/dzf7stsod/image/upload/v1707417994/n5gtlojizufa0vpgdupl.png)
+![Users](https://res.cloudinary.com/dzf7stsod/image/upload/v1707417994/w9qaklfhiudjnkadvjp5.png)
+![Messages and notifications](https://res.cloudinary.com/dzf7stsod/image/upload/v1707417995/z3yxaybjyzf9gbnihi5b.png)
+![Groups](https://res.cloudinary.com/dzf7stsod/image/upload/v1707417994/g88um4xgtvjnubofrlpq.png)
+![User](https://res.cloudinary.com/dzf7stsod/image/upload/v1707417994/yikmylnppyj4r7xay4ez.png)
+![Comments](https://res.cloudinary.com/dzf7stsod/image/upload/v1707417994/fqahkamlmnljqhtpvjz0.png)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+# Tech stack
+* Angular 17 (frontend framework)
+* .NET 8 Minimal API (to build the backend)
+* SQL Server
+* Cloudinary (to upload and retrieve images)
 
-## Code scaffolding
+# Features
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Create posts
+* Create posts that can be seen by other users. Just like any other social media
+* Add images to your post
+* Edit your posts, add or remove images on the go
+### Comments
+* Users can leave comments in any post
+* Users can reply to comments, infinitely
+### Groups
+* Create groups and let users join
+* Have a own comunnity with group posts only visible to group members
+### Chat
+* SignalR implementation for real time messages and notifications
+* See all your messages in one place, ordered by activity
+### User profiles
+* Check users posts and comments inside their profile
