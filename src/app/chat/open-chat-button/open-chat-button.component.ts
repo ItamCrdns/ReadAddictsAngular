@@ -3,7 +3,16 @@ import { ChatComponent } from '../chat/chat.component'
 import { NgIconComponent, provideIcons } from '@ng-icons/core'
 import { ionChatbubble, ionCloseCircleSharp } from '@ng-icons/ionicons'
 import { slideInOut } from '../../animations/slide'
-import { Subject, BehaviorSubject, takeUntil } from 'rxjs'
+import {
+  Subject,
+  BehaviorSubject,
+  takeUntil,
+  delay,
+  switchMap,
+  of,
+  startWith,
+  NEVER
+} from 'rxjs'
 import { GetEntityService } from '../../../services/Get entity/get-entity.service'
 import { AsyncPipe } from '@angular/common'
 import { environment } from '../../../environment/environment'
@@ -11,11 +20,13 @@ import { type HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import { AlertService } from '../../../services/Alert/alert.service'
 import { type IMessage } from '../IMessage'
 import { ToggleChatService } from 'services/Toggle chat/toggle-chat.service'
+import { NotificationComponent } from '../notification/notification.component'
+import { fadeInOut } from 'app/animations/fade'
 
 @Component({
   selector: 'app-open-chat-button',
   standalone: true,
-  imports: [NgIconComponent, ChatComponent, AsyncPipe],
+  imports: [NgIconComponent, ChatComponent, AsyncPipe, NotificationComponent],
   providers: [
     provideIcons({
       ionChatbubble,
@@ -24,14 +35,17 @@ import { ToggleChatService } from 'services/Toggle chat/toggle-chat.service'
   ],
   templateUrl: './open-chat-button.component.html',
   styleUrl: '../chat/chat.component.scss',
-  animations: [slideInOut]
+  animations: [slideInOut, fadeInOut]
 })
 export class OpenChatButtonComponent implements OnInit, OnDestroy {
   toggle: boolean = false
   user: string = ''
   messagesCount$ = new BehaviorSubject<number>(0)
+  message$ = new BehaviorSubject<IMessage | null>(null)
 
   newMessageSubject = new Subject<IMessage>()
+
+  pause$ = new BehaviorSubject<boolean>(false)
 
   private readonly destroy$ = new Subject<void>()
 
@@ -58,7 +72,21 @@ export class OpenChatButtonComponent implements OnInit, OnDestroy {
     // * I could also create another connection for the messages count
     this.hub.on('ReceiveMessage', (message: IMessage) => {
       this.receiveMessage(message)
+      this.message$.next(message)
       this.messagesCount$.next(this.messagesCount$.value + 1)
+
+      this.pause$
+        .pipe(
+          startWith(false),
+          switchMap((isPaused) =>
+            isPaused ? NEVER : of(message).pipe(delay(99999999999))
+          )
+        )
+        .subscribe({
+          next: () => {
+            this.message$.next(null)
+          }
+        })
     })
   }
 
@@ -97,5 +125,13 @@ export class OpenChatButtonComponent implements OnInit, OnDestroy {
     event.stopPropagation() // * Prevent the click event from bubbling up to the dom
     // * Other words prevents the click event from triggering the onClickOutside function
     this.toggleChatService.updateToggle({ toggle: !this.toggle })
+  }
+
+  closeNotification (): void {
+    this.message$.next(null)
+  }
+
+  pauseResumeNotification (): void {
+    this.pause$.next(!this.pause$.value)
   }
 }

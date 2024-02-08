@@ -21,3 +21,12 @@
     <p>{{ toggle ? "Close chat" : "Open chat" }}</p>
   </div>
 </aside>
+@if (message$ | async; as message) {
+<app-notification
+  [message]="message"
+  [@fadeInOut]="'fadeInOut'"
+  (close)="closeNotification()"
+  (mouseover)="pauseResumeNotification()"
+  (mouseout)="pauseResumeNotification()"
+/>
+}
